@@ -1,3 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default () => <div className="App">EAZY LEARN</div>;
+const App: React.FC = function () {
+  return <div className="App">EAZY LEARN</div>;
+};
+
+export default App;
