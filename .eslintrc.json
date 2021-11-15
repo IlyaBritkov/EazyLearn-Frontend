@@ -12,14 +12,43 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
-    ],
+    "plugins": ["react", "@typescript-eslint"],
     "rules": {
+        // typescript
+        "@typescript-eslint/no-use-before-define": ["warn"],
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/no-redeclare": 1,
+        "@typescript-eslint/prefer-as-const": 1,
+
+        // react
+        "react/jsx-indent": [
+            2,
+            4,
+            { "checkAttributes": true, "indentLogicalExpressions": true }
+        ],
+        "react/function-component-definition": [
+            "error",
+            {
+                "namedComponents": "arrow-function",
+                "unnamedComponents": "arrow-function"
+            }
+        ],
+        "react/jsx-filename-extension": [
+            2,
+            { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+        ],
+        "react/jsx-max-props-per-line": [2, { "maximum": 1 }],
+        "react/jsx-indent-props": [2, 2],
+        "react/jsx-first-prop-new-line": [2, "multiline"],
+        "react/no-array-index-key": 1,
+        "react/no-unused-prop-types": 1,
+        "react/prop-types": 0,
+        "react/jsx-closing-bracket-location": 1,
+        "react/jsx-curly-newline": 1,
+        "react/jsx-one-expression-per-line": 0,
+
+        //other
         "no-use-before-define": "warn",
-        "@typescript-eslint/no-use-before-define": ["error"],
-        "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -28,21 +57,29 @@
                 "tsx": "never"
             }
         ],
+        "import/no-unresolved": 1,
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": ["error"],
         "linebreak-style": "off",
-        "react/function-component-definition": ["error", {
-          "namedComponents": "function-expression",
-          "unnamedComponents": "function-expression"
-        }],
         "no-unused-vars": "warn",
-        "object-curly-spacing": ["warn"]
+        "object-curly-spacing": ["warn"],
+        "indent": ["error", 4],
+        "comma-dangle": [
+            "warn",
+            {
+                "arrays": "always",
+                "objects": "always-multiline",
+                "imports": "never",
+                "exports": "never",
+                "functions": "never"
+            }
+        ],
+        "no-plusplus": ["off"]
     },
     "settings": {
-      "import/resolver": {
-        "node": {
-          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
         }
-      }
     }
 }
