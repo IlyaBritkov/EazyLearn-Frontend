@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import { withStyles, WithStyles } from '@mui/styles';
-import theme from '../theme';
+import theme from '../../theme';
 
 const styles = {
     input: {
@@ -71,23 +71,21 @@ const styles = {
     },
 };
 
-const StyledTextInput = ({
+const TextInput = ({
     classes,
     type,
-    placeholder,
     color,
     size,
     variant,
-    helperText,
+    ...extra
 }: WithStyles<typeof styles> & TextFieldProps) => (
     <TextField
         size={size ?? 'small'}
         variant={variant ?? 'outlined'}
-        color={color}
+        color={color ?? 'primary'}
         className={classes.input}
-        type={type}
-        placeholder={placeholder}
-        helperText={helperText}
+        type={type ?? 'text'}
+        {...extra}
     />
 );
-export default withStyles(styles)(StyledTextInput);
+export default withStyles(styles)(TextInput);

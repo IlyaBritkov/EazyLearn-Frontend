@@ -2,17 +2,17 @@ import React from 'react';
 import { createTheme } from '@mui/material/styles';
 
 enum ThemeColors {
-    main = '#F50010',
+    primary = '#F50010',
     secondary = '#FCCAC2',
     white = '#FFFFFF',
-    bloodyRed = '#AB0013',
+    primaryDarken = '#AB0013',
 }
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: ThemeColors.main,
-            dark: ThemeColors.bloodyRed,
+            main: ThemeColors.primary,
+            dark: ThemeColors.primaryDarken,
         },
         secondary: {
             main: ThemeColors.secondary,
