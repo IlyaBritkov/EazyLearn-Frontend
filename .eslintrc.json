@@ -79,7 +79,7 @@
         "import/no-unresolved": 1,
         "no-shadow": "off",
         "linebreak-style": "off",
-        "no-unused-vars": "off",
+        "no-unused-vars": "warn",
         "object-curly-spacing": ["warn"],
         "indent": ["error", 4],
         "comma-dangle": [

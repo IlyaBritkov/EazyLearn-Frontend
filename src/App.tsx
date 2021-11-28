@@ -1,16 +1,10 @@
 import React from 'react';
-import StyledTextInput from './UI/StyledTextInput';
+import TextInput from './components/common/TextInput';
 
 const App: React.FC = () => (
     <div className="App">
-        <StyledTextInput
-            placeholder="Логин"
-            type="text"
-            color="primary"
-            helperText="foo bar"
-            variant="filled"
-        />
-        <StyledTextInput placeholder="Пароль" type="password" color="primary" />
+        <TextInput placeholder="Логин" helperText="foo bar" variant="filled" />
+        <TextInput placeholder="Пароль" type="password" />
     </div>
 );
 
