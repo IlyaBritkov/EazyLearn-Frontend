@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Test from './Test';
+import React from 'react';
+import TextInput from './components/common/TextInput';
 
 const App: React.FC = () => (
     <div className="App">
-        EAZY LEARN
-        <Test />
+        <TextInput placeholder="Логин" helperText="foo bar" variant="filled" />
+        <TextInput placeholder="Пароль" type="password" />
     </div>
 );
 
