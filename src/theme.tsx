@@ -7,7 +7,6 @@ enum ThemeColors {
     white = '#FFFFFF',
     primaryDarken = '#AB0013',
 }
-
 const theme = createTheme({
     palette: {
         primary: {

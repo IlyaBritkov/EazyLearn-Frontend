@@ -11,7 +11,7 @@ const styles = {
                 width: 270,
                 fontSize: '10px',
             },
-            [theme.breakpoints.up('md')]: {
+            [theme.breakpoints.up('sm')]: {
                 width: 430,
                 fontSize: '13px',
             },
@@ -43,7 +43,7 @@ const styles = {
                 width: 270,
                 fontSize: '10px',
             },
-            [theme.breakpoints.only('md')]: {
+            [theme.breakpoints.between('sm', 'lg')]: {
                 width: 380,
                 fontSize: '13px',
             },
