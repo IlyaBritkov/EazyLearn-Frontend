@@ -66,6 +66,7 @@
         "react/destructuring-assignment": "off",
 
         //other
+        "object-curly-newline": "warn",
         "no-use-before-define": "warn",
         "eol-last": "off",
         "import/extensions": [
