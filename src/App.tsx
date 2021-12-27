@@ -3,6 +3,7 @@ import { Stack } from '@mui/material';
 import TextInput from './components/common/TextInput';
 import Button from './components/common/Button';
 import * as Assets from './assets';
+import Dropdown from './components/common/Dropdown';
 
 const App: React.FC = () => (
     <div className="App">
@@ -36,6 +37,11 @@ const App: React.FC = () => (
             <Button onClick={() => console.log('only text button')}>no icon</Button>
             <Button startIcon={Assets.filterIcon} IconStartStyles={{ width: 15, height: 15 }} variant="outlined" onClick={() => console.log('button left icon')}>icon start</Button>
             <Button endIcon={Assets.profileIcon} IconEndStyles={{ border: '1px solid black', padding: 1 }} variant="outlined" onClick={() => console.log('button right icon')}>icon end</Button>
+            <Dropdown Icon={Assets.filterIcon}>
+                <Button variant="text">some button here</Button>
+                <Button variant="text">another button here</Button>
+                <div>plain text</div>
+            </Dropdown>
         </Stack>
     </div>
 );

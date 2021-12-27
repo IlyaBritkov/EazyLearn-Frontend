@@ -5,7 +5,7 @@ import {
 import { styled } from '@mui/material/styles';
 import theme from '../../theme';
 
-type Props = ButtonProps & IconButtonProps & {
+export type Props = ButtonProps & IconButtonProps & {
     Icon?: string,
     startIcon?: string,
     endIcon?: string,
