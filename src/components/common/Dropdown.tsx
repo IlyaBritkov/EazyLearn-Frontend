@@ -2,10 +2,10 @@ import React from 'react';
 import { Popover as popover } from '@mui/material';
 import { styled } from '@mui/styles';
 import Button, { Props as ButtonProps } from './Button';
-import theme from '../../theme';
 
 type Props = ButtonProps & {
     children: React.ReactNode | React.ReactNodeArray;
+    onUnMount?: any;
 };
 interface OriginInterface {
     anchorOrigin?: {
@@ -19,7 +19,7 @@ interface OriginInterface {
 }
 
 const Dropdown = ({
-    children, Icon,
+    children, Icon, IconWrapperStyles, IconStyles, onUnMount,
 }: Props) => {
     const Origin: OriginInterface = {
         anchorOrigin: {
@@ -84,12 +84,18 @@ const Dropdown = ({
 
     const handleClose = () => {
         setAnchorEl(null);
+        onUnMount();
     };
     const isOpen = Boolean(anchorEl);
 
     return (
         <>
-            <Button Icon={Icon} onClick={handleClick} />
+            <Button
+                Icon={Icon}
+                IconWrapperStyles={IconWrapperStyles}
+                IconStyles={IconStyles}
+                onClick={handleClick}
+            />
             <Popover
                 open={isOpen}
                 anchorEl={anchorEl}
@@ -100,6 +106,10 @@ const Dropdown = ({
             </Popover>
         </>
     );
+};
+
+Dropdown.defaultProps = {
+    onUnMount: () => {},
 };
 
 export default Dropdown;

@@ -7,25 +7,25 @@ const TextField = styled(tinput)({
     '& .MuiOutlinedInput-input': {
         [theme.breakpoints.down('sm')]: {
             width: 270,
-            fontSize: '10px',
+            fontSize: '12px',
         },
         [theme.breakpoints.up('sm')]: {
             width: 430,
-            fontSize: '13px',
+            fontSize: '14px',
         },
     },
     '& .MuiFilledInput-input': {
         [theme.breakpoints.down('sm')]: {
             width: 270,
-            fontSize: '10px',
+            fontSize: '12px',
         },
         [theme.breakpoints.between('sm', 'lg')]: {
             width: 380,
-            fontSize: '13px',
+            fontSize: '14px',
         },
         [theme.breakpoints.up('lg')]: {
             width: 420,
-            fontSize: '13px',
+            fontSize: '14px',
         },
     },
 });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { createTheme } from '@mui/material/styles';
-import { flexbox } from '@mui/system';
 
 enum ThemeColors {
     primary = '#F50010',
@@ -22,6 +21,16 @@ const theme = createTheme({
         fontFamily: 'Montserrat, sans-serif',
     },
     components: {
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    color: ThemeColors.primaryDarken,
+                    letterSpacing: '0.05em' as const,
+                    fontWeight: 400,
+                },
+            },
+        },
+        // dropdown
         MuiPopover: {
             styleOverrides: {
                 paper: {
@@ -54,6 +63,7 @@ const theme = createTheme({
                 },
             },
         },
+        // input
         MuiTextField: {
             styleOverrides: {
                 root: {

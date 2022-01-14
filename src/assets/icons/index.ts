@@ -12,8 +12,22 @@ import groupsInactiveIcon from './groups_inactive.svg';
 import groupsActiveIcon from './groups_active.svg';
 import profileIcon from './profile.svg';
 import searchIcon from './search.svg';
+import logoWhite from './logo_white.png';
+import logoRed from './logo_red.png';
+import arrowfilterIcon from './filter_arrow.svg';
+import checkbox from './checkbox.svg';
+import checkboxChecked from './checkbox_checked.svg';
+import tripleDots from './triple_dots.svg';
+import sliderArrow from './slider_arrow.svg';
 
 export {
+    sliderArrow,
+    tripleDots,
+    checkbox,
+    checkboxChecked,
+    arrowfilterIcon,
+    logoRed,
+    logoWhite,
     notificationIcon,
     filterIcon,
     arrowBackIcon,
