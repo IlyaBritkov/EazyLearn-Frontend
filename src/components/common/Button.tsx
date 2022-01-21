@@ -10,11 +10,15 @@ export type Props = ButtonProps & IconButtonProps & {
     startIcon?: string,
     endIcon?: string,
     IconStyles?: React.CSSProperties,
+    IconWrapperStyles?: React.CSSProperties,
     IconStartStyles?: React.CSSProperties,
     IconEndStyles?: React.CSSProperties,
 };
 
 const MuiButton = styled(btn)({
+    textTransform: 'none',
+    letterSpacing: '0.1em',
+    borderRadius: 10,
     [theme.breakpoints.down('sm')]: {
         width: 270,
     },
@@ -24,8 +28,7 @@ const MuiButton = styled(btn)({
 });
 
 const IconButton = styled(IconBtn)({
-    // styles if neccessary
-    padding: 5,
+
 });
 
 const Button = ({
@@ -34,6 +37,7 @@ const Button = ({
     variant,
     Icon,
     IconStyles,
+    IconWrapperStyles,
     startIcon,
     IconStartStyles,
     endIcon,
@@ -44,10 +48,15 @@ const Button = ({
 }: Props) => {
     if (Icon) {
         return (
-            <IconButton {...extra}>
+            <IconButton
+                className={className}
+                style={{
+                    ...IconWrapperStyles, position: 'relative', minWidth: 25, minHeight: 25,
+                }} {...extra}
+            >
                 <img
                     src={Icon} style={{
-                        ...IconStyles, pointerEvents: 'none', minWidth: 23, minHeight: 23,
+                        ...IconStyles, pointerEvents: 'none',
                     }} alt=""
                 />
             </IconButton>
@@ -71,6 +80,7 @@ Button.defaultProps = {
     startIcon: undefined,
     endIcon: undefined,
     IconStyles: undefined,
+    IconWrapperStyles: undefined,
     IconStartStyles: undefined,
     IconEndStyles: undefined,
 };

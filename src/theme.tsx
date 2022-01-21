@@ -1,6 +1,6 @@
 import React from 'react';
 import { createTheme } from '@mui/material/styles';
-import { flexbox } from '@mui/system';
+import isMobile from './utils/isMobile';
 
 enum ThemeColors {
     primary = '#F50010',
@@ -22,38 +22,17 @@ const theme = createTheme({
         fontFamily: 'Montserrat, sans-serif',
     },
     components: {
-        MuiPopover: {
+        MuiTypography: {
             styleOverrides: {
-                paper: {
-                    borderRadius: 10,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    '& > *': {
-                        position: 'relative',
-                        padding: '15px',
-                        width: '100%',
-                        '&:before': {
-                            content: '""',
-                            position: 'absolute',
-                            top: 0,
-                            left: '5%',
-                            width: '90%',
-                            height: 1,
-                            backgroundColor: ThemeColors.primaryDarken,
-                            opacity: '0.25',
-                        },
-                    },
-                    '& > *:first-child': {
-                        '&:before': {
-                            display: 'none',
-                        },
-                    },
-                },
                 root: {
-                    borderRadius: 10,
+                    color: ThemeColors.primaryDarken,
+                    letterSpacing: '0.05em' as const,
+                    fontWeight: 400,
+                    fontSize: isMobile ? 12 : 15,
                 },
             },
         },
+        // input
         MuiTextField: {
             styleOverrides: {
                 root: {
