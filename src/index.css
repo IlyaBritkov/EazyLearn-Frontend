@@ -4,6 +4,85 @@
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
+.popup-portal {
+    z-index: 9999;
+}
+.popup-portal > div {
+    z-index: inherit;
+    background-color: transparent !important;
+}
+.popup-content {
+    position: fixed !important;
+}
+
+.popup-content > div > * {
+    position: relative;
+    width: 100%;
+}
+.popup-content > div > *:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 90%;
+    height: 1px;
+    background-color: #AB0013;
+    opacity: 0.25;
+}
+
+.popup-content > div > *:first-child:before, .caret-menu-no-line:before {
+    display: none !important;
+}
+
+.swiper-button-disabled {
+    display: none !important;
+}
+
+.filter-arrow-up > img {
+    animation: arrow-up-animation 1s ease-out;
+    animation-fill-mode: forwards;
+}
+.filter-arrow-down > img {
+    animation: arrow-down-animation 1s ease-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes arrow-up-animation {
+    30% {
+        transform: rotate(370deg);
+    }
+    50% {
+        transform: rotate(354deg);
+    }
+    70% {
+        transform: rotate(365deg);
+    }
+    85% {
+        transform: rotate(357deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes arrow-down-animation {
+    30% {
+        transform: rotate(190deg);
+    }
+    50% {
+        transform: rotate(174deg);
+    }
+    70% {
+        transform: rotate(185deg);
+    }
+    85% {
+        transform: rotate(177deg);
+    }
+    100% {
+        transform: rotate(180deg);
+    }
+}
+
 .MuiTabs-flexContainer {
     gap: 80px;
 }

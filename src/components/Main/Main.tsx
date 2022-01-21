@@ -3,6 +3,7 @@ import {
     Container as c, Stack
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { motion } from 'framer-motion';
 import theme from '../../theme';
 import Navigation from '../Navigation';
 import Home from '../Home/Home';
@@ -21,6 +22,7 @@ const styles = {
         background: '#fff',
         minHeight: 'calc(100vh - 110px)',
         boxShadow: '0px -14px 24px 0 rgba(0, 0, 0, 0.05)',
+        overflow: 'hidden',
     },
 };
 
@@ -47,10 +49,42 @@ const Main = ({ page }: MainProps) => {
                     <Stack
                         direction="column"
                     >
-                        {page === 'home' && <Home />}
-                        {page === 'categories' && <Categories />}
-                        {page === 'favourite' && <Favourite />}
-                        {page === 'profile' && <Profile />}
+                        {page === 'home' && (
+                            <motion.div
+                                initial={{ y: '100%' }}
+                                animate={{ y: 0 }}
+                                exit={{ y: '100%' }}
+                            >
+                                <Home />
+                            </motion.div>
+                        )}
+                        {page === 'categories' && (
+                            <motion.div
+                                initial={{ y: '100%' }}
+                                animate={{ y: 0 }}
+                                exit={{ y: '100%' }}
+                            >
+                                <Categories />
+                            </motion.div>
+                        )}
+                        {page === 'favourite' && (
+                            <motion.div
+                                initial={{ y: '100%' }}
+                                animate={{ y: 0 }}
+                                exit={{ y: '100%' }}
+                            >
+                                <Favourite />
+                            </motion.div>
+                        )}
+                        {page === 'profile' && (
+                            <motion.div
+                                initial={{ y: '100%' }}
+                                animate={{ y: 0 }}
+                                exit={{ y: '100%' }}
+                            >
+                                <Profile />
+                            </motion.div>
+                        )}
                     </Stack>
                 </Container>
             </Stack>

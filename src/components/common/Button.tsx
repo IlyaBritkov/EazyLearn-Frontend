@@ -49,6 +49,7 @@ const Button = ({
     if (Icon) {
         return (
             <IconButton
+                className={className}
                 style={{
                     ...IconWrapperStyles, position: 'relative', minWidth: 25, minHeight: 25,
                 }} {...extra}

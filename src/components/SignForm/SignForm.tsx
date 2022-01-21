@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
     Container, Stack, Tabs, Link
 } from '@mui/material';
+import { motion } from 'framer-motion';
 import theme from '../../theme';
 import { logoRed } from '../../assets';
 import Tab from '../common/Tab';

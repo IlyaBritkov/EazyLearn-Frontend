@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
-import Card from './Card';
+import Group from './Group';
 import { sliderArrow } from '../../assets';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -33,7 +33,7 @@ const NextButton = styled('div')({
     userSelect: 'none',
 });
 
-const CardsList: React.FC = React.memo((props) => {
+const GroupsList: React.FC = React.memo((props) => {
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
@@ -74,9 +74,10 @@ const CardsList: React.FC = React.memo((props) => {
                 }}
                 watchOverflow
                 onSwiper={handleSwiperLoad}
+                onSlideChange={handleSlideChange}
             >
                 {testArray.map((item, index) => (
-                    <SwiperSlide><Card index={index} key={item} /></SwiperSlide>
+                    <SwiperSlide><Group index={index} key={item} /></SwiperSlide>
                 ))}
             </Swiper>
 
@@ -84,4 +85,4 @@ const CardsList: React.FC = React.memo((props) => {
     );
 });
 
-export default CardsList;
+export default GroupsList;

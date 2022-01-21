@@ -1,92 +1,98 @@
-import React from 'react';
-import { Popover as popover } from '@mui/material';
+import React, { useRef } from 'react';
 import { styled } from '@mui/styles';
+import Modal from 'react-modal';
 import Button, { Props as ButtonProps } from './Button';
+import theme from '../../theme';
 
 type Props = ButtonProps & {
     children: React.ReactNode | React.ReactNodeArray;
     onUnMount?: any;
 };
-interface OriginInterface {
-    anchorOrigin?: {
-        vertical: 'top' | 'bottom';
-        horizontal: 'left' | 'right';
-    },
-    transformOrigin?: {
-        vertical: 'top' | 'bottom';
-        horizontal: 'left' | 'right';
-    },
-}
 
 const Dropdown = ({
     children, Icon, IconWrapperStyles, IconStyles, onUnMount,
 }: Props) => {
-    const Origin: OriginInterface = {
-        anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'left',
-        },
-        transformOrigin: {
-            vertical: 'top',
-            horizontal: 'left',
+    const popupRef = useRef(null);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [coords, setCoords] = React.useState({
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    });
+    const [offsets, setOffsets] = React.useState({
+        top: 0, left: 0,
+    });
+    const [cornerStyle, setCornerStyle] = React.useState('10px');
+
+    const styles = {
+        Popup: {
+            overlay: {
+                backgroundColor: 'transparent',
+            },
+            content: {
+                zIndex: 9999,
+                border: 'none',
+                inset: 'unset',
+                padding: 0,
+                maxWidth: 620,
+                background: 'rgba(252, 202, 194, 0.75)',
+                backdropFilter: 'blur(20px)',
+                borderRadius: cornerStyle,
+                top: offsets.top,
+                left: offsets.left,
+                display: 'flex',
+                flexDirection: 'column' as const,
+            },
         },
     };
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-    const [origin, setOrigin] = React.useState(Origin);
-    const [cornerStyle, setCornerStyle] = React.useState({
-        borderRadius: '10px',
-    });
-
-    const Popover = styled(popover)({
-        '& .MuiPopover-paper': {
-            borderRadius: cornerStyle.borderRadius,
-        },
-    });
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-        const { left, top } = event.currentTarget.getBoundingClientRect();
+    const handleOpen = (e: any) => {
         const { height, width } = window.screen;
-        const horizontal = width - left < left ? 'right' : 'left';
-        const vertical = height - top < top ? 'bottom' : 'top';
-        setOrigin({
-            anchorOrigin: {
-                vertical: height - top < top ? 'top' : 'bottom',
-                horizontal: width - left < left ? 'left' : 'right',
-            },
-            transformOrigin: {
-                vertical: height - top < top ? 'bottom' : 'top',
-                horizontal: width - left < left ? 'right' : 'left',
-            },
+        const {
+            top, left, right, bottom,
+        } = coords;
+
+        const offsetLeft = width - left < left
+            ? left - e.contentEl.offsetWidth : right;
+        const offsetTop = height - top + e.contentEl.offsetHeight < top
+            ? top - e.contentEl.offsetHeight : bottom;
+
+        setOffsets({
+            top: offsetTop,
+            left: offsetLeft,
         });
+
+        const horizontal = width - left < left ? 'right' : 'left';
+        const vertical = height - top + e.contentEl.offsetHeight < top ? 'bottom' : 'top';
+
         if (horizontal === 'left' && vertical === 'top') {
-            setCornerStyle({
-                borderRadius: '0 10px 10px 10px',
-            });
+            setCornerStyle('0 10px 10px 10px');
         }
         if (horizontal === 'right' && vertical === 'top') {
-            setCornerStyle({
-                borderRadius: '10px 0 10px 10px',
-            });
+            setCornerStyle('10px 0 10px 10px');
         }
         if (horizontal === 'left' && vertical === 'bottom') {
-            setCornerStyle({
-                borderRadius: '10px 10px 10px 0',
-            });
+            setCornerStyle('10px 10px 10px 0');
         }
         if (horizontal === 'right' && vertical === 'bottom') {
-            setCornerStyle({
-                borderRadius: '10px 10px 0 10px',
-            });
+            setCornerStyle('10px 10px 0 10px');
         }
+    };
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setIsOpen(true);
+        const {
+            top, left, bottom, right,
+        } = event.currentTarget.getBoundingClientRect();
+        setCoords({
+            top, left, bottom, right,
+        });
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setIsOpen(false);
         onUnMount();
     };
-    const isOpen = Boolean(anchorEl);
 
     return (
         <>
@@ -96,14 +102,18 @@ const Dropdown = ({
                 IconStyles={IconStyles}
                 onClick={handleClick}
             />
-            <Popover
-                open={isOpen}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                {...origin}
+            <Modal
+                ariaHideApp={false}
+                ref={popupRef}
+                isOpen={isOpen}
+                onAfterOpen={handleOpen}
+                onRequestClose={handleClose}
+                portalClassName="popup-portal"
+                className="popup-content"
+                style={styles.Popup}
             >
-                {children}
-            </Popover>
+                <div>{children}</div>
+            </Modal>
         </>
     );
 };

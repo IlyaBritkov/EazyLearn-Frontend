@@ -1,148 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { Stack, Typography } from '@mui/material';
-import {
-    createIcon, filterIcon, arrowfilterIcon, checkbox, checkboxChecked
-} from '../../assets';
+import { createIcon } from '../../assets';
 import Button from '../common/Button';
 import Dropdown from '../common/Dropdown';
 import theme from '../../theme';
-import CardsList from './CardsList';
 import isMobile from '../../utils/isMobile';
+import Filter from './Filter';
+
+const CardsList = lazy(() => import('./CardsList'));
+const GroupsList = lazy(() => import('./GroupsList'));
 
 const styles = {
-    DropdownDiv: {
-        padding: 0,
-        display: 'flex',
-        flexDirection: 'row' as const,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    DropdownArrow: {
-        width: 20,
-        maxHeight: 20,
-    },
-    DropdownArrowButton: {
-        padding: '15px',
-        borderRadius: '0 !important',
-        marginRight: '20px',
-    },
-    DropdownButton: {
-        width: '100% !important',
-        justifyContent: 'flex-start',
-        padding: '15px 50px',
-        color: theme.palette.primary.dark,
-        letterSpacing: 0,
-        fontSize: 15,
-        fontWeight: 'normal',
-        gap: '15px',
-    },
     StackMobile: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: '32px 0',
+        margin: '24px 0',
         width: '100%',
     },
     StackDesktop: {
-        margin: '55px 0',
+        margin: '35px 0',
+    },
+    cardWrapper: {
+        position: 'relative' as const,
+        width: isMobile ? 'calc(100% + 16px)' : '100%',
+    },
+    CreateButton: {
+        maxWidth: isMobile ? 180 : 230,
+        padding: isMobile ? '18px 20px' : '20px 24px',
+        justifyContent: 'flex-start',
     },
 };
-type filter = {
-    time: {
-        isSortByTime: boolean,
-        SortByTimeAsc: boolean,
-    },
-    level: {
-        isSortByLevel: boolean,
-        SortByLevelAsc: boolean,
-    },
-}
-type FilterProps = {
-    handleFilterChange: (sortings: filter) => void,
-}
-
-const Filter = React.memo(({
-    handleFilterChange,
-} : FilterProps) => {
-    const [isSortByTime, setSortByTime] = useState(false);
-    const [SortByTimeAsc, setSortByTimeAsc] = useState(true);
-
-    const [isSortByLevel, setSortByLevel] = useState(false);
-    const [SortByLevelAsc, setSortByLevelAsc] = useState(true);
-
-    const sortings = {
-        time: {
-            isSortByTime,
-            SortByTimeAsc,
-        },
-        level: {
-            isSortByLevel,
-            SortByLevelAsc,
-        },
-    };
-
-    const handleTimeSorting = (e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-        setSortByTime(!isSortByTime);
-    };
-    const handleLevelSorting = (e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-        setSortByLevel(!isSortByLevel);
-    };
-    const handleChangeTimeType = (e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-        setSortByTimeAsc(!SortByTimeAsc);
-    };
-    const handleChangeLevelType = (e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-        setSortByLevelAsc(!SortByLevelAsc);
-    };
-
-    const handleUnMount = () => {
-        console.log('unmounted');
-        handleFilterChange(sortings);
-    };
-    return (
-        <Dropdown
-            Icon={filterIcon}
-            IconStyles={{ width: isMobile ? 20 : 30 }}
-            onUnMount={handleUnMount}
-        >
-            <div style={styles.DropdownDiv}>
-                <Button onClick={handleTimeSorting} sx={{ ...styles.DropdownButton }} startIcon={isSortByTime ? checkboxChecked : checkbox} variant="text">Сортировать по недавности</Button>
-                {
-                    isSortByTime && (
-                        <Button
-                            Icon={arrowfilterIcon}
-                            IconStyles={styles.DropdownArrow}
-                            sx={{ ...styles.DropdownArrowButton, transform: !SortByTimeAsc ? 'rotate(180deg)' : '' }}
-                            onClick={handleChangeTimeType}
-                        />
-                    )
-                }
-            </div>
-            <div style={styles.DropdownDiv}>
-                <Button onClick={handleLevelSorting} sx={{ ...styles.DropdownButton }} startIcon={isSortByLevel ? checkboxChecked : checkbox} variant="text">Сортировать по уровню владения</Button>
-                {
-                    isSortByLevel && (
-                        <Button
-                            Icon={arrowfilterIcon}
-                            IconStyles={styles.DropdownArrow}
-                            sx={{ ...styles.DropdownArrowButton, transform: !SortByLevelAsc ? 'rotate(180deg)' : '' }}
-                            onClick={handleChangeLevelType}
-                        />
-                    )
-                }
-            </div>
-        </Dropdown>
-    );
-});
 
 const Home = () => {
-    const handleFilterChange = (sortings: filter) => {
-        console.log(sortings);
-    };
+    const [groupSortings, setGroupSortings] = useState({
+        time: {
+            isSortByTime: false,
+            SortByTimeAsc: true,
+        },
+        level: {
+            isSortByLevel: false,
+            SortByLevelAsc: true,
+        },
+    });
+
+    const [cardsSortings, setCardsSortings] = useState({
+        time: {
+            isSortByTime: false,
+            SortByTimeAsc: true,
+        },
+        level: {
+            isSortByLevel: false,
+            SortByLevelAsc: true,
+        },
+    });
 
     return (
         <Stack
@@ -151,15 +63,22 @@ const Home = () => {
             justifyContent="flex-start"
         >
             <Stack style={isMobile ? styles.StackMobile : styles.StackDesktop}>
-                <Button Icon={createIcon} IconStyles={{ width: 30 }} />
+                <Dropdown
+                    Icon={createIcon}
+                    IconStyles={{ width: 30 }}
+                >
+                    <div><Button onClick={() => console.log('card creation pressed')} style={styles.CreateButton} variant="text"><Typography>Создать карточку</Typography></Button></div>
+                    <div><Button onClick={() => console.log('group creation pressed')} style={styles.CreateButton} variant="text"><Typography>Создать группу</Typography></Button></div>
+                </Dropdown>
                 {isMobile && (
                     <Filter
-                        handleFilterChange={handleFilterChange}
+                        sortings={groupSortings}
+                        setSortings={setGroupSortings}
                     />
                 )}
             </Stack>
             <Stack
-                style={{ width: '100%', gap: '40px' }}
+                style={{ width: '100%', gap: '35px' }}
             >
                 <Stack
                     direction="row"
@@ -169,20 +88,44 @@ const Home = () => {
                     <Typography>Группы</Typography>
                     {!isMobile && (
                         <Filter
-                            handleFilterChange={handleFilterChange}
+                            sortings={groupSortings}
+                            setSortings={setGroupSortings}
                         />
                     )}
                 </Stack>
                 <Stack
                     direction="row"
                     alignItems="center"
-                    style={{ position: 'relative', width: isMobile ? 'calc(100% + 16px)' : '100%' }}
+                    style={styles.cardWrapper}
                 >
 
-                    <CardsList />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <GroupsList />
+                    </Suspense>
                 </Stack>
             </Stack>
-            <Stack style={{ marginTop: 105 }} />
+            <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
+                    <Typography>Карточки</Typography>
+                    <Filter
+                        sortings={cardsSortings}
+                        setSortings={setCardsSortings}
+                    />
+                </Stack>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    style={styles.cardWrapper}
+                >
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <CardsList />
+                    </Suspense>
+                </Stack>
+            </Stack>
         </Stack>
     );
 };

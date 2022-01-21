@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
-import { favouritesInactiveIcon, tripleDots } from '../../assets';
+import { Typography as Typo } from '@mui/material';
+import {
+    favouritesActiveIcon, favouritesInactiveIcon, tripleDots, dropdownCaret
+} from '../../assets';
 import Button from '../common/Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
+import Dropdown from '../common/Dropdown';
 
 type CardProps = {
     index: number;
 }
 
+const styles = {
+    MenuItemButton: {
+        padding: '7px 14px',
+        maxWidth: 175,
+        justifyContent: 'flex-start',
+        textAlign: 'start' as const,
+    },
+    Typo: {
+        fontSize: isMobile ? 10 : 12,
+    },
+};
+
 const Card = ({ index }: CardProps) => {
+    const [isFavourite, setFavourite] = useState(false);
+
     const OuterDiv = styled('div')({
         display: 'flex',
         flexDirection: 'column',
@@ -26,8 +44,8 @@ const Card = ({ index }: CardProps) => {
         fontWeight: 500,
         fontSize: isMobile ? 10 : 12,
         textAlign: 'center',
-        textDecoration: 'ellipsis',
-        '-webkit-tap-highlight-color': 'transparent',
+        textOverflow: 'ellipsis',
+        WebkitTapHighlightColor: 'transparent',
         position: 'relative',
         padding: 20,
     });
@@ -36,9 +54,22 @@ const Card = ({ index }: CardProps) => {
         position: 'absolute',
         top: isMobile ? 7 : 12,
     });
-    const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+
+    const Typography = styled(Typo)({
+        color: theme.palette.secondary.main,
+        fontWeight: 500,
+        fontSize: isMobile ? 10 : 12,
+        lineHeight: isMobile ? '12px' : '15px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    });
+
+    const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        console.dir(e.currentTarget);
+        setFavourite(!isFavourite);
+    };
+
+    const handleRemove = (e: React.MouseEvent<HTMLElement>) => {
     };
     return (
         <OuterDiv key={index} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${index}`)} onKeyDown={() => {}}>
@@ -47,22 +78,43 @@ const Card = ({ index }: CardProps) => {
                     sx={{
                         width: '30px',
                     }}
-                    Icon={favouritesInactiveIcon}
+                    Icon={isFavourite ? favouritesActiveIcon : favouritesInactiveIcon}
                     IconStyles={{ width: 12 }}
-                    onClick={handleClick}
+                    onClick={handleActive}
                 />
             </AbsoluteIcon>
             <AbsoluteIcon style={{ right: isMobile ? 5 : 12 }}>
-                <Button
-                    sx={{
+                <Dropdown
+                    Icon={tripleDots}
+                    IconStyles={{ width: 12 }}
+                    IconWrapperStyles={{
                         width: '30px',
                         height: '30px',
                     }}
-                    Icon={tripleDots}
-                    IconStyles={{ width: 12 }}
-                />
+                >
+                    <div>
+                        <Button style={styles.MenuItemButton} variant="text">
+                            <Typo style={styles.Typo}>Редактировать</Typo>
+                        </Button>
+                    </div>
+                    <div>
+                        <Button style={styles.MenuItemButton} variant="text">
+                            <Typo style={styles.Typo}>Добавить карточки</Typo>
+                        </Button>
+                    </div>
+                    <div>
+                        <Button style={styles.MenuItemButton} variant="text">
+                            <Typo style={styles.Typo}>Изменить уровень владения</Typo>
+                        </Button>
+                    </div>
+                    <div>
+                        <Button onClick={handleRemove} style={styles.MenuItemButton} variant="text">
+                            <Typo style={styles.Typo}>Удалить</Typo>
+                        </Button>
+                    </div>
+                </Dropdown>
             </AbsoluteIcon>
-            <div style={{ userSelect: 'none' }}>Карточка №{index}</div>
+            <div style={{ userSelect: 'none', width: '100%' }}><Typography>Карточка №{index}</Typography></div>
         </OuterDiv>
     );
 };
