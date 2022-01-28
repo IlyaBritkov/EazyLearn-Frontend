@@ -66,16 +66,23 @@ const theme = createTheme({
                         },
                     },
                     '& .MuiFilledInput-root': {
-                        '&:before': {
-                            borderColor: ThemeColors.primaryDarken,
-                            borderWidth: '2px',
+                        backgroundColor: ThemeColors.white,
+                        '&:hover': {
+                            backgroundColor: ThemeColors.white,
                         },
-                        '&:hover:not($disabled):not($cssFocused):not($error):before': {
+                        '&:hover:not(.Mui-disabled):before': {
+                            borderColor: ThemeColors.primaryDarken,
+                        },
+                        '&.Mui-focused': {
+                            backgroundColor: ThemeColors.white,
+                        },
+                        '&:before': {
                             borderColor: ThemeColors.primary,
                             borderWidth: '2px',
                         },
-                        '&:after': {
+                        '&:hover:not($disabled):not($cssFocused):not($error):before': {
                             borderColor: ThemeColors.primaryDarken,
+                            borderWidth: '2px',
                         },
                     },
                 },

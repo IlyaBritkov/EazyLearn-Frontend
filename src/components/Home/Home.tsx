@@ -1,14 +1,15 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { createIcon } from '../../assets';
 import Button from '../common/Button';
 import Dropdown from '../common/Dropdown';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import Filter from './Filter';
-
-const CardsList = lazy(() => import('./CardsList'));
-const GroupsList = lazy(() => import('./GroupsList'));
+import CardsList from './CardsList';
+import GroupsList from './GroupsList';
 
 const styles = {
     StackMobile: {
@@ -34,6 +35,7 @@ const styles = {
 };
 
 const Home = () => {
+    const navigate = useNavigate();
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -57,36 +59,39 @@ const Home = () => {
     });
 
     return (
-        <Stack
-            direction="column"
-            alignItems="flex-start"
-            justifyContent="flex-start"
+        <motion.div
+            initial={{ y: '110vh' }}
+            animate={{ y: 0, transition: { delay: 0.2 } }}
+            exit={{ y: '110vh' }}
         >
-            <Stack style={isMobile ? styles.StackMobile : styles.StackDesktop}>
-                <Dropdown
-                    Icon={createIcon}
-                    IconStyles={{ width: 30 }}
-                >
-                    <div><Button onClick={() => console.log('card creation pressed')} style={styles.CreateButton} variant="text"><Typography>Создать карточку</Typography></Button></div>
-                    <div><Button onClick={() => console.log('group creation pressed')} style={styles.CreateButton} variant="text"><Typography>Создать группу</Typography></Button></div>
-                </Dropdown>
-                {isMobile && (
-                    <Filter
-                        sortings={groupSortings}
-                        setSortings={setGroupSortings}
-                    />
-                )}
-            </Stack>
             <Stack
-                style={{ width: '100%', gap: '35px' }}
+                direction="column"
+                alignItems="flex-start"
+                justifyContent="flex-start"
             >
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Typography>Группы</Typography>
-                    {!isMobile && (
+                <Stack style={isMobile ? styles.StackMobile : styles.StackDesktop}>
+                    <Dropdown
+                        Icon={createIcon}
+                        IconStyles={{ width: 30 }}
+                    >
+                        <div>
+                            <Button
+                                onClick={() => navigate('create-card')}
+                                style={styles.CreateButton} variant="text"
+                            >
+                                <Typography>Создать карточку</Typography>
+                            </Button>
+                        </div>
+                        <div>
+                            <Button
+                                onClick={() => navigate('create-group')}
+                                style={styles.CreateButton} variant="text"
+                            >
+                                <Typography>Создать группу</Typography>
+                            </Button>
+                        </div>
+                    </Dropdown>
+                    {isMobile && (
                         <Filter
                             sortings={groupSortings}
                             setSortings={setGroupSortings}
@@ -94,39 +99,51 @@ const Home = () => {
                     )}
                 </Stack>
                 <Stack
-                    direction="row"
-                    alignItems="center"
-                    style={styles.cardWrapper}
+                    style={{ width: '100%', gap: '35px' }}
                 >
-
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <Typography>Группы</Typography>
+                        {!isMobile && (
+                            <Filter
+                                sortings={groupSortings}
+                                setSortings={setGroupSortings}
+                            />
+                        )}
+                    </Stack>
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        style={styles.cardWrapper}
+                    >
                         <GroupsList />
-                    </Suspense>
+                    </Stack>
                 </Stack>
-            </Stack>
-            <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Typography>Карточки</Typography>
-                    <Filter
-                        sortings={cardsSortings}
-                        setSortings={setCardsSortings}
-                    />
-                </Stack>
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    style={styles.cardWrapper}
-                >
-                    <Suspense fallback={<div>Loading...</div>}>
+                <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <Typography>Карточки</Typography>
+                        <Filter
+                            sortings={cardsSortings}
+                            setSortings={setCardsSortings}
+                        />
+                    </Stack>
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        style={styles.cardWrapper}
+                    >
                         <CardsList />
-                    </Suspense>
+                    </Stack>
                 </Stack>
             </Stack>
-        </Stack>
+        </motion.div>
     );
 };
 

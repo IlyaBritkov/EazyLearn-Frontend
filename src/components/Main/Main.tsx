@@ -3,13 +3,14 @@ import {
     Container as c, Stack
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { motion } from 'framer-motion';
 import theme from '../../theme';
 import Navigation from '../Navigation';
 import Home from '../Home/Home';
 import Categories from '../Categories/Categories';
 import Favourite from '../Favourite/Favourite';
 import Profile from '../Profile/Profile';
+import CardCreator from '../CardCreator/CardCreator';
+import GroupCreator from '../GroupCreator/GroupCreator';
 
 type MainProps = {
     page: string;
@@ -49,42 +50,12 @@ const Main = ({ page }: MainProps) => {
                     <Stack
                         direction="column"
                     >
-                        {page === 'home' && (
-                            <motion.div
-                                initial={{ y: '100%' }}
-                                animate={{ y: 0 }}
-                                exit={{ y: '100%' }}
-                            >
-                                <Home />
-                            </motion.div>
-                        )}
-                        {page === 'categories' && (
-                            <motion.div
-                                initial={{ y: '100%' }}
-                                animate={{ y: 0 }}
-                                exit={{ y: '100%' }}
-                            >
-                                <Categories />
-                            </motion.div>
-                        )}
-                        {page === 'favourite' && (
-                            <motion.div
-                                initial={{ y: '100%' }}
-                                animate={{ y: 0 }}
-                                exit={{ y: '100%' }}
-                            >
-                                <Favourite />
-                            </motion.div>
-                        )}
-                        {page === 'profile' && (
-                            <motion.div
-                                initial={{ y: '100%' }}
-                                animate={{ y: 0 }}
-                                exit={{ y: '100%' }}
-                            >
-                                <Profile />
-                            </motion.div>
-                        )}
+                        {page === 'home' && <Home />}
+                        {page === 'categories' && <Categories />}
+                        {page === 'favourite' && <Favourite />}
+                        {page === 'profile' && <Profile />}
+                        {page === 'create-card' && <CardCreator />}
+                        {page === 'create-group' && <GroupCreator />}
                     </Stack>
                 </Container>
             </Stack>

@@ -5,14 +5,14 @@ import {
     useLocation
 } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Loader from './components/Loader'; // loader is ready to use
-import SignForm from './components/SignForm/SignForm'; // sign form is ready to use
+import Loader from './components/Loader';
+import SignForm from './components/SignForm/SignForm';
 import Main from './components/Main/Main';
 import HandleRoutes from './components/HandleRoutes';
+import CardCreator from './components/CardCreator/CardCreator';
+import * as Assets from './assets';
 
 const App: React.FC = () => {
-    const [isLoading, setIsLoading] = React.useState(true);
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => setIsLoading(false), 1200));
     const location = useLocation();
     return (
         <AnimatePresence exitBeforeEnter>
@@ -20,6 +20,8 @@ const App: React.FC = () => {
                 <Route path="/" element={<HandleRoutes />} />
                 <Route path="/login" element={<SignForm />} />
                 <Route path="/home" element={<Main page="home" />} />
+                <Route path="/home/create-card" element={<Main page="create-card" />} />
+                <Route path="/home/create-group" element={<Main page="create-group" />} />
                 <Route path="/categories" element={<Main page="categories" />} />
                 <Route path="/favourite" element={<Main page="favourite" />} />
                 <Route path="/profile" element={<Main page="profile" />} />

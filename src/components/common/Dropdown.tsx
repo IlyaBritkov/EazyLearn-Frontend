@@ -36,7 +36,7 @@ const Dropdown = ({
                 inset: 'unset',
                 padding: 0,
                 maxWidth: 620,
-                background: 'rgba(252, 202, 194, 0.75)',
+                background: 'rgba(252, 202, 194, 0.7)',
                 backdropFilter: 'blur(20px)',
                 borderRadius: cornerStyle,
                 top: offsets.top,

@@ -20,8 +20,14 @@ import checkboxChecked from './checkbox_checked.svg';
 import tripleDots from './triple_dots.svg';
 import sliderArrow from './slider_arrow.svg';
 import dropdownCaret from './dropdown_caret.svg';
+import dropdownProfileCaret from './profileCaret.svg';
+import addIcon from './add_icon.svg';
+import searchCardCreator from './searchCardCreator.svg';
 
 export {
+    searchCardCreator,
+    addIcon,
+    dropdownProfileCaret,
     dropdownCaret,
     favouritesMenu,
     sliderArrow,

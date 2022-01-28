@@ -26,7 +26,7 @@ const styles = {
         borderRadius: '4px',
     },
     MenuItemButton: {
-        padding: '7px 14px',
+        padding: '9px 14px',
         maxWidth: 175,
         justifyContent: 'flex-start',
         textAlign: 'start' as const,

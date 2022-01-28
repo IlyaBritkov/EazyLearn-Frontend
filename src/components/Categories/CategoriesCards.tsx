@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Card from './Card';
 import isMobile from '../../utils/isMobile';
 
@@ -11,32 +11,36 @@ const styles = {
     Wrapper: {
         display: 'flex',
         flexDirection: 'row' as const,
-        gap: isMobile ? '20px' : '70px 140px',
+        gap: isMobile ? '18px' : '70px 140px',
         flexWrap: 'wrap' as const,
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         overflow: 'hidden',
-        marginBottom: 50,
+        marginBottom: 70,
     },
 };
 
-const CategoriesCards = React.memo((props : Props) => {
-    const [testArray, setTestArray] = useState(['name', 'another', 'name', 'dog', 'cat', 'GRAU']);
+const CategoriesCards = (props : Props) => {
+    const [array, setArray] = useState(['heylo', 'woah', 'noob', 'react', 'js', 'alloe', 'zen', 'css']);
     const [filteredArray, setFilteredArray] = useState<string[]>([]);
-    console.log(filteredArray, props.searchTerm);
+    console.log(props.searchTerm);
     useEffect(() => {
-        setFilteredArray(testArray.filter(
-            (item) => item.toLowerCase().includes(props.searchTerm.toLowerCase())
+        setFilteredArray(array.filter(
+            (item: any) => item.toLowerCase().includes(props.searchTerm.toLowerCase())
         ));
     }, [props.searchTerm]);
     return (
-        <div {...props} style={styles.Wrapper}>
-            {filteredArray.length > 0 ? filteredArray.map((item, index) => (
-                <Card index={index} key={item} />
-            )) : (<div>Пусто</div>)}
-        </div>
+        <AnimatePresence>
+            <motion.div {...props} style={styles.Wrapper}>
+                {
+                    filteredArray.length > 0 ? filteredArray.map((item: any, index: number) => (
+                        <Card index={index} key={item} />
+                    )) : (<div>Пусто</div>)
+                }
+            </motion.div>
+        </AnimatePresence>
     );
-});
+};
 
 export default CategoriesCards;

@@ -22,10 +22,9 @@ const styles = {
         justifyContent: 'flex-start',
     },
     TextField: {
-        maxWidth: 270,
+        maxWidth: isMobile ? 215 : 270,
         marginRight: '-40px',
-        marginTop: '12px',
-        transition: '0.2s',
+        marginTop: isMobile ? 15 : 12,
     },
 };
 
@@ -40,54 +39,57 @@ const Categories = () => {
         setInputValue(e.currentTarget.value);
     };
     return (
-        <Stack
-            direction="column"
-            alignItems="flex-start"
-            justifyContent="flex-start"
+        <motion.div
+            initial={{ y: '110vh' }}
+            animate={{ y: 0, transition: { delay: 0.2 } }}
+            exit={{ y: '110vh' }}
         >
-            <Stack style={{ ...styles.Stack, margin: isMobile ? '24px 0' : '35px 0' }}>
-                <Dropdown
-                    Icon={createIcon}
-                    IconStyles={{ width: 30 }}
-                >
-                    <div>
-                        <Button onClick={() => console.log('card creation pressed')} style={styles.CreateButton} variant="text">
-                            <Typography>Создать карточку</Typography>
-                        </Button>
-                    </div>
-                    <div>
-                        <Button onClick={() => console.log('group creation pressed')} style={styles.CreateButton} variant="text">
-                            <Typography>Создать группу</Typography>
-                        </Button>
-                    </div>
-                </Dropdown>
-                <div>
-                    {isSearchActive && (
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                        >
-                            <TextInput onChange={handleSearchChange} style={styles.TextField} variant="filled" placeholder="Поиск..." />
-                        </motion.span>
-                    )}
-                    <Button
-                        sx={{
-                            zIndex: 999, background: '#fff', borderRadius: 0,
-                        }}
-                        onClick={handleSearchActive} Icon={searchIcon} IconStyles={{ width: 25 }}
-                    />
-                </div>
-            </Stack>
             <Stack
-                style={{ width: '100%', gap: '35px' }}
+                direction="column"
+                alignItems="flex-start"
+                justifyContent="flex-start"
             >
-                <Stack
-                    direction="row"
-                >
-                    <CategoriesCards searchTerm={inputValue} />
+                <Stack style={{ ...styles.Stack, margin: isMobile ? '24px 0' : '35px 0' }}>
+                    <Dropdown
+                        Icon={createIcon}
+                        IconStyles={{ width: 30 }}
+                    >
+                        <div>
+                            <Button onClick={() => console.log('card creation pressed')} style={styles.CreateButton} variant="text">
+                                <Typography>Создать карточку</Typography>
+                            </Button>
+                        </div>
+                        <div>
+                            <Button onClick={() => console.log('group creation pressed')} style={styles.CreateButton} variant="text">
+                                <Typography>Создать группу</Typography>
+                            </Button>
+                        </div>
+                    </Dropdown>
+                    <div>
+                        {isSearchActive && (
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                            >
+                                <TextInput onChange={handleSearchChange} style={styles.TextField} variant="filled" />
+                            </motion.span>
+                        )}
+                        <Button
+                            sx={{
+                                zIndex: 999, background: '#fff', borderRadius: 0,
+                            }}
+                            onClick={handleSearchActive}
+                            Icon={searchIcon} IconStyles={{ width: 25 }}
+                        />
+                    </div>
+                </Stack>
+                <Stack style={{ width: 'calc(100% + 16px)' }}>
+                    <Stack direction="row" justifyContent="center">
+                        <CategoriesCards searchTerm={inputValue} />
+                    </Stack>
                 </Stack>
             </Stack>
-        </Stack>
+        </motion.div>
     );
 };
 
