@@ -9,8 +9,7 @@ import Home from '../Home/Home';
 import Categories from '../Categories/Categories';
 import Favourite from '../Favourite/Favourite';
 import Profile from '../Profile/Profile';
-import CardCreator from '../CardCreator/CardCreator';
-import GroupCreator from '../GroupCreator/GroupCreator';
+import Learn from '../Learn/Learn';
 
 type MainProps = {
     page: string;
@@ -54,8 +53,7 @@ const Main = ({ page }: MainProps) => {
                         {page === 'categories' && <Categories />}
                         {page === 'favourite' && <Favourite />}
                         {page === 'profile' && <Profile />}
-                        {page === 'create-card' && <CardCreator />}
-                        {page === 'create-group' && <GroupCreator />}
+                        {page === 'learn' && <Learn />}
                     </Stack>
                 </Container>
             </Stack>

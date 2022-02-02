@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { createIcon } from '../../assets';
 import Button from '../common/Button';
 import Dropdown from '../common/Dropdown';
-import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import Filter from './Filter';
 import CardsList from './CardsList';
 import GroupsList from './GroupsList';
+import GroupCreator from '../GroupCreator/GroupCreator';
+import CardCreator from '../CardCreator/CardCreator';
 
 const styles = {
     StackMobile: {
@@ -35,7 +36,8 @@ const styles = {
 };
 
 const Home = () => {
-    const navigate = useNavigate();
+    const [groupCreate, setCreateGroup] = useState(false);
+    const [cardCreate, setCreateCard] = useState(false);
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -58,6 +60,9 @@ const Home = () => {
         },
     });
 
+    if (groupCreate) return <GroupCreator groupPage={setCreateGroup} />;
+    if (cardCreate) return <CardCreator cardPage={setCreateCard} />;
+
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -69,23 +74,24 @@ const Home = () => {
                 alignItems="flex-start"
                 justifyContent="flex-start"
             >
-                <Stack style={isMobile ? styles.StackMobile : styles.StackDesktop}>
-                    <Dropdown
-                        Icon={createIcon}
-                        IconStyles={{ width: 30 }}
-                    >
+                <Stack
+                    style={isMobile ? styles.StackMobile : styles.StackDesktop}
+                >
+                    <Dropdown Icon={createIcon} IconStyles={{ width: 30 }}>
                         <div>
                             <Button
-                                onClick={() => navigate('create-card')}
-                                style={styles.CreateButton} variant="text"
+                                onClick={() => setCreateCard(true)}
+                                style={styles.CreateButton}
+                                variant="text"
                             >
                                 <Typography>Создать карточку</Typography>
                             </Button>
                         </div>
                         <div>
                             <Button
-                                onClick={() => navigate('create-group')}
-                                style={styles.CreateButton} variant="text"
+                                onClick={() => setCreateGroup(true)}
+                                style={styles.CreateButton}
+                                variant="text"
                             >
                                 <Typography>Создать группу</Typography>
                             </Button>
@@ -98,9 +104,7 @@ const Home = () => {
                         />
                     )}
                 </Stack>
-                <Stack
-                    style={{ width: '100%', gap: '35px' }}
-                >
+                <Stack style={{ width: '100%', gap: '35px' }}>
                     <Stack
                         direction="row"
                         justifyContent="space-between"

@@ -41,8 +41,11 @@ const styles = {
     },
 };
 
-const GroupCreator = () => {
-    const navigate = useNavigate();
+type Props = {
+    groupPage: (state: boolean) => void;
+}
+
+const GroupCreator: React.FC<Props> = ({ groupPage }) => {
     const [groupLevel, setGroupLevel] = useState<0 | 0.5 | 1 | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     return (
@@ -60,7 +63,7 @@ const GroupCreator = () => {
                     <Button
                         Icon={arrowBackIcon}
                         IconStyles={{ width: 40 }}
-                        onClick={() => navigate(-1)}
+                        onClick={() => groupPage(false)}
                     />
                     <Button style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
                 </Stack>

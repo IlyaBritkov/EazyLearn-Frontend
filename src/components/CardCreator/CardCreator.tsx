@@ -38,8 +38,11 @@ const styles = {
     },
 };
 
-const CardCreator = () => {
-    const navigate = useNavigate();
+type Props = {
+    cardPage: (state: boolean) => void;
+}
+
+const CardCreator: React.FC<Props> = ({ cardPage }) => {
     const [cardLevel, setCardLevel] = useState<0 | 0.5 | 1 | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     return (
@@ -57,7 +60,7 @@ const CardCreator = () => {
                     <Button
                         Icon={arrowBackIcon}
                         IconStyles={{ width: 40 }}
-                        onClick={() => navigate(-1)}
+                        onClick={() => cardPage(false)}
                     />
                     <Button style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
                 </Stack>

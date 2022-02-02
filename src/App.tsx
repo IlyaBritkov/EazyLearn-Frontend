@@ -9,7 +9,6 @@ import Loader from './components/Loader';
 import SignForm from './components/SignForm/SignForm';
 import Main from './components/Main/Main';
 import HandleRoutes from './components/HandleRoutes';
-import CardCreator from './components/CardCreator/CardCreator';
 import * as Assets from './assets';
 
 const App: React.FC = () => {
@@ -20,11 +19,10 @@ const App: React.FC = () => {
                 <Route path="/" element={<HandleRoutes />} />
                 <Route path="/login" element={<SignForm />} />
                 <Route path="/home" element={<Main page="home" />} />
-                <Route path="/home/create-card" element={<Main page="create-card" />} />
-                <Route path="/home/create-group" element={<Main page="create-group" />} />
                 <Route path="/categories" element={<Main page="categories" />} />
                 <Route path="/favourite" element={<Main page="favourite" />} />
                 <Route path="/profile" element={<Main page="profile" />} />
+                <Route path="/learn" element={<Main page="learn" />} />
                 <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Routes>
         </AnimatePresence>

@@ -2,12 +2,14 @@ import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { Typography } from '@mui/material';
 import ExistingCard from './ExistingCard';
 import { sliderArrow } from '../../assets';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import 'swiper/modules/navigation/navigation.min.css';
 import isMobile from '../../utils/isMobile';
+import theme from '../../theme';
 
 const PrevButton = styled('div')({
     position: 'absolute',
@@ -33,17 +35,49 @@ const NextButton = styled('div')({
     userSelect: 'none',
 });
 
+const CreateNewCard = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    width: isMobile ? 160 : 190,
+    height: isMobile ? 80 : 100,
+    color: theme.palette.primary.main,
+    background: '#fff',
+    borderRadius: 10,
+    border: `1px solid ${theme.palette.primary.dark}`,
+    transition: '0.2s',
+    '&:hover': {
+        cursor: 'pointer',
+        background: 'rgba(252, 202, 194, 0.2)',
+    },
+});
+
+const styles = {
+    Slide: {
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: 35,
+    },
+
+};
+
 const CardsInGroup: React.FC = React.memo((props) => {
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
-    const testArray = new Array(7).fill(Math.random());
-    const handleSlideChange = (e: any) => {
-        // if (e.realIndex > 0) setPrev(true);
-        // else setPrev(false);
-        // if (!e.isEnd) setNext(true);
-        // else setNext(false);
+    const [testArray, setTestArray] = useState([
+        { type: 'create' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' }]);
+    const handleCreateNewCard = (e: React.MouseEvent<HTMLButtonElement>) => {
+        console.log('create new card', e);
     };
 
     const handleSwiperLoad = (e: any) => {
@@ -55,7 +89,7 @@ const CardsInGroup: React.FC = React.memo((props) => {
         }, 0);
     };
     return (
-        <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
+        <div {...props} style={{ margin: '60px 0', overflow: 'hidden' }}>
 
             <PrevButton id="prev-button" ref={prevRef} role="button">
                 <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />
@@ -75,16 +109,33 @@ const CardsInGroup: React.FC = React.memo((props) => {
                 watchOverflow
                 onSwiper={handleSwiperLoad}
             >
-                {testArray.map((item, index, array) => {
-                    if (index % 2 === 0) {
+                {testArray.map((item, index) => {
+                    if (testArray.length < 6) {
                         return (
-                            <SwiperSlide style={{ width: '100% !important' }}>
-                                <ExistingCard index={index} key={array[index]} />
-                                <ExistingCard index={index + 1} key={array[index + 1]} />
+                            <SwiperSlide key={index}>
+                                <ExistingCard index={index} />
                             </SwiperSlide>
                         );
                     }
-                    return null;
+                    if (index % 2 === 1) return null;
+                    if (item?.type === 'create') {
+                        return (
+                            <SwiperSlide onClick={handleCreateNewCard} style={styles.Slide} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
+                                <CreateNewCard className="create-new-card">
+                                    <Typography style={{ fontSize: isMobile ? 10 : 12 }}>
+                                        Создать карточку в категории
+                                    </Typography>
+                                </CreateNewCard>
+                                <ExistingCard index={index} />
+                            </SwiperSlide>
+                        );
+                    }
+                    return (
+                        <SwiperSlide style={styles.Slide} key={index}>
+                            <ExistingCard index={index} />
+                            <ExistingCard index={index + 1} />
+                        </SwiperSlide>
+                    );
                 })}
             </Swiper>
 

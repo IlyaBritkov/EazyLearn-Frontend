@@ -9,21 +9,7 @@ type CardProps = {
     index: number;
 }
 
-const styles = {
-    MenuItemButton: {
-        padding: '9px 14px',
-        maxWidth: 175,
-        justifyContent: 'flex-start',
-        textAlign: 'start' as const,
-    },
-    Typo: {
-        fontSize: isMobile ? 10 : 12,
-    },
-};
-
-const ExistingCard = ({ index }: CardProps) => {
-    const [isFavourite, setFavourite] = useState(false);
-
+const ExistingCard: React.FC<CardProps> = ({ index }) => {
     const OuterDiv = styled('div')({
         display: 'flex',
         flexDirection: 'column',
@@ -46,11 +32,6 @@ const ExistingCard = ({ index }: CardProps) => {
         padding: 20,
     });
 
-    const AbsoluteIcon = styled('div')({
-        position: 'absolute',
-        top: isMobile ? 7 : 12,
-    });
-
     const Typography = styled(Typo)({
         color: theme.palette.secondary.main,
         fontWeight: 500,
@@ -60,13 +41,6 @@ const ExistingCard = ({ index }: CardProps) => {
         textOverflow: 'ellipsis',
     });
 
-    const handleActive = (e: React.MouseEvent<HTMLElement>) => {
-        e.stopPropagation();
-        setFavourite(!isFavourite);
-    };
-
-    const handleRemove = (e: React.MouseEvent<HTMLElement>) => {
-    };
     return (
         <OuterDiv key={index} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${index}`)} onKeyDown={() => {}}>
             <div style={{ userSelect: 'none', width: '100%' }}><Typography>Карточка №{index}</Typography></div>
