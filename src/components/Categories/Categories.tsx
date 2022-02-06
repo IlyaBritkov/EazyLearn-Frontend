@@ -83,7 +83,7 @@ const Categories = () => {
                         />
                     </div>
                 </Stack>
-                <Stack style={{ width: 'calc(100% + 16px)' }}>
+                <Stack>
                     <Stack direction="row" justifyContent="center">
                         <CategoriesCards searchTerm={inputValue} />
                     </Stack>

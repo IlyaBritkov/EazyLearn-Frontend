@@ -75,6 +75,10 @@ const CardsInGroup: React.FC = React.memo((props) => {
         { type: 'card' },
         { type: 'card' },
         { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
+        { type: 'card' },
         { type: 'card' }]);
     const handleCreateNewCard = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.log('create new card', e);

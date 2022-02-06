@@ -14,7 +14,7 @@ const styles = {
         gap: isMobile ? '18px' : '70px 140px',
         flexWrap: 'wrap' as const,
         width: '100%',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'flex-start',
         overflow: 'hidden',
         marginBottom: 70,

@@ -28,10 +28,11 @@ const styles = {
 };
 
 const Learn: React.FC = () => {
-    const [pickedGroups, setPickedGroups] = useState([1, 2, 3]);
+    const [pickedGroups, setPickedGroups] = useState([]);
 
     const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        setPickedGroups([]);
     };
     return (
         <motion.div

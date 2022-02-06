@@ -48,6 +48,11 @@
     animation-fill-mode: forwards;
 }
 
+.learn-link:active {
+    background: rgba(94, 0, 0, 0.2);
+    color: #fff;
+}
+
 @keyframes arrow-up-animation {
     30% {
         transform: rotate(370deg);

@@ -11,8 +11,9 @@ import getNoun from '../../utils/getNoun';
 import Dropdown from '../common/Dropdown';
 
 type GroupProps = {
-    picked: boolean;
+    group: any;
     index: number;
+    pickedGroups: any;
     setPickedGroups: any;
 }
 
@@ -44,7 +45,9 @@ const styles = {
     },
 };
 
-const Group: React.FC<GroupProps> = ({ picked, setPickedGroups, index }) => {
+const Group: React.FC<GroupProps> = ({
+    group, pickedGroups, setPickedGroups, index,
+}) => {
     const [isFavourite, setFavourite] = useState(false);
     const caretRef = useRef(null);
     const menuItem1 = useRef(null);
@@ -103,6 +106,7 @@ const Group: React.FC<GroupProps> = ({ picked, setPickedGroups, index }) => {
     };
 
     const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
         const caret = (caretRef!.current as any);
         if (!caret.classList.contains('active')) {
             caret.style.transform = 'rotate(90deg)';
@@ -117,17 +121,19 @@ const Group: React.FC<GroupProps> = ({ picked, setPickedGroups, index }) => {
         }
     };
 
+    const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+    };
+
     const handlePick = (e: any) => {
-        if (picked) {
-            setPickedGroups(
-                (pickedGroups: any) => pickedGroups.filter((group: any) => group !== index)
-            );
+        if (pickedGroups.includes(group)) {
+            setPickedGroups(pickedGroups.filter((g: any) => g !== group));
         } else {
-            setPickedGroups((pickedGroups: any) => [...pickedGroups, index]);
+            setPickedGroups([...pickedGroups, group]);
         }
     };
     return (
-        <OuterDiv onClick={handlePick} style={{ opacity: picked ? 0.5 : 1 }} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
+        <OuterDiv onClick={handlePick} style={{ opacity: pickedGroups.includes(group) ? 1 : 0.5 }} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
             <InnerDiv>
                 <AbsoluteItem style={{ left: '-5px' }}>
                     <Button
@@ -190,10 +196,10 @@ const Group: React.FC<GroupProps> = ({ picked, setPickedGroups, index }) => {
                         Название группы
                     </Typography>
                     <Typography className="card-number" style={{ fontSize: isMobile ? 8 : 10, fontWeight: 400 }}>
-                        {index + getNoun(index, ' карточка', ' карточки', ' карточек')}
+                        {group + getNoun(group, ' карточка', ' карточки', ' карточек')}
                     </Typography>
                 </div>
-                <Button style={styles.ButtonOpen}>
+                <Button onClick={handleOpen} style={styles.ButtonOpen}>
                     <Typography
                         style={{
                             fontSize: isMobile ? 8 : 10, fontWeight: 400,

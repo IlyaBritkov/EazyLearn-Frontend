@@ -76,9 +76,6 @@ const Navigation = ({ page }: NavigationProps) => {
                         <Link to="/favourite" style={{ ...styles.Link, opacity: page === 'favourite' ? 1 : 0.5 }}>
                             <img style={styles.Img} src={favouritesMenu} alt="Избранное" />
                         </Link>
-                        <Link to="/learn" style={{ ...styles.Link, opacity: page === 'learn' ? 1 : 0.5 }}>
-                            <img style={styles.Img} src={favouritesMenu} alt="Изучать" />
-                        </Link>
                     </Stack>
                 )
             }

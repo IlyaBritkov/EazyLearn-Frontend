@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createIcon } from '../../assets';
 import Button from '../common/Button';
 import Dropdown from '../common/Dropdown';
@@ -11,6 +11,7 @@ import CardsList from './CardsList';
 import GroupsList from './GroupsList';
 import GroupCreator from '../GroupCreator/GroupCreator';
 import CardCreator from '../CardCreator/CardCreator';
+import theme from '../../theme';
 
 const styles = {
     StackMobile: {
@@ -32,6 +33,21 @@ const styles = {
         maxWidth: isMobile ? 180 : 230,
         padding: isMobile ? '18px 20px' : '20px 24px',
         justifyContent: 'flex-start',
+    },
+    LearnLink: {
+        width: 95,
+        height: 35,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        border: '1px solid #6D0000',
+        color: '#6D0000',
+        padding: '15px 25px',
+        fontSize: 11,
+        fontWeight: 400,
+        textDecoration: 'none',
+        transition: '0.1s',
     },
 };
 
@@ -146,6 +162,11 @@ const Home = () => {
                         <CardsList />
                     </Stack>
                 </Stack>
+                {isMobile && (
+                    <Stack style={{ marginTop: 40 }}>
+                        <Link to="/learn" className="learn-link" style={styles.LearnLink}>Изучать</Link>
+                    </Stack>
+                )}
             </Stack>
         </motion.div>
     );

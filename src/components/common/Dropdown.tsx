@@ -80,6 +80,7 @@ const Dropdown = ({
         }
     };
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
         setIsOpen(true);
         const {
             top, left, bottom, right,
@@ -89,7 +90,8 @@ const Dropdown = ({
         });
     };
 
-    const handleClose = () => {
+    const handleClose = (e: any) => {
+        e.stopPropagation();
         setIsOpen(false);
         onUnMount();
     };
