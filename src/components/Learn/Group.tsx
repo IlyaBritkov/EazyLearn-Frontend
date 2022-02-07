@@ -25,8 +25,11 @@ const styles = {
         bottom: 5,
         width: 'calc(100% - 10px)',
         maxWidth: 190,
-        background: 'radial-gradient(90% 90% at 53.15% 0%, #BC000C 0%, #8C0004 100%)',
+        // background: 'radial-gradient(90% 90% at 53.15% 0%, #BC000C 0%, #8C0004 100%)',
         borderRadius: '4px',
+        border: '1px solid #B16B67',
+        background: 'transparent',
+        height: 25,
     },
     MenuItemButton: {
         padding: '9px 14px',
@@ -42,6 +45,27 @@ const styles = {
         height: 10,
         transition: '0.2s',
         marginBottom: '-2px',
+    },
+    Active: {
+        opacity: 1,
+    },
+    InActiveButton: {
+        position: 'absolute' as const,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        bottom: 5,
+        width: 'calc(100% - 10px)',
+        maxWidth: 190,
+        background: 'radial-gradient(90% 90% at 53.15% 0%, #BC000C 0%, #8C0004 100%)',
+        borderRadius: '4px',
+        border: '1px solid #FCCAC2',
+        height: 25,
+        opacity: 0.5,
+    },
+    InActive: {
+        background: 'rgba(245, 0, 16, 0.5)',
+        borderColor: theme.palette.primary.dark,
+        boxShadow: 'inset 5px 5px 30px rgba(94, 0, 0, 0.15)',
     },
 };
 
@@ -60,10 +84,10 @@ const Group: React.FC<GroupProps> = ({
         justifyContent: 'center',
         width: isMobile ? 160 : 190,
         height: isMobile ? 160 : 190,
-        background: theme.palette.primary.main,
+        border: '1px solid #B16B67',
         color: '#fff',
         borderRadius: 12,
-        boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
+        // boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
         cursor: 'pointer',
         fontStyle: 'normal',
         fontWeight: 500,
@@ -91,7 +115,7 @@ const Group: React.FC<GroupProps> = ({
     });
 
     const Typography = styled(Typo)({
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.dark,
         fontWeight: 500,
         fontSize: isMobile ? 10 : 12,
         lineHeight: isMobile ? '12px' : '15px',
@@ -133,7 +157,7 @@ const Group: React.FC<GroupProps> = ({
         }
     };
     return (
-        <OuterDiv onClick={handlePick} style={{ opacity: pickedGroups.includes(group) ? 1 : 0.5 }} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
+        <OuterDiv onClick={handlePick} style={pickedGroups.includes(group) ? styles.Active : styles.InActive} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
             <InnerDiv>
                 <AbsoluteItem style={{ left: '-5px' }}>
                     <Button
@@ -199,12 +223,17 @@ const Group: React.FC<GroupProps> = ({
                         {group + getNoun(group, ' карточка', ' карточки', ' карточек')}
                     </Typography>
                 </div>
-                <Button onClick={handleOpen} style={styles.ButtonOpen}>
+                <Button
+                    onClick={handleOpen}
+                    style={pickedGroups.includes(group) ? styles.ButtonOpen : styles.InActiveButton}
+                >
                     <Typography
                         style={{
-                            fontSize: isMobile ? 8 : 10, fontWeight: 400,
+                            fontSize: isMobile ? 8 : 10,
+                            fontWeight: 400,
+                            color: pickedGroups.includes(group) ? theme.palette.primary.dark : 'rgba(252, 202, 194, 0.5)',
                         }}
-                    >открыть
+                    >Открыть
                     </Typography>
                 </Button>
             </InnerDiv>

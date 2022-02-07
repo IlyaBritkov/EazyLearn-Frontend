@@ -45,7 +45,7 @@ const CreateNewCard = styled('div')({
     color: theme.palette.primary.main,
     background: '#fff',
     borderRadius: 10,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    border: '1px solid #970004',
     transition: '0.2s',
     '&:hover': {
         cursor: 'pointer',
@@ -93,7 +93,7 @@ const CardsInGroup: React.FC = React.memo((props) => {
         }, 0);
     };
     return (
-        <div {...props} style={{ margin: '60px 0', overflow: 'hidden' }}>
+        <div {...props} style={{ overflow: 'hidden' }}>
 
             <PrevButton id="prev-button" ref={prevRef} role="button">
                 <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />
@@ -126,7 +126,11 @@ const CardsInGroup: React.FC = React.memo((props) => {
                         return (
                             <SwiperSlide onClick={handleCreateNewCard} style={styles.Slide} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
                                 <CreateNewCard className="create-new-card">
-                                    <Typography style={{ fontSize: isMobile ? 10 : 12 }}>
+                                    <Typography
+                                        style={{
+                                            fontSize: isMobile ? 10 : 12,
+                                        }}
+                                    >
                                         Создать карточку в категории
                                     </Typography>
                                 </CreateNewCard>

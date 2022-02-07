@@ -34,13 +34,19 @@ const styles = {
         maxWidth: isMobile ? 100 : 170,
     },
 };
+type Props = {
+    existingGroups: any;
+    setExistingGroups: any;
+};
 
-const ExistingGroups = () => {
-    const [testArray, setTestArray] = useState([1, 2, 3, 4, 5, 6]);
+const ExistingGroups: React.FC<Props> = ({ existingGroups, setExistingGroups }) => {
+    const handleDeleteGroup = (item: any) => {
+        setExistingGroups(existingGroups.filter((i: any) => i.id !== item.id));
+    };
     return (
         <AnimatePresence>
             {
-                testArray.map((item: any, index: number) => (
+                existingGroups.map((item: any, index: number) => (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -55,12 +61,11 @@ const ExistingGroups = () => {
                             style={{
                                 maxWidth: 260, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap',
                             }}
-                        >{item} Название группы123131231212313123123
+                        >
+                            {item.name}
                         </Typography>
                         <Button
-                            onClick={() => setTestArray(
-                                testArray.filter((i: any) => i !== item)
-                            )}
+                            onClick={() => handleDeleteGroup(item)}
                             Icon={deleteIcon}
                             IconStyles={{ width: 25 }}
                         />

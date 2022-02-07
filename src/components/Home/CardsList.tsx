@@ -34,11 +34,81 @@ const NextButton = styled('div')({
 });
 
 const CardsList: React.FC = React.memo((props) => {
+    const [initialCardArray, setInitialCardArray] = useState([
+        {
+            id: 1,
+            name: 'Кислород',
+        }, {
+            id: 2,
+            name: 'Углерод',
+        }, {
+            id: 3,
+            name: 'Почка',
+        }, {
+            id: 4,
+            name: 'ООП',
+        }, {
+            id: 5,
+            name: 'Таблица Мендлеева',
+        }, {
+            id: 6,
+            name: 'Spring',
+        }, {
+            id: 7,
+            name: 'Favourite',
+        }, {
+            id: 8,
+            name: 'le fait',
+        }, {
+            id: 9,
+            name: 'English',
+        }, {
+            id: 10,
+            name: 'Силизёнка',
+        }, {
+            id: 11,
+            name: 'Цинк',
+        }, {
+            id: 12,
+            name: 'Инфузория',
+        }, {
+            id: 13,
+            name: 'Сталь',
+        }, {
+            id: 14,
+            name: 'Карбонат',
+        }, {
+            id: 15,
+            name: 'Натрий',
+        }, {
+            id: 16,
+            name: 'Большая медведица',
+        },
+        {
+            id: 17,
+            name: 'JavaScript',
+        },
+        {
+            id: 18,
+            name: 'Python',
+        },
+        {
+            id: 19,
+            name: 'React Props',
+        },
+        {
+            id: 20,
+            name: 'Семья',
+        },
+        {
+            id: 21,
+            name: 'Погода',
+        }
+    ]);
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
-    const testArray = new Array(10).fill(Math.random());
     const handleSlideChange = (e: any) => {
         // if (e.realIndex > 0) setPrev(true);
         // else setPrev(false);
@@ -75,8 +145,8 @@ const CardsList: React.FC = React.memo((props) => {
                 watchOverflow
                 onSwiper={handleSwiperLoad}
             >
-                {testArray.map((item, index) => (
-                    <SwiperSlide><Card index={index} key={item} /></SwiperSlide>
+                {initialCardArray.map((item: any, index: number) => (
+                    <SwiperSlide><Card item={item} index={index} key={item.id} /></SwiperSlide>
                 ))}
             </Swiper>
 

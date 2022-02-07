@@ -73,13 +73,13 @@ const GroupCreator: React.FC<Props> = ({ groupPage }) => {
                     justifyContent="flex-start"
                     style={{ position: 'relative', width: '100%', marginTop: isMobile ? 10 : 30 }}
                 >
-                    <div className="input-group" style={styles.flex}>
+                    <div className="input-group" style={{ ...styles.flex, marginBottom: 30 }}>
                         <TextInput helperText="Название" variant="filled" />
                     </div>
                     <div className="create-group-card" style={styles.GroupCardWrapper}>
                         <CardsInGroup />
                     </div>
-                    <div className="known-level">
+                    <div className="known-level" style={{ margin: '30px 0 80px 0' }}>
                         <LevelDropdown row level={groupLevel} setLevel={setGroupLevel} />
                     </div>
                 </Stack>

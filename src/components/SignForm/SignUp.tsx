@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
+import theme from '../../theme';
 
 const styles = {
     TextInput: {
@@ -12,6 +13,9 @@ const styles = {
     Button: {
         height: isMobile ? 35 : 40,
         width: '100%',
+        maxWidth: 245,
+        background: '#FEEFED',
+        color: theme.palette.primary.dark,
     },
 };
 

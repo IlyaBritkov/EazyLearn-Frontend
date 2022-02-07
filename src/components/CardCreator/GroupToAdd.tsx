@@ -8,6 +8,10 @@ import Button from '../common/Button';
 
 type Props = {
     searchTerm: string;
+    existingGroups: any;
+    setExistingGroups: any;
+    availableGroups: any;
+    setAvailableGroups: any;
 }
 
 const styles = {
@@ -39,15 +43,24 @@ const styles = {
     },
 };
 
-const GroupToAdd = (props: Props) => {
-    const [array, setArray] = useState(['heylo', 'woah', 'noob', 'react', 'js', 'alloe', 'zen', 'css']);
-    const [filteredArray, setFilteredArray] = useState<string[]>([]);
+const GroupToAdd: React.FC<Props> = (
+    {
+        searchTerm, availableGroups, setAvailableGroups, existingGroups, setExistingGroups,
+    }
+) => {
+    const [filteredArray, setFilteredArray] = useState<any[]>([]);
     useEffect(() => {
-        setFilteredArray(array.filter(
-            (item: any) => item.toLowerCase().includes(props.searchTerm.toLowerCase())
+        setFilteredArray(availableGroups.filter(
+            (item: any) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
         ));
-        console.log(props.searchTerm, filteredArray);
-    }, [props.searchTerm]);
+        console.log(searchTerm, filteredArray);
+    }, [searchTerm]);
+
+    const handleAddToGroup = (item: any) => {
+        if (!existingGroups.includes(item)) setExistingGroups([...existingGroups, item]);
+        // setFilteredArray(filteredArray.filter((i: any) => i.id !== item.id));
+    };
+
     return (
         <AnimatePresence>
             <motion.div style={{ margin: '15px 0 80px 0' }}>
@@ -61,10 +74,10 @@ const GroupToAdd = (props: Props) => {
                                 style={{
                                     maxWidth: 260, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap',
                                 }}
-                            >{item}
+                            >{item.name}
                             </Typography>
                             <Button
-                                onClick={() => console.log(`add ${index} to existing list`)}
+                                onClick={() => handleAddToGroup(item)}
                                 Icon={addIcon}
                                 IconStyles={{ width: 25 }}
                             />

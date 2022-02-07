@@ -44,6 +44,21 @@ type Props = {
 
 const CardCreator: React.FC<Props> = ({ cardPage }) => {
     const [cardLevel, setCardLevel] = useState<0 | 0.5 | 1 | null>(null);
+    const [existingGroups, setExistingGroups] = useState([]);
+    const [availableGroups, setAvailableGroups] = useState([
+        {
+            id: 1,
+            name: 'Group 1',
+        },
+        {
+            id: 2,
+            name: 'Group 2',
+        },
+        {
+            id: 3,
+            name: 'Group 3',
+        }
+    ]);
     const [searchTerm, setSearchTerm] = useState('');
     return (
         <motion.div
@@ -78,7 +93,10 @@ const CardCreator: React.FC<Props> = ({ cardPage }) => {
                         <CardLevelDropdown level={cardLevel} setLevel={setCardLevel} />
                     </div>
                     <div className="existing-groups" style={{ marginTop: isMobile ? 20 : 50 }}>
-                        <ExistingGroups />
+                        <ExistingGroups
+                            existingGroups={existingGroups}
+                            setExistingGroups={setExistingGroups}
+                        />
                     </div>
                     <div className="search-groups" style={{ ...styles.flex, marginTop: isMobile ? 50 : 80 }}>
                         <TextInput
@@ -89,7 +107,13 @@ const CardCreator: React.FC<Props> = ({ cardPage }) => {
                                 startAdornment: (<img src={searchCardCreator} style={{ marginBottom: '-6px' }} alt="search" />),
                             }}
                         />
-                        <GroupToAdd searchTerm={searchTerm} />
+                        <GroupToAdd
+                            searchTerm={searchTerm}
+                            existingGroups={existingGroups}
+                            setExistingGroups={setExistingGroups}
+                            availableGroups={availableGroups}
+                            setAvailableGroups={setAvailableGroups}
+                        />
                     </div>
                 </Stack>
             </Stack>

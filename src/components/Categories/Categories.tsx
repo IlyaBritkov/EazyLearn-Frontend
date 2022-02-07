@@ -6,7 +6,7 @@ import Dropdown from '../common/Dropdown';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
-import CategoriesCards from './CategoriesCards';
+import CategoriesGroups from './CategoriesGroups';
 
 const styles = {
     Stack: {
@@ -85,7 +85,7 @@ const Categories = () => {
                 </Stack>
                 <Stack>
                     <Stack direction="row" justifyContent="center">
-                        <CategoriesCards searchTerm={inputValue} />
+                        <CategoriesGroups searchTerm={inputValue} />
                     </Stack>
                 </Stack>
             </Stack>

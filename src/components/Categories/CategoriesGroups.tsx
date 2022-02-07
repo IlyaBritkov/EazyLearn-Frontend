@@ -1,42 +1,28 @@
-import React, { useState, useRef } from 'react';
-import { styled } from '@mui/material/styles';
-import { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Group from './Group';
-import { favouritesActiveIcon, sliderArrow } from '../../assets';
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
-import 'swiper/modules/navigation/navigation.min.css';
 import isMobile from '../../utils/isMobile';
 
-const PrevButton = styled('div')({
-    position: 'absolute',
-    height: '100%',
-    width: '100px',
-    left: '-100px',
-    display: isMobile ? 'none' : 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    userSelect: 'none',
-});
+type Props = {
+    searchTerm: string;
+}
 
-const NextButton = styled('div')({
-    position: 'absolute',
-    height: '100%',
-    width: '100px',
-    right: '-100px',
-    display: isMobile ? 'none' : 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    userSelect: 'none',
-});
+const styles = {
+    Wrapper: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        gap: isMobile ? '18px' : '70px 140px',
+        flexWrap: 'wrap' as const,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        overflow: 'hidden',
+        marginBottom: 70,
+    },
+};
 
-const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
-    { showFavourite, ...props }
-) => {
-    const [initialGroupArray, setInitialGroupArray] = useState([
+const CategoriesCards = (props : Props) => {
+    const [array, setArray] = useState([
         {
             id: 1,
             name: 'Анатомия',
@@ -250,116 +236,24 @@ const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
             }],
         }
     ]);
-    const [favouriteArray, setFavouriteArray] = useState<number[]>([1, 2, 3, 4, 5, 6, 7]);
-    const [desktopSlidesPerView, setDesktopSlidesPerView] = useState(5);
-    const [mobileSlidesPerView, setMobileSlidesPerView] = useState(2);
-    const [prev, setPrev] = useState(false);
-    const [next, setNext] = useState(false);
-    const prevRef = useRef<HTMLDivElement>(null);
-    const nextRef = useRef<HTMLDivElement>(null);
-    const handleSlideChange = (e: any) => {
-        // if (e.realIndex > 0) setPrev(true);
-        // else setPrev(false);
-        // if (!e.isEnd) setNext(true);
-        // else setNext(false);
-    };
-
-    const handleSwiperLoad = (e: any) => {
-        if (showFavourite) {
-            if (favouriteArray.length < 5) {
-                setDesktopSlidesPerView(favouriteArray.length);
-                if (favouriteArray.length < 2) {
-                    setMobileSlidesPerView(favouriteArray.length);
-                }
-            }
-        } else if (initialGroupArray.length < 5) {
-            setDesktopSlidesPerView(initialGroupArray.length);
-            if (initialGroupArray.length < 2) {
-                setMobileSlidesPerView(initialGroupArray.length);
-            }
-        }
-        setTimeout(() => {
-            e.slideNext();
-            e.slidePrev();
-            setPrev(true);
-            setNext(true);
-        }, 0);
-    };
-
-    const loadGroups = () => {
-        if (showFavourite && favouriteArray.length === 0) {
-            return <div>Пусто</div>;
-        }
-        if (!showFavourite && initialGroupArray.length === 0) {
-            return <div>Пусто</div>;
-        }
-        if (showFavourite) {
-            return (
-                <Swiper
-                    modules={[Navigation]}
-                    spaceBetween={isMobile ? 45 : 60}
-                    slidesPerView={isMobile ? mobileSlidesPerView : desktopSlidesPerView}
-                    navigation={{
-                        prevEl: prev ? prevRef.current : null,
-                        nextEl: next ? nextRef.current : null,
-                    }}
-                    watchOverflow
-                    onSwiper={handleSwiperLoad}
-                    onSlideChange={handleSlideChange}
-                >{initialGroupArray.map((item: any, index: number) => {
-                        if (favouriteArray.includes(item.name)) {
-                            return (
-                                <SwiperSlide>
-                                    <Group item={item} index={index} key={item.id} />
-                                </SwiperSlide>
-                            );
-                        } return null;
-                    })}
-                </Swiper>
-            );
-        }
-        return (
-            <Swiper
-                modules={[Navigation]}
-                spaceBetween={isMobile ? 45 : 60}
-                slidesPerView={isMobile ? mobileSlidesPerView : desktopSlidesPerView}
-                navigation={{
-                    prevEl: prev ? prevRef.current : null,
-                    nextEl: next ? nextRef.current : null,
-                }}
-                watchOverflow
-                onSwiper={handleSwiperLoad}
-                onSlideChange={handleSlideChange}
-            >
-                {
-                    initialGroupArray.map((item: any, index: number) => (
-                        <SwiperSlide><Group item={item} index={index} key={item.id} /></SwiperSlide>
-                    ))
-                }
-            </Swiper>
-        );
-    };
-
+    const [filteredArray, setFilteredArray] = useState<any[]>([]);
+    console.log(props.searchTerm);
+    useEffect(() => {
+        setFilteredArray(array.filter(
+            (item: any) => item.name.toLowerCase().includes(props.searchTerm.toLowerCase())
+        ));
+    }, [props.searchTerm]);
     return (
-        <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
-
-            {
-                (!showFavourite && initialGroupArray.length > 0) || favouriteArray.length > 0 ? (
-                    <>
-                        <PrevButton id="prev-button" ref={prevRef} role="button">
-                            <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />
-                        </PrevButton>
-                        <NextButton id="next-button" ref={nextRef} role="button">
-                            <img src={sliderArrow} alt="next" />
-                        </NextButton>
-                    </>
-                ) : null
-            }
-
-            {loadGroups()}
-
-        </div>
+        <AnimatePresence>
+            <motion.div {...props} style={styles.Wrapper}>
+                {
+                    filteredArray.length > 0 ? filteredArray.map((item: any, index: number) => (
+                        <Group item={item} index={index} key={item.id} />
+                    )) : (<div>Пусто</div>)
+                }
+            </motion.div>
+        </AnimatePresence>
     );
-});
+};
 
-export default GroupsList;
+export default CategoriesCards;

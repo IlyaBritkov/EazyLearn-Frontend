@@ -10,6 +10,7 @@ import isMobile from '../../utils/isMobile';
 import Dropdown from '../common/Dropdown';
 
 type CardProps = {
+    item: any;
     index: number;
 }
 
@@ -25,7 +26,7 @@ const styles = {
     },
 };
 
-const Card = ({ index }: CardProps) => {
+const Card: React.FC<CardProps> = ({ item, index }) => {
     const [isFavourite, setFavourite] = useState(false);
 
     const OuterDiv = styled('div')({
@@ -35,10 +36,10 @@ const Card = ({ index }: CardProps) => {
         justifyContent: 'center',
         width: isMobile ? 160 : 190,
         height: isMobile ? 80 : 100,
-        background: theme.palette.primary.main,
+        border: `1px solid ${theme.palette.primary.dark}`,
         color: '#fff',
         borderRadius: 12,
-        boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
+        // boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
         cursor: 'pointer',
         fontStyle: 'normal',
         fontWeight: 500,
@@ -56,7 +57,7 @@ const Card = ({ index }: CardProps) => {
     });
 
     const Typography = styled(Typo)({
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.dark,
         fontWeight: 500,
         fontSize: isMobile ? 10 : 12,
         lineHeight: isMobile ? '12px' : '15px',
@@ -114,7 +115,7 @@ const Card = ({ index }: CardProps) => {
                     </div>
                 </Dropdown>
             </AbsoluteIcon>
-            <div style={{ userSelect: 'none', width: '100%' }}><Typography>Карточка №{index}</Typography></div>
+            <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.name}</Typography></div>
         </OuterDiv>
     );
 };

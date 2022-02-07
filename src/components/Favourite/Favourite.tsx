@@ -6,8 +6,8 @@ import Dropdown from '../common/Dropdown';
 import { createIcon } from '../../assets';
 import isMobile from '../../utils/isMobile';
 import Filter from './Filter';
-import CardsList from './CardsList';
-import GroupsList from './GroupsList';
+import CardsList from '../Home/CardsList';
+import GroupsList from '../Home/GroupsList';
 
 const styles = {
     StackMobile: {

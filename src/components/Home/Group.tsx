@@ -11,6 +11,7 @@ import getNoun from '../../utils/getNoun';
 import Dropdown from '../common/Dropdown';
 
 type GroupProps = {
+    item: any;
     index: number;
 }
 
@@ -22,8 +23,10 @@ const styles = {
         bottom: 5,
         width: 'calc(100% - 10px)',
         maxWidth: 190,
-        background: 'radial-gradient(90% 90% at 53.15% 0%, #BC000C 0%, #8C0004 100%)',
+        // background: 'radial-gradient(90% 90% at 53.15% 0%, #BC000C 0%, #8C0004 100%)',
         borderRadius: '4px',
+        border: '1px solid #B16B67',
+        background: 'transparent',
     },
     MenuItemButton: {
         padding: '9px 14px',
@@ -42,7 +45,7 @@ const styles = {
     },
 };
 
-const Group = ({ index }: GroupProps) => {
+const Group: React.FC<GroupProps> = ({ item, index }) => {
     const [isFavourite, setFavourite] = useState(false);
     const caretRef = useRef(null);
     const menuItem1 = useRef(null);
@@ -55,10 +58,10 @@ const Group = ({ index }: GroupProps) => {
         justifyContent: 'center',
         width: isMobile ? 160 : 190,
         height: isMobile ? 160 : 190,
-        background: theme.palette.primary.main,
+        border: '1px solid #B16B67',
         color: '#fff',
         borderRadius: 12,
-        boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
+        // boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
         cursor: 'pointer',
         fontStyle: 'normal',
         fontWeight: 500,
@@ -86,7 +89,7 @@ const Group = ({ index }: GroupProps) => {
     });
 
     const Typography = styled(Typo)({
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.dark,
         fontWeight: 500,
         fontSize: isMobile ? 10 : 12,
         lineHeight: isMobile ? '12px' : '15px',
@@ -175,10 +178,10 @@ const Group = ({ index }: GroupProps) => {
                     }}
                 >
                     <Typography className="group-name">
-                        Название группы
+                        {item.name}
                     </Typography>
                     <Typography className="card-number" style={{ fontSize: isMobile ? 8 : 10, fontWeight: 400 }}>
-                        {index + getNoun(index, ' карточка', ' карточки', ' карточек')}
+                        {item.cards.length + getNoun(item.cards.length, ' карточка', ' карточки', ' карточек')}
                     </Typography>
                 </div>
                 <Button style={styles.ButtonOpen}>
@@ -186,7 +189,7 @@ const Group = ({ index }: GroupProps) => {
                         style={{
                             fontSize: isMobile ? 8 : 10, fontWeight: 400,
                         }}
-                    >открыть
+                    >Открыть
                     </Typography>
                 </Button>
             </InnerDiv>
