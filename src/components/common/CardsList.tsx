@@ -33,7 +33,9 @@ const NextButton = styled('div')({
     userSelect: 'none',
 });
 
-const CardsList: React.FC = React.memo((props) => {
+const CardsList: React.FC<{ showFavourite?: boolean }> = React.memo((
+    { showFavourite, ...props }
+) => {
     const [initialCardArray, setInitialCardArray] = useState([
         {
             id: 1,
@@ -105,6 +107,9 @@ const CardsList: React.FC = React.memo((props) => {
             name: 'Погода',
         }
     ]);
+    const [favouriteArray, setFavouriteArray] = useState<any[]>([1, 2, 3, 4, 5, 6, 7]);
+    const [desktopSlidesPerView, setDesktopSlidesPerView] = useState(5);
+    const [mobileSlidesPerView, setMobileSlidesPerView] = useState(2);
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
@@ -117,6 +122,19 @@ const CardsList: React.FC = React.memo((props) => {
     };
 
     const handleSwiperLoad = (e: any) => {
+        if (showFavourite) {
+            if (favouriteArray.length < 5) {
+                setDesktopSlidesPerView(favouriteArray.length);
+                if (favouriteArray.length < 2) {
+                    setMobileSlidesPerView(favouriteArray.length);
+                }
+            }
+        } else if (initialCardArray.length < 5) {
+            setDesktopSlidesPerView(initialCardArray.length);
+            if (initialCardArray.length < 2) {
+                setMobileSlidesPerView(initialCardArray.length);
+            }
+        }
         setTimeout(() => {
             e.slideNext();
             e.slidePrev();
@@ -124,32 +142,76 @@ const CardsList: React.FC = React.memo((props) => {
             setNext(true);
         }, 0);
     };
-    return (
-        <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
-
-            <PrevButton id="prev-button" ref={prevRef} role="button">
-                <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />
-            </PrevButton>
-            <NextButton id="next-button" ref={nextRef} role="button">
-                <img src={sliderArrow} alt="next" />
-            </NextButton>
-
+    const loadCards = () => {
+        if (showFavourite && favouriteArray.length === 0) {
+            return <div>Пусто</div>;
+        }
+        if (!showFavourite && initialCardArray.length === 0) {
+            return <div>Пусто</div>;
+        }
+        if (showFavourite) {
+            return (
+                <Swiper
+                    modules={[Navigation]}
+                    spaceBetween={isMobile ? 45 : 60}
+                    slidesPerView={isMobile ? mobileSlidesPerView : desktopSlidesPerView}
+                    navigation={{
+                        prevEl: prev ? prevRef.current : null,
+                        nextEl: next ? nextRef.current : null,
+                    }}
+                    watchOverflow
+                    onSwiper={handleSwiperLoad}
+                    onSlideChange={handleSlideChange}
+                >{initialCardArray.map((item: any, index: number) => {
+                        if (favouriteArray.includes(item.id)) {
+                            return (
+                                <SwiperSlide>
+                                    <Card item={item} index={index} key={item.id} />
+                                </SwiperSlide>
+                            );
+                        } return null;
+                    })}
+                </Swiper>
+            );
+        }
+        return (
             <Swiper
                 modules={[Navigation]}
                 spaceBetween={isMobile ? 45 : 60}
-                slidesPerView={isMobile ? 2 : 5}
+                slidesPerView={isMobile ? mobileSlidesPerView : desktopSlidesPerView}
                 navigation={{
                     prevEl: prev ? prevRef.current : null,
                     nextEl: next ? nextRef.current : null,
                 }}
                 watchOverflow
                 onSwiper={handleSwiperLoad}
+                onSlideChange={handleSlideChange}
             >
-                {initialCardArray.map((item: any, index: number) => (
-                    <SwiperSlide><Card item={item} index={index} key={item.id} /></SwiperSlide>
-                ))}
+                {
+                    initialCardArray.map((item: any, index: number) => (
+                        <SwiperSlide>
+                            <Card item={item} index={index} key={item.id} />
+                        </SwiperSlide>
+                    ))
+                }
             </Swiper>
-
+        );
+    };
+    return (
+        <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
+            {
+                (!showFavourite && initialCardArray.length > 0) || favouriteArray.length > 0 ? (
+                    <>
+                        <PrevButton id="prev-button" ref={prevRef} role="button">
+                            <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />
+                        </PrevButton>
+                        <NextButton id="next-button" ref={nextRef} role="button">
+                            <img src={sliderArrow} alt="next" />
+                        </NextButton>
+                    </>
+                ) : null
+            }
+            {loadCards()}
         </div>
     );
 });

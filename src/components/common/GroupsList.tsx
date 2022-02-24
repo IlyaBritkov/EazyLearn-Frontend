@@ -33,9 +33,19 @@ const NextButton = styled('div')({
     userSelect: 'none',
 });
 
-const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
-    { showFavourite, ...props }
+type GroupsProps = {
+    showFavourite?: boolean;
+    pickedGroups?: any[],
+    setPickedGroups?: any,
+    Learn?: boolean
+}
+
+const GroupsList: React.FC<GroupsProps> = React.memo((
+    {
+        showFavourite, pickedGroups, setPickedGroups, Learn, ...props
+    }
 ) => {
+    console.log('picked groups', pickedGroups);
     const [initialGroupArray, setInitialGroupArray] = useState([
         {
             id: 1,
@@ -250,7 +260,7 @@ const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
             }],
         }
     ]);
-    const [favouriteArray, setFavouriteArray] = useState<number[]>([1, 2, 3, 4, 5, 6, 7]);
+    const [favouriteArray, setFavouriteArray] = useState<any[]>([1, 2, 3, 4, 5, 6, 7]);
     const [desktopSlidesPerView, setDesktopSlidesPerView] = useState(5);
     const [mobileSlidesPerView, setMobileSlidesPerView] = useState(2);
     const [prev, setPrev] = useState(false);
@@ -310,7 +320,7 @@ const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
                         if (favouriteArray.includes(item.name)) {
                             return (
                                 <SwiperSlide>
-                                    <Group item={item} index={index} key={item.id} />
+                                    <Group page="Home" group={item} index={index} key={item.id} />
                                 </SwiperSlide>
                             );
                         } return null;
@@ -333,12 +343,42 @@ const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
             >
                 {
                     initialGroupArray.map((item: any, index: number) => (
-                        <SwiperSlide><Group item={item} index={index} key={item.id} /></SwiperSlide>
+                        <SwiperSlide>
+                            <Group page="Home" group={item} index={index} key={item.id} />
+                        </SwiperSlide>
                     ))
                 }
             </Swiper>
         );
     };
+
+    if (Learn) {
+        return (
+            <div style={{ display: 'flex', width: '100%' }}>
+                <Swiper
+                    spaceBetween={isMobile ? 45 : 60}
+                    slidesPerView={isMobile ? 2 : 5}
+                    watchOverflow
+                >
+                    {initialGroupArray.map((item, index) => {
+                        console.log(item);
+                        return (
+                            <SwiperSlide>
+                                <Group
+                                    page="Learn"
+                                    group={item}
+                                    pickedGroups={pickedGroups}
+                                    setPickedGroups={setPickedGroups}
+                                    index={index}
+                                    key={item.id}
+                                />
+                            </SwiperSlide>
+                        );
+                    })}
+                </Swiper>
+            </div>
+        );
+    }
 
     return (
         <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
@@ -357,7 +397,6 @@ const GroupsList: React.FC<{ showFavourite?: boolean }> = React.memo((
             }
 
             {loadGroups()}
-
         </div>
     );
 });

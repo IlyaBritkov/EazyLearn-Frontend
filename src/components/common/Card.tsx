@@ -4,10 +4,10 @@ import { Typography as Typo } from '@mui/material';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots
 } from '../../assets';
-import Button from '../common/Button';
+import Button from './Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
-import Dropdown from '../common/Dropdown';
+import Dropdown from './Dropdown';
 
 type CardProps = {
     item: any;

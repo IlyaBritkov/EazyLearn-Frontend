@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Group from './Group';
+import Group from '../common/Group';
 import isMobile from '../../utils/isMobile';
 
 type Props = {
@@ -248,7 +248,7 @@ const CategoriesCards = (props : Props) => {
             <motion.div {...props} style={styles.Wrapper}>
                 {
                     filteredArray.length > 0 ? filteredArray.map((item: any, index: number) => (
-                        <Group item={item} index={index} key={item.id} />
+                        <Group page="Home" group={item} index={index} key={item.id} />
                     )) : (<div>Пусто</div>)
                 }
             </motion.div>

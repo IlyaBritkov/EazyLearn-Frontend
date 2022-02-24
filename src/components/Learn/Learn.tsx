@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import isMobile from '../../utils/isMobile';
 import Button from '../common/Button';
 import ListInfo from './ListInfo';
-import GroupsList from './GroupsList';
+import GroupsList from '../common/GroupsList';
 
 const styles = {
     cardWrapper: {
@@ -74,7 +74,11 @@ const Learn: React.FC = () => {
                     justifyContent="flex-start"
                     style={{ width: '100%', marginTop: isMobile ? 10 : 30 }}
                 >
-                    <GroupsList pickedGroups={pickedGroups} setPickedGroups={setPickedGroups} />
+                    <GroupsList
+                        Learn
+                        pickedGroups={pickedGroups}
+                        setPickedGroups={setPickedGroups}
+                    />
                 </Stack>
             </Stack>
         </motion.div>

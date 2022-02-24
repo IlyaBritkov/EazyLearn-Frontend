@@ -10,6 +10,7 @@ import Categories from '../Categories/Categories';
 import Favourite from '../Favourite/Favourite';
 import Profile from '../Profile/Profile';
 import Learn from '../Learn/Learn';
+import GroupView from '../GroupView/GroupView';
 
 type MainProps = {
     page: string;
@@ -54,6 +55,7 @@ const Main = ({ page }: MainProps) => {
                         {page === 'favourite' && <Favourite />}
                         {page === 'profile' && <Profile />}
                         {page === 'learn' && <Learn />}
+                        {page === 'group-view' && <GroupView />}
                     </Stack>
                 </Container>
             </Stack>
