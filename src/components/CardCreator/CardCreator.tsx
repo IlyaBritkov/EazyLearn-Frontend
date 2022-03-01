@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { arrowBackIcon, searchCardCreator } from '../../assets';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
@@ -9,6 +10,7 @@ import isMobile from '../../utils/isMobile';
 import CardLevelDropdown from './LevelDropdown';
 import ExistingGroups from './ExistingGroups';
 import GroupToAdd from './GroupToAdd';
+import { addCard } from '../../app/userSlice.js';
 
 const styles = {
     Stack: {
@@ -38,28 +40,30 @@ const styles = {
     },
 };
 
-type Props = {
-    cardPage: (state: boolean) => void;
-}
-
-const CardCreator: React.FC<Props> = ({ cardPage }) => {
+const CardCreator: React.FC = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [cardLevel, setCardLevel] = useState<0 | 0.5 | 1 | null>(null);
     const [existingGroups, setExistingGroups] = useState([]);
-    const [availableGroups, setAvailableGroups] = useState([
-        {
-            id: 1,
-            name: 'Group 1',
-        },
-        {
-            id: 2,
-            name: 'Group 2',
-        },
-        {
-            id: 3,
-            name: 'Group 3',
-        }
-    ]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [availableGroups, setAvailableGroups] = useState(
+        useSelector((state: any) => state.user.groups)
+    );
+
+    const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        dispatch(addCard({
+            id: Math.random().toString(36).substr(2, 9),
+            level: cardLevel || 0,
+            title,
+            description,
+            isFavourite: location.state === 'createFavourite',
+        }));
+        navigate(-1);
+    };
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -75,9 +79,9 @@ const CardCreator: React.FC<Props> = ({ cardPage }) => {
                     <Button
                         Icon={arrowBackIcon}
                         IconStyles={{ width: 40 }}
-                        onClick={() => cardPage(false)}
+                        onClick={() => navigate(-1)}
                     />
-                    <Button style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
+                    <Button onClick={handleSave} style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
                 </Stack>
                 <Stack
                     direction="column"
@@ -86,8 +90,8 @@ const CardCreator: React.FC<Props> = ({ cardPage }) => {
                     style={{ width: '100%', marginTop: isMobile ? 10 : 30 }}
                 >
                     <div className="input-group" style={styles.flex}>
-                        <TextInput helperText="Термин" variant="filled" />
-                        <TextInput helperText="Определение" variant="filled" style={{ marginTop: '30px' }} />
+                        <TextInput helperText="Термин" variant="filled" onChange={(e) => setTitle(e.target.value)} />
+                        <TextInput helperText="Определение" variant="filled" onChange={(e) => setDescription(e.target.value)} style={{ marginTop: '30px' }} />
                     </div>
                     <div className="known-level">
                         <CardLevelDropdown level={cardLevel} setLevel={setCardLevel} />

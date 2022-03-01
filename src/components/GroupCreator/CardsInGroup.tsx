@@ -1,8 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ExistingCard from './ExistingCard';
 import { sliderArrow } from '../../assets';
 import 'swiper/swiper-bundle.min.css';
@@ -62,27 +64,19 @@ const styles = {
 
 };
 
-const CardsInGroup: React.FC = React.memo((props) => {
+const CardsInGroup: React.FC<any> = React.memo(({
+    cardArray, setInitialCardArray, pickedCards, setPickedCards, ...props
+}) => {
+    const navigate = useNavigate();
+    const [localCardArray, setLocalCardArray] = useState(cardArray);
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
-    const [testArray, setTestArray] = useState([
-        { type: 'create' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' },
-        { type: 'card' }]);
-    const handleCreateNewCard = (e: React.MouseEvent<HTMLButtonElement>) => {
-        console.log('create new card', e);
-    };
+
+    useEffect(() => {
+        setLocalCardArray([{ type: 'create' }, ...cardArray]);
+    }, []);
 
     const handleSwiperLoad = (e: any) => {
         setTimeout(() => {
@@ -113,18 +107,10 @@ const CardsInGroup: React.FC = React.memo((props) => {
                 watchOverflow
                 onSwiper={handleSwiperLoad}
             >
-                {testArray.map((item, index) => {
-                    if (testArray.length < 6) {
+                {localCardArray.map((item: any, index: number) => {
+                    if (item.type === 'create') {
                         return (
-                            <SwiperSlide key={index}>
-                                <ExistingCard index={index} />
-                            </SwiperSlide>
-                        );
-                    }
-                    if (index % 2 === 1) return null;
-                    if (item?.type === 'create') {
-                        return (
-                            <SwiperSlide onClick={handleCreateNewCard} style={styles.Slide} key={index} role="button" tabIndex={0} onKeyDown={() => {}}>
+                            <SwiperSlide onClick={() => navigate('/create-card')} style={styles.Slide} key={item.id} role="button" tabIndex={0} onKeyDown={() => {}}>
                                 <CreateNewCard className="create-new-card">
                                     <Typography
                                         style={{
@@ -134,14 +120,16 @@ const CardsInGroup: React.FC = React.memo((props) => {
                                         Создать карточку в категории
                                     </Typography>
                                 </CreateNewCard>
-                                <ExistingCard index={index} />
                             </SwiperSlide>
                         );
                     }
                     return (
-                        <SwiperSlide style={styles.Slide} key={index}>
-                            <ExistingCard index={index} />
-                            <ExistingCard index={index + 1} />
+                        <SwiperSlide key={item.id}>
+                            <ExistingCard
+                                pickedCards={pickedCards}
+                                setPickedCards={setPickedCards}
+                                item={item}
+                            />
                         </SwiperSlide>
                     );
                 })}

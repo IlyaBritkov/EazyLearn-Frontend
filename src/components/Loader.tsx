@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoWhite } from '../assets';
 import theme from '../theme';
 import isMobile from '../utils/isMobile';
+import { RootState } from '../app/store';
+import { setUser } from '../app/userSlice.js';
 
 const Gradient = styled('div')({
     position: !isMobile ? 'absolute' : 'fixed',
@@ -83,24 +87,40 @@ const variants = {
     },
 };
 
-const Loader = ({ isLoading }: {isLoading: boolean}) => (
-    <motion.div
-        animate={!isLoading ? 'loadedMain' : 'loading'}
-        variants={variants}
-    >
-        <Gradient className={isMobile ? 'mobile' : 'desktop'}>
-            <motion.div
-                animate={!isLoading ? 'loadedFirst' : 'loading'}
-                variants={variants}
-                className={isMobile ? 'mobile' : 'desktop'}
-            />
-            <div className={isMobile ? 'mobile' : 'desktop'} />
-            <motion.div
-                animate={!isLoading ? 'loadedLast' : 'loading'}
-                variants={variants}
-                className={isMobile ? 'mobile' : 'desktop'}
-            />
-        </Gradient>
-    </motion.div>
-);
+const Loader = () => {
+    const [isLoading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.user.user);
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+            if (user) {
+                dispatch(setUser(user));
+                setTimeout(() => navigate('/home'), 600);
+            } else setTimeout(() => navigate('/login'), 600);
+        }, 1000);
+    }, []);
+
+    return (
+        <motion.div
+            animate={!isLoading ? 'loadedMain' : 'loading'}
+            variants={variants}
+        >
+            <Gradient className={isMobile ? 'mobile' : 'desktop'}>
+                <motion.div
+                    animate={!isLoading ? 'loadedFirst' : 'loading'}
+                    variants={variants}
+                    className={isMobile ? 'mobile' : 'desktop'}
+                />
+                <div className={isMobile ? 'mobile' : 'desktop'} />
+                <motion.div
+                    animate={!isLoading ? 'loadedLast' : 'loading'}
+                    variants={variants}
+                    className={isMobile ? 'mobile' : 'desktop'}
+                />
+            </Gradient>
+        </motion.div>
+    );
+};
 export default Loader;

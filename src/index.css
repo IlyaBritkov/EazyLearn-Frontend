@@ -5,6 +5,9 @@
     font-family: 'Montserrat', sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
+.swiper {
+    width: 100% !important;
+}
 .popup-portal {
     z-index: 9999;
 }

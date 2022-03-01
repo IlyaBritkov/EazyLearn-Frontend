@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Typography as Typo } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots
 } from '../../assets';
@@ -8,10 +9,12 @@ import Button from './Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import Dropdown from './Dropdown';
+import { addCard, removeCard } from '../../app/userSlice.js';
 
 type CardProps = {
     item: any;
-    index: number;
+    initialCardArray: any;
+    setInitialCardArray: any;
 }
 
 const styles = {
@@ -26,9 +29,9 @@ const styles = {
     },
 };
 
-const Card: React.FC<CardProps> = ({ item, index }) => {
-    const [isFavourite, setFavourite] = useState(false);
-
+const Card: React.FC<CardProps> = ({ item, initialCardArray, setInitialCardArray }) => {
+    const [isFavourite, setFavourite] = useState(item.isFavourite);
+    const dispatch = useDispatch();
     const OuterDiv = styled('div')({
         display: 'flex',
         flexDirection: 'column',
@@ -67,13 +70,24 @@ const Card: React.FC<CardProps> = ({ item, index }) => {
 
     const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
+        dispatch(removeCard(item.id));
+        dispatch(addCard({
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            level: item.level,
+            isFavourite: !isFavourite,
+        }));
         setFavourite(!isFavourite);
     };
 
     const handleRemove = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        dispatch(removeCard(item.id));
+        setInitialCardArray(initialCardArray.filter((card: any) => card.id !== item.id));
     };
     return (
-        <OuterDiv key={index} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${index}`)} onKeyDown={() => {}}>
+        <OuterDiv key={item.id} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${item.id}`)} onKeyDown={() => {}}>
             <AbsoluteIcon style={{ left: isMobile ? 5 : 12 }}>
                 <Button
                     sx={{
@@ -115,7 +129,7 @@ const Card: React.FC<CardProps> = ({ item, index }) => {
                     </div>
                 </Dropdown>
             </AbsoluteIcon>
-            <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.name}</Typography></div>
+            <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.title}</Typography></div>
         </OuterDiv>
     );
 };

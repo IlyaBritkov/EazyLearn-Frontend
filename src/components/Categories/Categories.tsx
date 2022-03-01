@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import { createIcon, searchIcon } from '../../assets';
 import Dropdown from '../common/Dropdown';
 import Button from '../common/Button';
@@ -29,13 +30,15 @@ const styles = {
 };
 
 const Categories = () => {
+    const [initialGroupArray, setInitialGroupArray] = useState(
+        useSelector((state: any) => state.user.groups)
+    );
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const handleSearchActive = (e: React.MouseEvent<HTMLButtonElement>) => {
         setIsSearchActive(!isSearchActive);
     };
     const handleSearchChange = (e: React.ChangeEvent<any>) => {
-        console.log(e.currentTarget.value);
         setInputValue(e.currentTarget.value);
     };
     return (
@@ -85,7 +88,11 @@ const Categories = () => {
                 </Stack>
                 <Stack>
                     <Stack direction="row" justifyContent="center">
-                        <CategoriesGroups searchTerm={inputValue} />
+                        <CategoriesGroups
+                            initialGroupArray={initialGroupArray}
+                            setInitialGroupArray={setInitialGroupArray}
+                            searchTerm={inputValue}
+                        />
                     </Stack>
                 </Stack>
             </Stack>

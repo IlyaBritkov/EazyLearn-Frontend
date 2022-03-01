@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { arrowBackIcon } from '../../assets';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import LevelDropdown from '../CardCreator/LevelDropdown';
 import CardsInGroup from './CardsInGroup';
+import { addCard, addGroup } from '../../app/userSlice.js';
 
 const styles = {
     Stack: {
@@ -41,13 +43,26 @@ const styles = {
     },
 };
 
-type Props = {
-    groupPage: (state: boolean) => void;
-}
-
-const GroupCreator: React.FC<Props> = ({ groupPage }) => {
+const GroupCreator: React.FC = () => {
+    const [cardArray, setCardArray] = useState(useSelector((state: any) => state.user.cards));
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const [pickedCards, setPickedCards] = useState([]);
+    const [title, setTitle] = useState('');
     const [groupLevel, setGroupLevel] = useState<0 | 0.5 | 1 | null>(null);
-    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        dispatch(addGroup({
+            id: Math.random().toString(36).substr(2, 9),
+            level: groupLevel || 0,
+            title,
+            cards: pickedCards,
+            isFavourite: location.state === 'createFavourite',
+        }));
+        navigate(-1);
+    };
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -63,9 +78,9 @@ const GroupCreator: React.FC<Props> = ({ groupPage }) => {
                     <Button
                         Icon={arrowBackIcon}
                         IconStyles={{ width: 40 }}
-                        onClick={() => groupPage(false)}
+                        onClick={() => navigate(-1)}
                     />
-                    <Button style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
+                    <Button style={styles.SaveButton} onClick={handleSave} variant="text"><Typography>Сохранить</Typography></Button>
                 </Stack>
                 <Stack
                     direction="column"
@@ -74,10 +89,14 @@ const GroupCreator: React.FC<Props> = ({ groupPage }) => {
                     style={{ position: 'relative', width: '100%', marginTop: isMobile ? 10 : 30 }}
                 >
                     <div className="input-group" style={{ ...styles.flex, marginBottom: 30 }}>
-                        <TextInput helperText="Название" variant="filled" />
+                        <TextInput helperText="Название" variant="filled" onChange={(e) => setTitle(e.target.value)} />
                     </div>
                     <div className="create-group-card" style={styles.GroupCardWrapper}>
-                        <CardsInGroup />
+                        <CardsInGroup
+                            cardArray={cardArray}
+                            pickedCards={pickedCards}
+                            setPickedCards={setPickedCards}
+                        />
                     </div>
                     <div className="known-level" style={{ margin: '30px 0 80px 0' }}>
                         <LevelDropdown row level={groupLevel} setLevel={setGroupLevel} />

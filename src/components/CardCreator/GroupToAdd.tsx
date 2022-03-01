@@ -51,9 +51,8 @@ const GroupToAdd: React.FC<Props> = (
     const [filteredArray, setFilteredArray] = useState<any[]>([]);
     useEffect(() => {
         setFilteredArray(availableGroups.filter(
-            (item: any) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            (item: any) => item.title.toLowerCase().includes(searchTerm.toLowerCase())
         ));
-        console.log(searchTerm, filteredArray);
     }, [searchTerm]);
 
     const handleAddToGroup = (item: any) => {
@@ -65,7 +64,7 @@ const GroupToAdd: React.FC<Props> = (
         <AnimatePresence>
             <motion.div style={{ margin: '15px 0 80px 0' }}>
                 {
-                    filteredArray.length > 0 ? filteredArray.map((item: any, index: number) => (
+                    filteredArray.length > 0 ? filteredArray.map((item: any) => (
                         <motion.div
                             style={styles.ProfileDetailsDiv}
                             key={Math.random()}
@@ -74,7 +73,7 @@ const GroupToAdd: React.FC<Props> = (
                                 style={{
                                     maxWidth: 260, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap',
                                 }}
-                            >{item.name}
+                            >{item.title}
                             </Typography>
                             <Button
                                 onClick={() => handleAddToGroup(item)}

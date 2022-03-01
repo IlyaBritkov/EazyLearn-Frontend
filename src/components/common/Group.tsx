@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Typography as Typo } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots, dropdownCaret
 } from '../../assets';
@@ -10,14 +11,7 @@ import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import getNoun from '../../utils/getNoun';
 import Dropdown from './Dropdown';
-
-type GroupProps = {
-    page: string;
-    group: any;
-    index: number;
-    pickedGroups?: any;
-    setPickedGroups?: any;
-}
+import { addGroup, removeCard, removeGroup } from '../../app/userSlice.js';
 
 const styles = {
     ButtonOpen: {
@@ -71,12 +65,19 @@ const styles = {
     },
 };
 
-const Group: React.FC<GroupProps> = ({
-    group, pickedGroups, setPickedGroups, index,
+const Group: React.FC<any> = ({
+    group,
+    initialGroupArray,
+    setInitialGroupArray,
+    filteredArray,
+    setFilteredArray,
+    pickedGroups,
+    setPickedGroups,
     page,
 }) => {
     const navigate = useNavigate();
-    const [isFavourite, setFavourite] = useState(false);
+    const dispatch = useDispatch();
+    const [isFavourite, setFavourite] = useState(group.isFavourite);
     const caretRef = useRef(null);
     const menuItem1 = useRef(null);
     const menuItem2 = useRef(null);
@@ -130,6 +131,14 @@ const Group: React.FC<GroupProps> = ({
 
     const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
+        dispatch(removeGroup(group.id));
+        dispatch(addGroup({
+            id: group.id,
+            title: group.title,
+            level: group.level,
+            cards: group.cards,
+            isFavourite: !isFavourite,
+        }));
         setFavourite(!isFavourite);
     };
 
@@ -161,9 +170,19 @@ const Group: React.FC<GroupProps> = ({
             setPickedGroups([...pickedGroups, group]);
         }
     };
+    const handleRemove = (withCards: boolean) => {
+        if (withCards) {
+            group.cards.forEach((card: any) => {
+                dispatch(removeCard(card.id));
+            });
+        }
+        dispatch(removeGroup(group.id));
+        setInitialGroupArray(initialGroupArray.filter((g: any) => g !== group));
+        if (filteredArray) setFilteredArray([]);
+    };
     if (page === 'Home') {
         return (
-            <OuterDiv key={index} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${index}`)} onKeyDown={() => { }}>
+            <OuterDiv key={group.id} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${group.id}`)} onKeyDown={() => { }}>
                 <InnerDiv>
                     <AbsoluteItem style={{ left: '-5px' }}>
                         <Button
@@ -206,12 +225,12 @@ const Group: React.FC<GroupProps> = ({
                                 </Button>
                             </div>
                             <div className="caret-menu caret-menu-no-line" ref={menuItem1} style={{ display: 'none' }}>
-                                <Button style={styles.MenuItemButton} variant="text">
+                                <Button style={styles.MenuItemButton} onClick={() => handleRemove(false)} variant="text">
                                     <Typo style={styles.Typo}>Только группу</Typo>
                                 </Button>
                             </div>
                             <div className="caret-menu" ref={menuItem2} style={{ display: 'none' }}>
-                                <Button style={styles.MenuItemButton} variant="text">
+                                <Button style={styles.MenuItemButton} onClick={() => handleRemove(true)} variant="text">
                                     <Typo style={styles.Typo}>Группу и карточки в ней</Typo>
                                 </Button>
                             </div>
@@ -223,7 +242,7 @@ const Group: React.FC<GroupProps> = ({
                         }}
                     >
                         <Typography className="group-name">
-                            {group.name}
+                            {group.title}
                         </Typography>
                         <Typography className="card-number" style={{ fontSize: isMobile ? 8 : 10, fontWeight: 400 }}>
                             {group.cards.length + getNoun(group.cards.length, ' карточка', ' карточки', ' карточек')}
@@ -246,7 +265,7 @@ const Group: React.FC<GroupProps> = ({
     }
     if (page === 'Learn') {
         return (
-            <OuterDiv onClick={handlePick} style={pickedGroups.includes(group) ? styles.Active : styles.InActive} key={index} role="button" tabIndex={0} onKeyDown={() => { }}>
+            <OuterDiv onClick={handlePick} style={pickedGroups.includes(group) ? styles.Active : styles.InActive} key={group.id} role="button" tabIndex={0} onKeyDown={() => { }}>
                 <InnerDiv>
                     <AbsoluteItem style={{ left: '-5px' }}>
                         <Button
@@ -306,37 +325,17 @@ const Group: React.FC<GroupProps> = ({
                         }}
                     >
                         <Typography className="group-name">
-                            {group.name}
+                            {group.title}
                         </Typography>
                         <Typography className="card-number" style={{ fontSize: isMobile ? 8 : 10, fontWeight: 400 }}>
                             {group.cards.length + getNoun(group.cards.length, ' карточка', ' карточки', ' карточек')}
                         </Typography>
                     </div>
-                    <Button
-                        onClick={handleOpen}
-                        style={
-                            pickedGroups.includes(group) ? styles.ButtonOpen : styles.InActiveButton
-                        }
-                    >
-                        <Typography
-                            style={{
-                                fontSize: isMobile ? 8 : 10,
-                                fontWeight: 400,
-                                color: pickedGroups.includes(group) ? theme.palette.primary.dark : 'rgba(252, 202, 194, 0.5)',
-                            }}
-                        >Открыть
-                        </Typography>
-                    </Button>
                 </InnerDiv>
             </OuterDiv>
         );
     }
     return (<div>Пусто</div>);
-};
-
-Group.defaultProps = {
-    pickedGroups: [],
-    setPickedGroups: () => {},
 };
 
 export default Group;

@@ -34,6 +34,7 @@ const NextButton = styled('div')({
 });
 
 type GroupsProps = {
+    groupArray: Array<any>;
     showFavourite?: boolean;
     pickedGroups?: any[],
     setPickedGroups?: any,
@@ -42,238 +43,23 @@ type GroupsProps = {
 
 const GroupsList: React.FC<GroupsProps> = React.memo((
     {
-        showFavourite, pickedGroups, setPickedGroups, Learn, ...props
+        groupArray,
+        showFavourite,
+        pickedGroups,
+        setPickedGroups,
+        Learn, ...props
     }
 ) => {
-    console.log('picked groups', pickedGroups);
-    const [initialGroupArray, setInitialGroupArray] = useState([
-        {
-            id: 1,
-            name: 'Анатомия',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }],
-        },
-        {
-            id: 2,
-            name: 'Программирование',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }],
-        },
-        {
-            id: 3,
-            name: 'Физика',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }],
-        },
-        {
-            id: 4,
-            name: 'Химия',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }],
-        },
-        {
-            id: 5,
-            name: 'Астрономия',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }],
-        },
-        {
-            id: 6,
-            name: 'Биология',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }],
-        }, {
-            id: 7,
-            name: 'Английский',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }],
-        }, {
-            id: 8,
-            name: 'Французский',
-            cards: [{
-                id: 1,
-                name: 'Первая карточка',
-            }, {
-                id: 2,
-                name: 'Вторая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }, {
-                id: 4,
-                name: 'Четвертая карточка',
-            }, {
-                id: 3,
-                name: 'Третья карточка',
-            }],
-        }
-    ]);
-    const [favouriteArray, setFavouriteArray] = useState<any[]>([1, 2, 3, 4, 5, 6, 7]);
+    const [initialGroupArray, setInitialGroupArray] = useState(groupArray);
+    const [favouriteArray, setFavouriteArray] = useState<any[]>(
+        groupArray.filter((item: any) => item.isFavourite)
+    );
     const [desktopSlidesPerView, setDesktopSlidesPerView] = useState(5);
     const [mobileSlidesPerView, setMobileSlidesPerView] = useState(2);
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
-    const handleSlideChange = (e: any) => {
-        // if (e.realIndex > 0) setPrev(true);
-        // else setPrev(false);
-        // if (!e.isEnd) setNext(true);
-        // else setNext(false);
-    };
-
     const handleSwiperLoad = (e: any) => {
         if (showFavourite) {
             if (favouriteArray.length < 5) {
@@ -315,12 +101,17 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
                     }}
                     watchOverflow
                     onSwiper={handleSwiperLoad}
-                    onSlideChange={handleSlideChange}
-                >{initialGroupArray.map((item: any, index: number) => {
-                        if (favouriteArray.includes(item.name)) {
+                >{initialGroupArray.map((item: any) => {
+                        if (item.isFavourite) {
                             return (
                                 <SwiperSlide>
-                                    <Group page="Home" group={item} index={index} key={item.id} />
+                                    <Group
+                                        page="Home"
+                                        group={item}
+                                        initialGroupArray={initialGroupArray}
+                                        setInitialGroupArray={setInitialGroupArray}
+                                        key={item.id}
+                                    />
                                 </SwiperSlide>
                             );
                         } return null;
@@ -339,12 +130,16 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
                 }}
                 watchOverflow
                 onSwiper={handleSwiperLoad}
-                onSlideChange={handleSlideChange}
             >
                 {
-                    initialGroupArray.map((item: any, index: number) => (
+                    initialGroupArray.map((item: any) => (
                         <SwiperSlide>
-                            <Group page="Home" group={item} index={index} key={item.id} />
+                            <Group
+                                page="Home"
+                                initialGroupArray={initialGroupArray}
+                                setInitialGroupArray={setInitialGroupArray}
+                                group={item} key={item.id}
+                            />
                         </SwiperSlide>
                     ))
                 }
@@ -360,28 +155,26 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
                     slidesPerView={isMobile ? 2 : 5}
                     watchOverflow
                 >
-                    {initialGroupArray.map((item, index) => {
-                        console.log(item);
-                        return (
-                            <SwiperSlide>
-                                <Group
-                                    page="Learn"
-                                    group={item}
-                                    pickedGroups={pickedGroups}
-                                    setPickedGroups={setPickedGroups}
-                                    index={index}
-                                    key={item.id}
-                                />
-                            </SwiperSlide>
-                        );
-                    })}
+                    {initialGroupArray.map((item) => (
+                        <SwiperSlide>
+                            <Group
+                                page="Learn"
+                                group={item}
+                                initialGroupArray={initialGroupArray}
+                                setInitialGroupArray={setInitialGroupArray}
+                                pickedGroups={pickedGroups}
+                                setPickedGroups={setPickedGroups}
+                                key={item.id}
+                            />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
             </div>
         );
     }
 
     return (
-        <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
+        <div {...props} style={{ display: 'flex', overflow: 'hidden', width: '100%' }}>
 
             {
                 (!showFavourite && initialGroupArray.length > 0) || favouriteArray.length > 0 ? (

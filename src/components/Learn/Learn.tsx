@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import isMobile from '../../utils/isMobile';
 import Button from '../common/Button';
 import ListInfo from './ListInfo';
@@ -28,6 +29,7 @@ const styles = {
 };
 
 const Learn: React.FC = () => {
+    const [groupArray, setGroupArray] = useState(useSelector((state: any) => state.user.groups));
     const [pickedGroups, setPickedGroups] = useState([]);
 
     const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,6 +78,7 @@ const Learn: React.FC = () => {
                 >
                     <GroupsList
                         Learn
+                        groupArray={groupArray}
                         pickedGroups={pickedGroups}
                         setPickedGroups={setPickedGroups}
                     />

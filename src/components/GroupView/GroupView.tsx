@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { idText } from 'typescript';
 import { dropdownCaret } from '../../assets';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
+import Card from '../common/Card';
 
 const styles = {
     Stack: {
         display: 'flex',
         flexDirection: 'row' as const,
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         width: '100%',
     },
     cardWrapper: {
         position: 'relative' as const,
         width: isMobile ? 'calc(100% + 16px)' : '100%',
+        display: 'flex',
+        flexDirection: 'row' as const,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        flexWrap: 'wrap' as const,
+        gap: isMobile ? 20 : '25px 60px',
     },
     CreateButton: {
         maxWidth: isMobile ? 180 : 230,
@@ -34,22 +43,24 @@ const styles = {
     },
     GroupName: {
         fontWeight: 500,
-        fontSize: isMobile ? 13 : 17,
+        fontSize: isMobile ? 12 : 17,
         textAlign: 'center' as const,
-        width: '100%',
+        marginLeft: isMobile ? 25 : 250,
     },
     BackButton: {
         height: 40,
-        maxWidth: 260,
+        maxWidth: isMobile ? 130 : 260,
+        textAlign: 'start' as const,
     },
 };
 
-type Props = {
-
-}
-
-const GroupView: React.FC<Props> = () => {
+const GroupView: React.FC<any> = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const [group, setGroup] = useState(useSelector(
+        (state: any) => state.user.groups.find((g: any) => g.id === id)
+    ));
+    const [cardsInGroup, setCardsInGroup] = useState(group.cards);
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -67,27 +78,27 @@ const GroupView: React.FC<Props> = () => {
                         onClick={() => navigate(-1)}
                         style={styles.BackButton}
                     >
-                        <img src={dropdownCaret} style={{ transform: 'rotate(180deg)', marginRight: 25, height: 20 }} alt="back-icon" />
-                        <Typography>Предыдущий раздел</Typography>
+                        <img src={dropdownCaret} style={{ transform: 'rotate(180deg)', marginRight: isMobile ? 12 : 25, height: isMobile ? 15 : 20 }} alt="back-icon" />
+                        <Typography
+                            style={{
+                                fontSize: isMobile ? 10 : 16,
+                            }}
+                        >Предыдущий раздел
+                        </Typography>
                     </Button>
-                    <Typography style={styles.GroupName}>Название группы</Typography>
-                    <Button style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
+                    <Typography style={styles.GroupName}>{group.title}</Typography>
                 </Stack>
                 <Stack
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    style={{ width: '100%', marginTop: isMobile ? 10 : 80 }}
+                    style={{ ...styles.cardWrapper, width: '100%', marginTop: isMobile ? 10 : 80 }}
                 >
-                    123
-                </Stack>
-                <Stack
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    style={{ width: '100%', marginTop: isMobile ? 10 : 40 }}
-                >
-                    123
+                    {cardsInGroup.map((card: any) => (
+                        <Card
+                            key={card.id}
+                            item={card}
+                            initialCardArray={cardsInGroup}
+                            setInitialCardArray={setCardsInGroup}
+                        />
+                    ))}
                 </Stack>
             </Stack>
         </motion.div>

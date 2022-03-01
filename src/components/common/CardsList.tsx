@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import { useSelector } from 'react-redux';
 import Card from './Card';
 import { sliderArrow } from '../../assets';
 import 'swiper/swiper-bundle.min.css';
@@ -33,93 +34,24 @@ const NextButton = styled('div')({
     userSelect: 'none',
 });
 
-const CardsList: React.FC<{ showFavourite?: boolean }> = React.memo((
-    { showFavourite, ...props }
+type Props = {
+    showFavourite?: boolean;
+    cardArray: Array<any>;
+}
+
+const CardsList: React.FC<Props> = React.memo((
+    { showFavourite, cardArray, ...props }
 ) => {
-    const [initialCardArray, setInitialCardArray] = useState([
-        {
-            id: 1,
-            name: 'Кислород',
-        }, {
-            id: 2,
-            name: 'Углерод',
-        }, {
-            id: 3,
-            name: 'Почка',
-        }, {
-            id: 4,
-            name: 'ООП',
-        }, {
-            id: 5,
-            name: 'Таблица Мендлеева',
-        }, {
-            id: 6,
-            name: 'Spring',
-        }, {
-            id: 7,
-            name: 'Favourite',
-        }, {
-            id: 8,
-            name: 'le fait',
-        }, {
-            id: 9,
-            name: 'English',
-        }, {
-            id: 10,
-            name: 'Силизёнка',
-        }, {
-            id: 11,
-            name: 'Цинк',
-        }, {
-            id: 12,
-            name: 'Инфузория',
-        }, {
-            id: 13,
-            name: 'Сталь',
-        }, {
-            id: 14,
-            name: 'Карбонат',
-        }, {
-            id: 15,
-            name: 'Натрий',
-        }, {
-            id: 16,
-            name: 'Большая медведица',
-        },
-        {
-            id: 17,
-            name: 'JavaScript',
-        },
-        {
-            id: 18,
-            name: 'Python',
-        },
-        {
-            id: 19,
-            name: 'React Props',
-        },
-        {
-            id: 20,
-            name: 'Семья',
-        },
-        {
-            id: 21,
-            name: 'Погода',
-        }
-    ]);
-    const [favouriteArray, setFavouriteArray] = useState<any[]>([1, 2, 3, 4, 5, 6, 7]);
+    const [initialCardArray, setInitialCardArray] = useState(cardArray);
+    const [favouriteArray, setFavouriteArray] = useState<any[]>(
+        cardArray.filter((item) => item.isFavourite)
+    );
     const [desktopSlidesPerView, setDesktopSlidesPerView] = useState(5);
     const [mobileSlidesPerView, setMobileSlidesPerView] = useState(2);
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
-    const handleSlideChange = (e: any) => {
-        // if (e.realIndex > 0) setPrev(true);
-        // else setPrev(false);
-        // if (!e.isEnd) setNext(true);
-        // else setNext(false);
-    };
 
     const handleSwiperLoad = (e: any) => {
         if (showFavourite) {
@@ -161,12 +93,15 @@ const CardsList: React.FC<{ showFavourite?: boolean }> = React.memo((
                     }}
                     watchOverflow
                     onSwiper={handleSwiperLoad}
-                    onSlideChange={handleSlideChange}
-                >{initialCardArray.map((item: any, index: number) => {
-                        if (favouriteArray.includes(item.id)) {
+                >{initialCardArray.map((item: any) => {
+                        if (item.isFavourite) {
                             return (
                                 <SwiperSlide>
-                                    <Card item={item} index={index} key={item.id} />
+                                    <Card
+                                        item={item}
+                                        initialCardArray={initialCardArray}
+                                        setInitialCardArray={setInitialCardArray} key={item.id}
+                                    />
                                 </SwiperSlide>
                             );
                         } return null;
@@ -185,12 +120,15 @@ const CardsList: React.FC<{ showFavourite?: boolean }> = React.memo((
                 }}
                 watchOverflow
                 onSwiper={handleSwiperLoad}
-                onSlideChange={handleSlideChange}
             >
                 {
-                    initialCardArray.map((item: any, index: number) => (
+                    initialCardArray.map((item: any) => (
                         <SwiperSlide>
-                            <Card item={item} index={index} key={item.id} />
+                            <Card
+                                item={item}
+                                initialCardArray={initialCardArray}
+                                setInitialCardArray={setInitialCardArray} key={item.id}
+                            />
                         </SwiperSlide>
                     ))
                 }
@@ -198,7 +136,7 @@ const CardsList: React.FC<{ showFavourite?: boolean }> = React.memo((
         );
     };
     return (
-        <div {...props} style={{ display: 'flex', overflow: 'hidden' }}>
+        <div {...props} style={{ display: 'flex', overflow: 'hidden', width: '100%' }}>
             {
                 (!showFavourite && initialCardArray.length > 0) || favouriteArray.length > 0 ? (
                     <>

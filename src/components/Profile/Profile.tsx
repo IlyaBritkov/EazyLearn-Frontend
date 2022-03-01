@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Stack, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Dropdown from '../common/Dropdown';
 import Button from '../common/Button';
 import { dropdownProfileCaret, profileIcon } from '../../assets';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
+import { logout } from '../../app/userSlice.js';
 
 const styles = {
     DropdownButton: {
@@ -18,7 +21,10 @@ const styles = {
         height: 100,
         borderRadius: '50%',
         background: 'rgba(252,202,194,0.3)',
-        overflow: 'hidden',
+        overflow: 'hidden' as const,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     ProfileImage: {
         width: 100,
@@ -63,7 +69,14 @@ const styles = {
 
 const Profile = () => {
     const [profileImage, setProfileImage] = useState(null);
-    // "https://images.wallpaperscraft.ru/image/single/devushka_ushki_plashch_237177_1920x1080.jpg"
+    const [user, setUser] = useState(useSelector((state: any) => state.user.user));
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/');
+        window.location.reload();
+    };
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -81,30 +94,8 @@ const Profile = () => {
                     justifyContent="center"
                     style={{ marginTop: isMobile ? 45 : 100 }}
                 >
-                    <Dropdown
-                        Icon={profileImage || profileIcon}
-                        IconStyles={profileImage ? styles.ProfileImage : styles.ProfileImagePlug}
-                        IconWrapperStyles={styles.ProfileImageWrapper}
-                    >
-                        <div>
-                            <Button
-                                onClick={() => console.log('image add pressed')}
-                                style={styles.DropdownButton} variant="text"
-                            >
-                                {profileImage
-                                    ? <Typography>Изменить</Typography>
-                                    : <Typography>Добавить</Typography>}
-                            </Button>
-                        </div>
-                        <div>
-                            <Button
-                                onClick={() => console.log('image remove pressed')}
-                                style={styles.DropdownButton} variant="text"
-                            >
-                                <Typography>Удалить</Typography>
-                            </Button>
-                        </div>
-                    </Dropdown>
+
+                    <div style={styles.ProfileImageWrapper}><img src={profileIcon} style={styles.ProfileImagePlug} alt="profile" /></div>
                     <Typography
                         style={{
                             marginTop: 50,
@@ -112,7 +103,7 @@ const Profile = () => {
                             textAlign: 'center',
                             wordBreak: 'break-all',
                         }}
-                    >Username
+                    >{user.username}
                     </Typography>
                 </Stack>
                 <Stack
@@ -132,7 +123,7 @@ const Profile = () => {
                         <Typography>Имя пользователя</Typography>
                         <div style={styles.flex}>
                             <Typography style={styles.DetailsInfo}>
-                                LooooooooooongUsernameeeeee
+                                {user.username}
                             </Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
@@ -147,7 +138,7 @@ const Profile = () => {
                         <Typography>Эл. почта</Typography>
                         <div style={styles.flex}>
                             <Typography style={styles.DetailsInfo}>
-                                ivanovin123loooong1111111111111an@gmail.com
+                                {user.email}
                             </Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
@@ -161,30 +152,7 @@ const Profile = () => {
                     >
                         <Typography>Пароль</Typography>
                         <div style={styles.flex}>
-                            <Typography style={styles.DetailsInfo}>*******</Typography>
-                            <img src={dropdownProfileCaret} alt="dropdown-caret" />
-                        </div>
-                    </div>
-                    <div
-                        style={styles.ProfileDetailsDiv}
-                        onClick={() => console.log('pressed 4 button')}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex={0}
-                    >
-                        <Typography>Уведомления</Typography>
-                        <div style={styles.flex} />
-                    </div>
-                    <div
-                        style={styles.ProfileDetailsDiv}
-                        onClick={() => console.log('pressed 5 button')}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex={0}
-                    >
-                        <Typography>Статистика</Typography>
-                        <div style={styles.flex}>
-                            <Typography style={styles.DetailsInfo} />
+                            <Typography style={styles.DetailsInfo}>********</Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
                     </div>
@@ -195,7 +163,7 @@ const Profile = () => {
                     alignItems="center"
                 >
                     <Button
-                        onClick={() => console.log('logout pressed')} variant="text"
+                        onClick={handleLogout} variant="text"
                         style={{ maxWidth: 120, height: 40 }}
                     >
                         <Typography

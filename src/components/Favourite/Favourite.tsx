@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Stack, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import Dropdown from '../common/Dropdown';
 import { createIcon } from '../../assets';
@@ -33,6 +35,10 @@ const styles = {
 };
 
 const Favourite = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [groupArray, setGroupArray] = useState(useSelector((state: any) => state.user.groups));
+    const [cardArray, setCardArray] = useState(useSelector((state: any) => state.user.cards));
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -72,7 +78,7 @@ const Favourite = () => {
                     >
                         <div>
                             <Button
-                                onClick={() => console.log('card creation pressed')}
+                                onClick={() => navigate('/create-card', { state: 'createFavourite' })}
                                 style={styles.CreateButton} variant="text"
                             >
                                 <Typography>Создать карточку</Typography>
@@ -80,7 +86,7 @@ const Favourite = () => {
                         </div>
                         <div>
                             <Button
-                                onClick={() => console.log('group creation pressed')}
+                                onClick={() => navigate('/create-group', { state: 'createFavourite' })}
                                 style={styles.CreateButton} variant="text"
                             >
                                 <Typography>Создать группу</Typography>
@@ -115,7 +121,7 @@ const Favourite = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <GroupsList />
+                        <GroupsList showFavourite groupArray={groupArray} />
                     </Stack>
                 </Stack>
                 <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
@@ -135,7 +141,7 @@ const Favourite = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <CardsList />
+                        <CardsList showFavourite cardArray={cardArray} />
                     </Stack>
                 </Stack>
             </Stack>

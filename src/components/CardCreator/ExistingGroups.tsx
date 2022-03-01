@@ -62,7 +62,7 @@ const ExistingGroups: React.FC<Props> = ({ existingGroups, setExistingGroups }) 
                                 maxWidth: 260, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap',
                             }}
                         >
-                            {item.name}
+                            {item.title}
                         </Typography>
                         <Button
                             onClick={() => handleDeleteGroup(item)}

@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Typography as Typo } from '@mui/material';
-import Button from '../common/Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 
-type CardProps = {
-    index: number;
-}
-
-const ExistingCard: React.FC<CardProps> = ({ index }) => {
+const ExistingCard: React.FC<any> = ({ item, pickedCards, setPickedCards }) => {
+    const [isPicked, setIsPicked] = useState(false);
+    useEffect(() => {
+        setIsPicked(pickedCards.includes(item));
+    }, [pickedCards]);
     const OuterDiv = styled('div')({
         display: 'flex',
         flexDirection: 'column',
@@ -20,6 +19,8 @@ const ExistingCard: React.FC<CardProps> = ({ index }) => {
         border: `1px solid ${theme.palette.primary.dark}`,
         color: '#fff',
         borderRadius: 12,
+        background: isPicked ? theme.palette.primary.dark : '#fff',
+        opacity: isPicked ? 0.8 : 1,
         // boxShadow: 'inset 6px 6px 36px rgba(94, 0, 0, 0.5)',
         cursor: 'pointer',
         fontStyle: 'normal',
@@ -33,17 +34,23 @@ const ExistingCard: React.FC<CardProps> = ({ index }) => {
     });
 
     const Typography = styled(Typo)({
-        color: theme.palette.primary.dark,
+        color: isPicked ? '#fff' : theme.palette.primary.dark,
         fontWeight: 500,
         fontSize: isMobile ? 10 : 12,
         lineHeight: isMobile ? '12px' : '15px',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     });
-
+    const handlePick = (e: any) => {
+        if (pickedCards.includes(item)) {
+            setPickedCards(pickedCards.filter((g: any) => g !== item));
+        } else {
+            setPickedCards([...pickedCards, item]);
+        }
+    };
     return (
-        <OuterDiv key={index} role="button" tabIndex={0} onClick={() => console.log(`clicked on ${index}`)} onKeyDown={() => {}}>
-            <div style={{ userSelect: 'none', width: '100%' }}><Typography>Карточка №{index}</Typography></div>
+        <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handlePick} onKeyDown={() => {}}>
+            <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.title}</Typography></div>
         </OuterDiv>
     );
 };

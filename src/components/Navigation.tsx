@@ -58,7 +58,6 @@ const Navigation = ({ page }: NavigationProps) => {
                     justifyContent={isMobile ? 'space-between !important' : 'flex-start'}
                     spacing={12}
                 >
-                    <Button Icon={notificationIcon} IconStyles={{ width: 25 }} />
                     {!isMobile && getJSXPage(page)}
                 </Stack>
                 {isMobile && getPage(page)}

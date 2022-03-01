@@ -11,6 +11,8 @@ import Favourite from '../Favourite/Favourite';
 import Profile from '../Profile/Profile';
 import Learn from '../Learn/Learn';
 import GroupView from '../GroupView/GroupView';
+import CardCreator from '../CardCreator/CardCreator';
+import GroupCreator from '../GroupCreator/GroupCreator';
 
 type MainProps = {
     page: string;
@@ -55,6 +57,8 @@ const Main = ({ page }: MainProps) => {
                         {page === 'favourite' && <Favourite />}
                         {page === 'profile' && <Profile />}
                         {page === 'learn' && <Learn />}
+                        {page === 'create-card' && <CardCreator />}
+                        {page === 'create-group' && <GroupCreator />}
                         {page === 'group-view' && <GroupView />}
                     </Stack>
                 </Container>

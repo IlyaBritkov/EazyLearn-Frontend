@@ -69,6 +69,7 @@
         "react/destructuring-assignment": "off",
 
         //other
+        "no-param-reassign": ["error", { "props": false }],
         "object-curly-newline": "warn",
         "no-use-before-define": "warn",
         "eol-last": "off",

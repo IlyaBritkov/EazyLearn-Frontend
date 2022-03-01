@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { createIcon } from '../../assets';
 import Button from '../common/Button';
 import Dropdown from '../common/Dropdown';
@@ -52,8 +53,10 @@ const styles = {
 };
 
 const Home = () => {
-    const [groupCreate, setCreateGroup] = useState(false);
-    const [cardCreate, setCreateCard] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [groupArray, setGroupArray] = useState(useSelector((state: any) => state.user.groups));
+    const [cardArray, setCardArray] = useState(useSelector((state: any) => state.user.cards));
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -76,9 +79,6 @@ const Home = () => {
         },
     });
 
-    if (groupCreate) return <GroupCreator groupPage={setCreateGroup} />;
-    if (cardCreate) return <CardCreator cardPage={setCreateCard} />;
-
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -96,7 +96,7 @@ const Home = () => {
                     <Dropdown Icon={createIcon} IconStyles={{ width: 30 }}>
                         <div>
                             <Button
-                                onClick={() => setCreateCard(true)}
+                                onClick={() => navigate('/create-card')}
                                 style={styles.CreateButton}
                                 variant="text"
                             >
@@ -105,7 +105,7 @@ const Home = () => {
                         </div>
                         <div>
                             <Button
-                                onClick={() => setCreateGroup(true)}
+                                onClick={() => navigate('/create-group')}
                                 style={styles.CreateButton}
                                 variant="text"
                             >
@@ -139,7 +139,7 @@ const Home = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <GroupsList />
+                        <GroupsList groupArray={groupArray} />
                     </Stack>
                 </Stack>
                 <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
@@ -159,7 +159,7 @@ const Home = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <CardsList />
+                        <CardsList cardArray={cardArray} />
                     </Stack>
                 </Stack>
                 {isMobile && (
