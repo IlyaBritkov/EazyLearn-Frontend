@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
-import { useSelector } from 'react-redux';
 import Card from './Card';
 import { sliderArrow } from '../../assets';
 import 'swiper/swiper-bundle.min.css';
@@ -55,14 +54,14 @@ const CardsList: React.FC<Props> = React.memo((
 
     const handleSwiperLoad = (e: any) => {
         if (showFavourite) {
-            if (favouriteArray.length < 5) {
-                setDesktopSlidesPerView(favouriteArray.length);
+            if (favouriteArray.length < 3) {
+                setDesktopSlidesPerView(favouriteArray.length + 3);
                 if (favouriteArray.length < 2) {
                     setMobileSlidesPerView(favouriteArray.length);
                 }
             }
-        } else if (initialCardArray.length < 5) {
-            setDesktopSlidesPerView(initialCardArray.length);
+        } else if (initialCardArray.length < 3) {
+            setDesktopSlidesPerView(initialCardArray.length + 3);
             if (initialCardArray.length < 2) {
                 setMobileSlidesPerView(initialCardArray.length);
             }
