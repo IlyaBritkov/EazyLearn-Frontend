@@ -21,7 +21,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Loader />} />
                 <Route path="/login" element={<SignForm />} />
                 <Route path="/home" element={user ? <Main page="home" /> : <Navigate to="/login" />} />
-                <Route path="/categories" element={user ? <Main page="categories" /> : <Navigate to="/login" />} />
+                <Route path="/sets" element={user ? <Main page="categories" /> : <Navigate to="/login" />} />
                 <Route path="/favourite" element={user ? <Main page="favourite" /> : <Navigate to="/login" />} />
                 <Route path="/profile" element={user ? <Main page="profile" /> : <Navigate to="/login" />} />
                 <Route path="/learn" element={user ? <Main page="learn" /> : <Navigate to="/login" />} />

@@ -19,7 +19,7 @@ export function getJSXPage(page: string) {
         return (
             <>
                 <Link to="/home" style={{ lineHeight: '70px', opacity: page === 'home' ? 1 : 0.5 }}>Главная</Link>
-                <Link to="/categories" style={{ lineHeight: '70px', opacity: page === 'categories' ? 1 : 0.5 }}>Категории</Link>
+                <Link to="/sets" style={{ lineHeight: '70px', opacity: page === 'categories' ? 1 : 0.5 }}>Группы</Link>
                 <Link to="/favourite" style={{ lineHeight: '70px', opacity: page === 'favourite' ? 1 : 0.5 }}>Избранное</Link>
                 <Link to="/learn" style={{ lineHeight: '70px', opacity: page === 'learn' ? 1 : 0.5 }}>Изучать</Link>
             </>
@@ -32,7 +32,7 @@ export function getPage(page: string) {
     case 'home':
         return <Typography style={styles.Typography}>Главная</Typography>;
     case 'categories':
-        return <Typography style={styles.Typography}>Категории</Typography>;
+        return <Typography style={styles.Typography}>Группы</Typography>;
     case 'favourite':
         return <Typography style={styles.Typography}>Избранное</Typography>;
     case 'profile':

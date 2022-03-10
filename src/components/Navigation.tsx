@@ -69,7 +69,7 @@ const Navigation = ({ page }: NavigationProps) => {
                         <Link to="/home" style={{ ...styles.Link, opacity: page === 'home' ? 1 : 0.5 }}>
                             <img style={styles.Img} src={homeIcon} alt="Главная" />
                         </Link>
-                        <Link to="/categories" style={{ ...styles.Link, opacity: page === 'categories' ? 1 : 0.5 }}>
+                        <Link to="/sets" style={{ ...styles.Link, opacity: page === 'categories' ? 1 : 0.5 }}>
                             <img style={styles.Img} src={groupsIcon} alt="Категории" />
                         </Link>
                         <Link to="/favourite" style={{ ...styles.Link, opacity: page === 'favourite' ? 1 : 0.5 }}>
