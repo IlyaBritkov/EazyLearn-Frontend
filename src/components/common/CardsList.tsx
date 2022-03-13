@@ -41,7 +41,6 @@ type Props = {
 const CardsList: React.FC<Props> = React.memo((
     { showFavourite, cardArray, ...props }
 ) => {
-    const [initialCardArray, setInitialCardArray] = useState(cardArray);
     const [favouriteArray, setFavouriteArray] = useState<any[]>(
         cardArray.filter((item) => item.isFavourite)
     );
@@ -60,10 +59,10 @@ const CardsList: React.FC<Props> = React.memo((
                     setMobileSlidesPerView(favouriteArray.length);
                 }
             }
-        } else if (initialCardArray.length < 3) {
-            setDesktopSlidesPerView(initialCardArray.length + 3);
-            if (initialCardArray.length < 2) {
-                setMobileSlidesPerView(initialCardArray.length);
+        } else if (cardArray.length < 3) {
+            setDesktopSlidesPerView(cardArray.length + 3);
+            if (cardArray.length < 2) {
+                setMobileSlidesPerView(cardArray.length);
             }
         }
         setTimeout(() => {
@@ -77,7 +76,7 @@ const CardsList: React.FC<Props> = React.memo((
         if (showFavourite && favouriteArray.length === 0) {
             return <div>Пусто</div>;
         }
-        if (!showFavourite && initialCardArray.length === 0) {
+        if (!showFavourite && cardArray.length === 0) {
             return <div>Пусто</div>;
         }
         if (showFavourite) {
@@ -92,14 +91,14 @@ const CardsList: React.FC<Props> = React.memo((
                     }}
                     watchOverflow
                     onSwiper={handleSwiperLoad}
-                >{initialCardArray.map((item: any) => {
+                >{cardArray.map((item: any) => {
                         if (item.isFavourite) {
                             return (
                                 <SwiperSlide>
                                     <Card
                                         item={item}
-                                        initialCardArray={initialCardArray}
-                                        setInitialCardArray={setInitialCardArray} key={item.id}
+                                        cardArray={cardArray}
+                                        key={item.id}
                                     />
                                 </SwiperSlide>
                             );
@@ -121,12 +120,12 @@ const CardsList: React.FC<Props> = React.memo((
                 onSwiper={handleSwiperLoad}
             >
                 {
-                    initialCardArray.map((item: any) => (
+                    cardArray.map((item: any) => (
                         <SwiperSlide>
                             <Card
                                 item={item}
-                                initialCardArray={initialCardArray}
-                                setInitialCardArray={setInitialCardArray} key={item.id}
+                                cardArray={cardArray}
+                                key={item.id}
                             />
                         </SwiperSlide>
                     ))
@@ -137,7 +136,7 @@ const CardsList: React.FC<Props> = React.memo((
     return (
         <div {...props} style={{ display: 'flex', overflow: 'hidden', width: '100%' }}>
             {
-                (!showFavourite && initialCardArray.length > 0) || favouriteArray.length > 0 ? (
+                (!showFavourite && cardArray.length > 0) || favouriteArray.length > 0 ? (
                     <>
                         <PrevButton id="prev-button" ref={prevRef} role="button">
                             <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />

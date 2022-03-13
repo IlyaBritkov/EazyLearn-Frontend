@@ -7,7 +7,7 @@ import isMobile from '../../utils/isMobile';
 const ExistingCard: React.FC<any> = ({ item, pickedCards, setPickedCards }) => {
     const [isPicked, setIsPicked] = useState(false);
     useEffect(() => {
-        setIsPicked(pickedCards.includes(item));
+        setIsPicked(pickedCards.includes(item.id));
     }, [pickedCards]);
     const OuterDiv = styled('div')({
         display: 'flex',
@@ -42,15 +42,15 @@ const ExistingCard: React.FC<any> = ({ item, pickedCards, setPickedCards }) => {
         textOverflow: 'ellipsis',
     });
     const handlePick = (e: any) => {
-        if (pickedCards.includes(item)) {
-            setPickedCards(pickedCards.filter((g: any) => g !== item));
+        if (pickedCards.includes(item.id)) {
+            setPickedCards(pickedCards.filter((g: any) => g !== item.id));
         } else {
-            setPickedCards([...pickedCards, item]);
+            setPickedCards([...pickedCards, item.id]);
         }
     };
     return (
         <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handlePick} onKeyDown={() => {}}>
-            <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.title}</Typography></div>
+            <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.term}</Typography></div>
         </OuterDiv>
     );
 };

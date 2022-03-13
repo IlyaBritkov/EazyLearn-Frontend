@@ -10,12 +10,11 @@ import Button from './Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import Dropdown from './Dropdown';
-import { addCard, removeCard } from '../../app/userSlice.js';
+import { removeCardById } from '../../app/actions';
 
 type CardProps = {
     item: any;
-    initialCardArray: any;
-    setInitialCardArray: any;
+    cardArray: any;
 }
 
 const styles = {
@@ -30,7 +29,7 @@ const styles = {
     },
 };
 
-const Card: React.FC<CardProps> = ({ item, initialCardArray, setInitialCardArray }) => {
+const Card: React.FC<CardProps> = ({ item, cardArray }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFavourite, setFavourite] = useState(item.isFavourite);
     const dispatch = useDispatch();
@@ -74,21 +73,14 @@ const Card: React.FC<CardProps> = ({ item, initialCardArray, setInitialCardArray
 
     const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        dispatch(removeCard(item.id));
-        dispatch(addCard({
-            id: item.id,
-            title: item.title,
-            description: item.description,
-            level: item.level,
-            isFavourite: !isFavourite,
-        }));
+
         setFavourite(!isFavourite);
     };
 
     const handleRemove = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        dispatch(removeCard(item.id));
-        setInitialCardArray(initialCardArray.filter((card: any) => card.id !== item.id));
+        dispatch(removeCardById(item.id));
+        // setInitialCardArray(cardArray.filter((card: any) => card.id !== item.id));
     };
     return (
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" flipSpeedFrontToBack={0.45} flipSpeedBackToFront={0.45}>
@@ -134,14 +126,55 @@ const Card: React.FC<CardProps> = ({ item, initialCardArray, setInitialCardArray
                         </div>
                     </Dropdown>
                 </AbsoluteIcon>
-                <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.title}</Typography></div>
+                <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.term}</Typography></div>
             </OuterDiv>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={() => setIsFlipped(!isFlipped)} onKeyDown={() => {}}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={() => setIsFlipped(!isFlipped)} onKeyDown={() => { }}>
+                <AbsoluteIcon style={{ left: isMobile ? 5 : 12 }}>
+                    <Button
+                        sx={{
+                            width: '30px',
+                        }}
+                        Icon={isFavourite ? favouritesActiveIcon : favouritesInactiveIcon}
+                        IconStyles={{ width: 12 }}
+                        onClick={handleActive}
+                    />
+                </AbsoluteIcon>
+                <AbsoluteIcon style={{ right: isMobile ? 5 : 12 }}>
+                    <Dropdown
+                        Icon={tripleDots}
+                        IconStyles={{ width: 12 }}
+                        IconWrapperStyles={{
+                            width: '30px',
+                            height: '30px',
+                        }}
+                    >
+                        <div>
+                            <Button style={styles.MenuItemButton} variant="text">
+                                <Typo style={styles.Typo}>Редактировать</Typo>
+                            </Button>
+                        </div>
+                        <div>
+                            <Button style={styles.MenuItemButton} variant="text">
+                                <Typo style={styles.Typo}>Добавить карточки</Typo>
+                            </Button>
+                        </div>
+                        <div>
+                            <Button style={styles.MenuItemButton} variant="text">
+                                <Typo style={styles.Typo}>Изменить уровень владения</Typo>
+                            </Button>
+                        </div>
+                        <div>
+                            <Button onClick={handleRemove} style={styles.MenuItemButton} variant="text">
+                                <Typo style={styles.Typo}>Удалить</Typo>
+                            </Button>
+                        </div>
+                    </Dropdown>
+                </AbsoluteIcon>
                 <div
                     style={{
                         userSelect: 'none', width: '100%', height: '100%',
                     }}
-                ><Typography style={{ textOverflow: 'initial', wordBreak: 'break-word' }}>{item.description}</Typography>
+                ><Typography style={{ textOverflow: 'initial', wordBreak: 'break-word' }}>{item.definition}</Typography>
                 </div>
             </OuterDiv>
         </ReactCardFlip>

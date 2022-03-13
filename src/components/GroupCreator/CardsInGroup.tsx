@@ -76,7 +76,7 @@ const CardsInGroup: React.FC<any> = React.memo(({
 
     useEffect(() => {
         setLocalCardArray([{ type: 'create' }, ...cardArray]);
-    }, []);
+    }, [cardArray]);
 
     const handleSwiperLoad = (e: any) => {
         setTimeout(() => {
@@ -107,7 +107,7 @@ const CardsInGroup: React.FC<any> = React.memo(({
                 watchOverflow
                 onSwiper={handleSwiperLoad}
             >
-                {localCardArray.map((item: any, index: number) => {
+                {localCardArray.map((item: any) => {
                     if (item.type === 'create') {
                         return (
                             <SwiperSlide onClick={() => navigate('/create-card')} style={styles.Slide} key={item.id} role="button" tabIndex={0} onKeyDown={() => {}}>
@@ -126,9 +126,9 @@ const CardsInGroup: React.FC<any> = React.memo(({
                     return (
                         <SwiperSlide key={item.id}>
                             <ExistingCard
+                                item={item}
                                 pickedCards={pickedCards}
                                 setPickedCards={setPickedCards}
-                                item={item}
                             />
                         </SwiperSlide>
                     );

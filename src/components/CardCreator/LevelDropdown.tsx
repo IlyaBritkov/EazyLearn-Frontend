@@ -86,13 +86,13 @@ const Vertical = styled('div')({
     right: 0,
 });
 
-const getLevel = (level: 0 | 0.5 | 1 | null) => {
+const getLevel = (level: 'LOW' | 'AVERAGE' | 'HIGH') => {
     switch (level) {
-    case 0:
+    case 'LOW':
         return 'Плохо знаю';
-    case 0.5:
+    case 'AVERAGE':
         return 'Не очень хорошо знаю';
-    case 1:
+    case 'HIGH':
         return 'Хорошо знаю';
     default:
         return 'Уровень владения';
@@ -103,7 +103,7 @@ const LevelDropdown = ({
     level, setLevel, row, ...props
 }: any) => {
     const [open, setOpen] = useState(false);
-    const handleLevelChange = (lvl: 0 | 0.5 | 1 | null) => {
+    const handleLevelChange = (lvl: 'LOW' | 'AVERAGE' | 'HIGH') => {
         setLevel(lvl);
         setOpen(false);
     };
@@ -131,15 +131,15 @@ const LevelDropdown = ({
                             style={styles.RowLevelsWrapper}
                         >
                             <div style={styles.RowRelativeWrappers}>
-                                <Button onClick={() => handleLevelChange(1)} style={styles.RowLevelsButtons} variant="text"><Typography>Хорошо знаю</Typography></Button>
+                                <Button onClick={() => handleLevelChange('HIGH')} style={styles.RowLevelsButtons} variant="text"><Typography>Хорошо знаю</Typography></Button>
                                 <Vertical />
                             </div>
                             <div style={styles.RowRelativeWrappers}>
-                                <Button onClick={() => handleLevelChange(0.5)} style={styles.RowLevelsButtons} variant="text"><Typography>Не очень хорошо знаю</Typography></Button>
+                                <Button onClick={() => handleLevelChange('AVERAGE')} style={styles.RowLevelsButtons} variant="text"><Typography>Не очень хорошо знаю</Typography></Button>
                                 <Vertical />
                             </div>
                             <div style={styles.RowRelativeWrappers}>
-                                <Button onClick={() => handleLevelChange(0)} style={styles.RowLevelsButtons} variant="text"><Typography>Плохо знаю</Typography></Button>
+                                <Button onClick={() => handleLevelChange('LOW')} style={styles.RowLevelsButtons} variant="text"><Typography>Плохо знаю</Typography></Button>
                             </div>
                         </motion.div>
                     )
@@ -169,11 +169,11 @@ const LevelDropdown = ({
                         transition={{ duration: 0.2 }}
                         style={styles.LevelsWrapper}
                     >
-                        <Button onClick={() => handleLevelChange(1)} style={styles.LevelsButtons} variant="text"><Typography>Хорошо знаю</Typography></Button>
+                        <Button onClick={() => handleLevelChange('HIGH')} style={styles.LevelsButtons} variant="text"><Typography>Хорошо знаю</Typography></Button>
                         <Horizontal />
-                        <Button onClick={() => handleLevelChange(0.5)} style={styles.LevelsButtons} variant="text"><Typography>Не очень хорошо знаю</Typography></Button>
+                        <Button onClick={() => handleLevelChange('AVERAGE')} style={styles.LevelsButtons} variant="text"><Typography>Не очень хорошо знаю</Typography></Button>
                         <Horizontal />
-                        <Button onClick={() => handleLevelChange(0)} style={styles.LevelsButtons} variant="text"><Typography>Плохо знаю</Typography></Button>
+                        <Button onClick={() => handleLevelChange('LOW')} style={styles.LevelsButtons} variant="text"><Typography>Плохо знаю</Typography></Button>
                     </motion.div>
                 )
             }

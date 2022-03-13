@@ -8,7 +8,7 @@ import Button from '../common/Button';
 import { dropdownProfileCaret, profileIcon } from '../../assets';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
-import { logout } from '../../app/userSlice.js';
+import { logout } from '../../app/userSlice';
 
 const styles = {
     DropdownButton: {

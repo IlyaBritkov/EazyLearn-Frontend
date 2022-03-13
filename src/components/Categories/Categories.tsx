@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { createIcon, searchIcon } from '../../assets';
 import Dropdown from '../common/Dropdown';
 import Button from '../common/Button';
@@ -30,11 +31,15 @@ const styles = {
 };
 
 const Categories = () => {
-    const [initialGroupArray, setInitialGroupArray] = useState(
-        useSelector((state: any) => state.user.groups)
-    );
+    const navigate = useNavigate();
+    const groups = useSelector((state: any) => state.user.groups);
+    const [initialGroupArray, setInitialGroupArray] = useState(groups);
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [inputValue, setInputValue] = useState('');
+
+    useEffect(() => {
+        setInitialGroupArray(groups);
+    }, [groups]);
     const handleSearchActive = (e: React.MouseEvent<HTMLButtonElement>) => {
         setIsSearchActive(!isSearchActive);
     };
@@ -58,12 +63,12 @@ const Categories = () => {
                         IconStyles={{ width: 30 }}
                     >
                         <div>
-                            <Button onClick={() => console.log('card creation pressed')} style={styles.CreateButton} variant="text">
+                            <Button onClick={() => navigate('/create-card')} style={styles.CreateButton} variant="text">
                                 <Typography>Создать карточку</Typography>
                             </Button>
                         </div>
                         <div>
-                            <Button onClick={() => console.log('group creation pressed')} style={styles.CreateButton} variant="text">
+                            <Button onClick={() => navigate('/create-group')} style={styles.CreateButton} variant="text">
                                 <Typography>Создать группу</Typography>
                             </Button>
                         </div>
@@ -90,7 +95,6 @@ const Categories = () => {
                     <Stack direction="row" justifyContent="center">
                         <CategoriesGroups
                             initialGroupArray={initialGroupArray}
-                            setInitialGroupArray={setInitialGroupArray}
                             searchTerm={inputValue}
                         />
                     </Stack>

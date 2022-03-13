@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { idText } from 'typescript';
 import { dropdownCaret } from '../../assets';
 import Button from '../common/Button';
-import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import Card from '../common/Card';
+
+import { getCardsByGroupId } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -56,11 +57,15 @@ const styles = {
 
 const GroupView: React.FC<any> = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { id } = useParams();
-    const [group, setGroup] = useState(useSelector(
-        (state: any) => state.user.groups.find((g: any) => g.id === id)
-    ));
-    const [cardsInGroup, setCardsInGroup] = useState(group.cards);
+    const group = useSelector((state: any) => state.user.groups.find((g: any) => g.id === id));
+    const [cardsInGroup, setCardsInGroup] = useState([]);
+    useEffect(() => {
+        dispatch(getCardsByGroupId(id)).then(({ payload }: any) => {
+            setCardsInGroup(payload);
+        });
+    }, [group, dispatch]);
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -86,19 +91,18 @@ const GroupView: React.FC<any> = () => {
                         >Предыдущий раздел
                         </Typography>
                     </Button>
-                    <Typography style={styles.GroupName}>{group.title}</Typography>
+                    <Typography style={styles.GroupName}>{group.name}</Typography>
                 </Stack>
                 <Stack
                     style={{ ...styles.cardWrapper, width: '100%', marginTop: isMobile ? 10 : 80 }}
                 >
-                    {cardsInGroup.map((card: any) => (
+                    {cardsInGroup.length > 0 ? cardsInGroup.map((card: any) => (
                         <Card
                             key={card.id}
                             item={card}
-                            initialCardArray={cardsInGroup}
-                            setInitialCardArray={setCardsInGroup}
+                            cardArray={cardsInGroup}
                         />
-                    ))}
+                    )) : 'Пусто'}
                 </Stack>
             </Stack>
         </motion.div>

@@ -7,10 +7,10 @@ import { arrowBackIcon, searchCardCreator } from '../../assets';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
-import CardLevelDropdown from './LevelDropdown';
+import LevelDropdown from './LevelDropdown';
 import ExistingGroups from './ExistingGroups';
 import GroupToAdd from './GroupToAdd';
-import { addCard } from '../../app/userSlice.js';
+import { addNewCard, addCardToGroups } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -46,7 +46,7 @@ const CardCreator: React.FC = () => {
     const location = useLocation();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [cardLevel, setCardLevel] = useState<0 | 0.5 | 1 | null>(null);
+    const [cardLevel, setCardLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH'>('AVERAGE');
     const [existingGroups, setExistingGroups] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [availableGroups, setAvailableGroups] = useState(
@@ -55,14 +55,16 @@ const CardCreator: React.FC = () => {
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(addCard({
-            id: Math.random().toString(36).substr(2, 9),
-            level: cardLevel || 0,
-            title,
-            description,
-            isFavourite: location.state === 'createFavourite',
-        }));
-        navigate(-1);
+        dispatch(addNewCard({
+            favourite: location.state === 'createFavourite',
+            term: title,
+            definition: description,
+            proficiencyLevel: cardLevel,
+            linkedCardSetsIds: existingGroups.map((group: any) => group.id),
+        }))
+            .then(({ payload }: any) => dispatch(
+                addCardToGroups({ id: payload[0].id, groups: existingGroups })
+            ).then(() => navigate(-1)));
     };
     return (
         <motion.div
@@ -94,7 +96,7 @@ const CardCreator: React.FC = () => {
                         <TextInput helperText="Определение" variant="filled" onChange={(e) => setDescription(e.target.value)} style={{ marginTop: '30px' }} />
                     </div>
                     <div className="known-level">
-                        <CardLevelDropdown level={cardLevel} setLevel={setCardLevel} />
+                        <LevelDropdown level={cardLevel} setLevel={setCardLevel} />
                     </div>
                     <div className="existing-groups" style={{ marginTop: isMobile ? 20 : 50 }}>
                         <ExistingGroups

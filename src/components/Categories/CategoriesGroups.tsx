@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSelector } from 'react-redux';
 import Group from '../common/Group';
 import isMobile from '../../utils/isMobile';
 
@@ -19,12 +18,12 @@ const styles = {
 };
 
 const CategoriesCards: React.FC<any> = ({
-    initialGroupArray, setInitialGroupArray, searchTerm, ...props
+    initialGroupArray, searchTerm, ...props
 }) => {
     const [filteredArray, setFilteredArray] = useState<any[]>([]);
     useEffect(() => {
         setFilteredArray(initialGroupArray.filter(
-            (item: any) => item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            (item: any) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
         ));
     }, [searchTerm]);
     return (
@@ -35,8 +34,6 @@ const CategoriesCards: React.FC<any> = ({
                         <Group
                             page="Home"
                             group={item}
-                            initialGroupArray={initialGroupArray}
-                            setInitialGroupArray={setInitialGroupArray}
                             filteredArray={filteredArray}
                             setFilteredArray={setFilteredArray}
                             key={item.id}

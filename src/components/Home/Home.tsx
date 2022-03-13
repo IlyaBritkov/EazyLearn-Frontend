@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -55,8 +55,9 @@ const styles = {
 const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [groupArray, setGroupArray] = useState(useSelector((state: any) => state.user.groups));
-    const [cardArray, setCardArray] = useState(useSelector((state: any) => state.user.cards));
+    const { cards, groups } = useSelector((state: any) => state.user);
+    const [groupArray, setGroupArray] = useState(groups);
+    const [cardArray, setCardArray] = useState(cards);
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -78,6 +79,14 @@ const Home = () => {
             SortByLevelAsc: true,
         },
     });
+
+    useEffect(() => {
+        setCardArray(cards);
+    }, [cards]);
+
+    useEffect(() => {
+        setGroupArray(groups);
+    }, [groups]);
 
     return (
         <motion.div

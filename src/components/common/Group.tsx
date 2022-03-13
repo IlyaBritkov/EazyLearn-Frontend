@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Typography as Typo } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots, dropdownCaret
@@ -11,7 +11,7 @@ import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import getNoun from '../../utils/getNoun';
 import Dropdown from './Dropdown';
-import { addGroup, removeCard, removeGroup } from '../../app/userSlice.js';
+import { removeGroupById } from '../../app/actions';
 
 const styles = {
     ButtonOpen: {
@@ -67,8 +67,7 @@ const styles = {
 
 const Group: React.FC<any> = ({
     group,
-    initialGroupArray,
-    setInitialGroupArray,
+    groupArray,
     filteredArray,
     setFilteredArray,
     pickedGroups,
@@ -131,14 +130,6 @@ const Group: React.FC<any> = ({
 
     const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        dispatch(removeGroup(group.id));
-        dispatch(addGroup({
-            id: group.id,
-            title: group.title,
-            level: group.level,
-            cards: group.cards,
-            isFavourite: !isFavourite,
-        }));
         setFavourite(!isFavourite);
     };
 
@@ -171,13 +162,8 @@ const Group: React.FC<any> = ({
         }
     };
     const handleRemove = (withCards: boolean) => {
-        if (withCards) {
-            group.cards.forEach((card: any) => {
-                dispatch(removeCard(card.id));
-            });
-        }
-        dispatch(removeGroup(group.id));
-        setInitialGroupArray(initialGroupArray.filter((g: any) => g !== group));
+        dispatch(removeGroupById({ id: group.id, withCards }));
+        // setInitialGroupArray(initialGroupArray.filter((g: any) => g !== group));
         if (filteredArray) setFilteredArray([]);
     };
     if (page === 'Home') {
@@ -242,10 +228,10 @@ const Group: React.FC<any> = ({
                         }}
                     >
                         <Typography className="group-name">
-                            {group.title}
+                            {group.name}
                         </Typography>
                         <Typography className="card-number" style={{ fontSize: isMobile ? 8 : 10, fontWeight: 400 }}>
-                            {group.cards.length + getNoun(group.cards.length, ' карточка', ' карточки', ' карточек')}
+                            {group.linkedCardsIds.length + getNoun(group.linkedCardsIds.length, ' карточка', ' карточки', ' карточек')}
                         </Typography>
                     </div>
                     <Button
@@ -265,7 +251,7 @@ const Group: React.FC<any> = ({
     }
     if (page === 'Learn') {
         return (
-            <OuterDiv onClick={handlePick} style={pickedGroups.includes(group) ? styles.Active : styles.InActive} key={group.id} role="button" tabIndex={0} onKeyDown={() => { }}>
+            <OuterDiv onClick={handlePick} style={!pickedGroups.includes(group) ? styles.Active : styles.InActive} key={group.id} role="button" tabIndex={0} onKeyDown={() => { }}>
                 <InnerDiv>
                     <AbsoluteItem style={{ left: '-5px' }}>
                         <Button
@@ -325,10 +311,10 @@ const Group: React.FC<any> = ({
                         }}
                     >
                         <Typography className="group-name">
-                            {group.title}
+                            {group.name}
                         </Typography>
                         <Typography className="card-number" style={{ fontSize: isMobile ? 8 : 10, fontWeight: 400 }}>
-                            {group.cards.length + getNoun(group.cards.length, ' карточка', ' карточки', ' карточек')}
+                            {group.linkedCardsIds.length + getNoun(group.linkedCardsIds.length, ' карточка', ' карточки', ' карточек')}
                         </Typography>
                     </div>
                 </InnerDiv>

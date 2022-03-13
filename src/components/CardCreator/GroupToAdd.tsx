@@ -51,7 +51,7 @@ const GroupToAdd: React.FC<Props> = (
     const [filteredArray, setFilteredArray] = useState<any[]>([]);
     useEffect(() => {
         setFilteredArray(availableGroups.filter(
-            (item: any) => item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            (item: any) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
         ));
     }, [searchTerm]);
 
@@ -73,7 +73,7 @@ const GroupToAdd: React.FC<Props> = (
                                 style={{
                                     maxWidth: 260, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap',
                                 }}
-                            >{item.title}
+                            >{item.name}
                             </Typography>
                             <Button
                                 onClick={() => handleAddToGroup(item)}

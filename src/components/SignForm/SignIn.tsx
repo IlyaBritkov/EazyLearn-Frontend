@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import theme from '../../theme';
+import { login } from '../../app/actions';
 
 const styles = {
     TextInput: {
@@ -19,12 +22,29 @@ const styles = {
     },
 };
 
-const SignIn = () => (
-    <>
-        <TextInput placeholder="Логин" style={styles.TextInput} />
-        <TextInput placeholder="Пароль" type="password" style={{ ...styles.TextInput, marginBottom: 40 }} />
-        <Button variant="contained" style={styles.Button}>Войти</Button>
-    </>
-);
+const SignIn = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const { error, loading, user } = useSelector((state: any) => state.user);
+
+    useEffect(() => {
+        if (user && !loading && !error) navigate('/home');
+    }, [user, loading, error]);
+
+    const handleSignIn = (e: any) => {
+        e.preventDefault();
+        dispatch(login({ email, password }));
+    };
+    return (
+        <>
+            <TextInput placeholder="Email" value={email} onChange={(e: any) => setEmail(e.target.value)} style={styles.TextInput} />
+            <TextInput placeholder="Пароль" value={password} onChange={(e: any) => setPassword(e.target.value)} type="password" style={{ ...styles.TextInput, marginBottom: 40 }} />
+            <Button variant="contained" style={styles.Button} onClick={handleSignIn} disabled={loading}>Войти</Button>
+        </>
+    );
+};
 
 export default SignIn;

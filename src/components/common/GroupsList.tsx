@@ -50,7 +50,6 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
         Learn, ...props
     }
 ) => {
-    const [initialGroupArray, setInitialGroupArray] = useState(groupArray);
     const [favouriteArray, setFavouriteArray] = useState<any[]>(
         groupArray.filter((item: any) => item.isFavourite)
     );
@@ -62,16 +61,16 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
     const nextRef = useRef<HTMLDivElement>(null);
     const handleSwiperLoad = (e: any) => {
         if (showFavourite) {
-            if (favouriteArray.length < 5) {
-                setDesktopSlidesPerView(favouriteArray.length);
+            if (favouriteArray.length < 3) {
+                setDesktopSlidesPerView(favouriteArray.length + 3);
                 if (favouriteArray.length < 2) {
                     setMobileSlidesPerView(favouriteArray.length);
                 }
             }
-        } else if (initialGroupArray.length < 5) {
-            setDesktopSlidesPerView(initialGroupArray.length);
-            if (initialGroupArray.length < 2) {
-                setMobileSlidesPerView(initialGroupArray.length);
+        } else if (groupArray.length < 3) {
+            setDesktopSlidesPerView(groupArray.length + 3);
+            if (groupArray.length < 2) {
+                setMobileSlidesPerView(groupArray.length);
             }
         }
         setTimeout(() => {
@@ -86,7 +85,7 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
         if (showFavourite && favouriteArray.length === 0) {
             return <div>Пусто</div>;
         }
-        if (!showFavourite && initialGroupArray.length === 0) {
+        if (!showFavourite && groupArray.length === 0) {
             return <div>Пусто</div>;
         }
         if (showFavourite) {
@@ -101,15 +100,14 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
                     }}
                     watchOverflow
                     onSwiper={handleSwiperLoad}
-                >{initialGroupArray.map((item: any) => {
+                >{groupArray.map((item: any) => {
                         if (item.isFavourite) {
                             return (
                                 <SwiperSlide>
                                     <Group
                                         page="Home"
                                         group={item}
-                                        initialGroupArray={initialGroupArray}
-                                        setInitialGroupArray={setInitialGroupArray}
+                                        groupArray={groupArray}
                                         key={item.id}
                                     />
                                 </SwiperSlide>
@@ -132,12 +130,11 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
                 onSwiper={handleSwiperLoad}
             >
                 {
-                    initialGroupArray.map((item: any) => (
+                    groupArray.map((item: any) => (
                         <SwiperSlide>
                             <Group
                                 page="Home"
-                                initialGroupArray={initialGroupArray}
-                                setInitialGroupArray={setInitialGroupArray}
+                                groupArray={groupArray}
                                 group={item} key={item.id}
                             />
                         </SwiperSlide>
@@ -155,13 +152,12 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
                     slidesPerView={isMobile ? 2 : 5}
                     watchOverflow
                 >
-                    {initialGroupArray.map((item) => (
+                    {groupArray.map((item) => (
                         <SwiperSlide>
                             <Group
                                 page="Learn"
                                 group={item}
-                                initialGroupArray={initialGroupArray}
-                                setInitialGroupArray={setInitialGroupArray}
+                                groupArray={groupArray}
                                 pickedGroups={pickedGroups}
                                 setPickedGroups={setPickedGroups}
                                 key={item.id}
@@ -177,7 +173,7 @@ const GroupsList: React.FC<GroupsProps> = React.memo((
         <div {...props} style={{ display: 'flex', overflow: 'hidden', width: '100%' }}>
 
             {
-                (!showFavourite && initialGroupArray.length > 0) || favouriteArray.length > 0 ? (
+                (!showFavourite && groupArray.length > 0) || favouriteArray.length > 0 ? (
                     <>
                         <PrevButton id="prev-button" ref={prevRef} role="button">
                             <img src={sliderArrow} style={{ transform: 'rotate(180deg)' }} alt="previous" />

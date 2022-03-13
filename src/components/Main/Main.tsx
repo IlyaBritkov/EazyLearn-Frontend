@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Container as c, Stack
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useDispatch } from 'react-redux';
 import theme from '../../theme';
 import Navigation from '../Navigation';
 import Home from '../Home/Home';

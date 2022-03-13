@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUser } from '../../app/userSlice.js';
+import { registerUser } from '../../app/actions';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
@@ -30,6 +30,12 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const { user, error, loading } = useSelector((state: any) => state.user);
+
+    useEffect(() => {
+        if (user && !loading && !error) navigator('/home');
+    }, [user, error, loading]);
+
     const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -37,8 +43,11 @@ const SignUp = () => {
         if (password !== confirmPassword) return;
 
         console.log('registered', username, email, password);
-        dispatch(setUser({ username, email, password }));
-        navigator('/home');
+        dispatch(registerUser({
+            username,
+            email,
+            password,
+        }));
     };
 
     return (
@@ -62,7 +71,7 @@ const SignUp = () => {
                 placeholder="Подтвердить пароль" type="password" style={{ ...styles.TextInput, marginBottom: 40 }}
                 value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            <Button variant="contained" style={styles.Button} onClick={handleRegister}>Зарегистрироваться</Button>
+            <Button variant="contained" style={styles.Button} onClick={handleRegister} disabled={loading}>Зарегистрироваться</Button>
         </>
     );
 };

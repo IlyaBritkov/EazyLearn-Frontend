@@ -9,7 +9,8 @@ import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import LevelDropdown from '../CardCreator/LevelDropdown';
 import CardsInGroup from './CardsInGroup';
-import { addCard, addGroup } from '../../app/userSlice.js';
+
+import { addNewGroup } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -44,22 +45,21 @@ const styles = {
 };
 
 const GroupCreator: React.FC = () => {
-    const [cardArray, setCardArray] = useState(useSelector((state: any) => state.user.cards));
+    const cardArray = useSelector((state: any) => state.user.cards);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const [pickedCards, setPickedCards] = useState([]);
     const [title, setTitle] = useState('');
-    const [groupLevel, setGroupLevel] = useState<0 | 0.5 | 1 | null>(null);
+    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH' | null>('AVERAGE');
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(addGroup({
-            id: Math.random().toString(36).substr(2, 9),
-            level: groupLevel || 0,
-            title,
-            cards: pickedCards,
-            isFavourite: location.state === 'createFavourite',
+        dispatch(addNewGroup({
+            linkedCardsIds: pickedCards,
+            name: title,
+            proficiencyLevel: groupLevel,
+            linkedNewCards: [],
         }));
         navigate(-1);
     };
