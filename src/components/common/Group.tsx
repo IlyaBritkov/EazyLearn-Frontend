@@ -195,16 +195,6 @@ const Group: React.FC<any> = ({
                                 </Button>
                             </div>
                             <div>
-                                <Button style={styles.MenuItemButton} variant="text">
-                                    <Typo style={styles.Typo}>Добавить карточки</Typo>
-                                </Button>
-                            </div>
-                            <div>
-                                <Button style={styles.MenuItemButton} variant="text">
-                                    <Typo style={styles.Typo}>Изменить уровень владения</Typo>
-                                </Button>
-                            </div>
-                            <div>
                                 <Button onClick={handleMenuOpen} style={styles.MenuItemButton} variant="text">
                                     <Typo style={styles.Typo}>Удалить</Typo>
                                     <img ref={caretRef} style={styles.DropdownCaret} src={dropdownCaret} alt="caret" />
@@ -275,16 +265,6 @@ const Group: React.FC<any> = ({
                             <div>
                                 <Button style={styles.MenuItemButton} variant="text">
                                     <Typo style={styles.Typo}>Редактировать</Typo>
-                                </Button>
-                            </div>
-                            <div>
-                                <Button style={styles.MenuItemButton} variant="text">
-                                    <Typo style={styles.Typo}>Добавить карточки</Typo>
-                                </Button>
-                            </div>
-                            <div>
-                                <Button style={styles.MenuItemButton} variant="text">
-                                    <Typo style={styles.Typo}>Изменить уровень владения</Typo>
                                 </Button>
                             </div>
                             <div>

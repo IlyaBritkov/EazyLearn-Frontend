@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Stack, Typography } from '@mui/material';
+import { TextField, Stack, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Dropdown from '../common/Dropdown';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 import Button from '../common/Button';
 import { dropdownProfileCaret, profileIcon } from '../../assets';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
-import { logout } from '../../app/userSlice';
+import { logout, setUser } from '../../app/userSlice';
 
 const styles = {
     DropdownButton: {
@@ -68,14 +69,41 @@ const styles = {
 };
 
 const Profile = () => {
-    const [profileImage, setProfileImage] = useState(null);
-    const [user, setUser] = useState(useSelector((state: any) => state.user.user));
+    const user = useSelector((state: any) => state.user.user);
+    const [inputs, setInputs] = useState({
+        username: '',
+        email: '',
+        password: '',
+    });
+    const [isError, setIsError] = useState(false);
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
         dispatch(logout());
         navigate('/');
         window.location.reload();
+    };
+
+    const handleChange = (event: { target: { name?: any; value?: any; }; }) => {
+        const { name } = event.target;
+        const { value } = event.target;
+        setInputs((values) => ({ ...values, [name]: value }));
+    };
+
+    const handleSubmit = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+        const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email);
+        if (!validEmail || inputs.password.length < 9 || inputs.username.length < 4) {
+            setIsError(true);
+            return;
+        }
+        dispatch(setUser({ ...inputs }));
+        handleClose();
     };
     return (
         <motion.div
@@ -94,7 +122,99 @@ const Profile = () => {
                     justifyContent="center"
                     style={{ marginTop: isMobile ? 45 : 100 }}
                 >
-
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 500,
+                                bgcolor: 'background.paper',
+                                border: '2px solid #000',
+                                boxShadow: 24,
+                                p: 4,
+                            }}
+                        >
+                            <Typography
+                                style={{
+                                    fontWeight: 'bold',
+                                    fontSize: '1.5rem',
+                                    marginBottom: 30,
+                                }}
+                                id="modal-modal-title" variant="h6" component="h2"
+                            >
+                                Редактировать профиль
+                            </Typography>
+                            <TextField
+                                variant="standard"
+                                error={isError}
+                                label="Имя пользователя"
+                                defaultValue={user.username || ''}
+                                inputProps={{ style: { fontSize: 20 } }}
+                                InputLabelProps={{ style: { fontSize: 25 } }}
+                                style={{
+                                    marginBottom: 20,
+                                }}
+                                name="username"
+                                onChange={handleChange}
+                            />
+                            <TextField
+                                variant="standard"
+                                error={isError}
+                                label="Эл. почта"
+                                defaultValue={user.email || ''}
+                                inputProps={{ style: { fontSize: 20 } }}
+                                InputLabelProps={{ style: { fontSize: 25 } }}
+                                style={{
+                                    marginBottom: 20,
+                                }}
+                                name="email"
+                                onChange={handleChange}
+                            />
+                            <TextField
+                                type="password"
+                                error={isError}
+                                variant="standard"
+                                label="Пароль"
+                                defaultValue={user.password || ''}
+                                inputProps={{ style: { fontSize: 20 } }}
+                                InputLabelProps={{ style: { fontSize: 25 } }}
+                                style={{
+                                    marginBottom: 50,
+                                }}
+                                name="password"
+                                onChange={handleChange}
+                            />
+                            <Typography align="right">
+                                <Button
+                                    onClick={handleClose}
+                                    variant="text"
+                                    style={{
+                                        maxWidth: 110,
+                                        marginRight: 30,
+                                        fontSize: '1.2rem',
+                                    }}
+                                >Отмена
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    onClick={handleSubmit}
+                                    variant="text"
+                                    style={{
+                                        maxWidth: 150,
+                                        fontSize: '1.2rem',
+                                    }}
+                                >Сохранить
+                                </Button>
+                            </Typography>
+                        </Box>
+                    </Modal>
                     <div style={styles.ProfileImageWrapper}><img src={profileIcon} style={styles.ProfileImagePlug} alt="profile" /></div>
                     <Typography
                         style={{
@@ -115,8 +235,8 @@ const Profile = () => {
                 >
                     <div
                         style={styles.ProfileDetailsDiv}
-                        onClick={() => console.log('pressed 1 button')}
-                        onKeyDown={() => {}}
+                        onClick={handleOpen}
+                        onKeyDown={handleOpen}
                         role="button"
                         tabIndex={0}
                     >
@@ -130,8 +250,8 @@ const Profile = () => {
                     </div>
                     <div
                         style={styles.ProfileDetailsDiv}
-                        onClick={() => console.log('pressed 2 button')}
-                        onKeyDown={() => {}}
+                        onClick={handleOpen}
+                        onKeyDown={handleOpen}
                         role="button"
                         tabIndex={0}
                     >
@@ -145,8 +265,8 @@ const Profile = () => {
                     </div>
                     <div
                         style={styles.ProfileDetailsDiv}
-                        onClick={() => console.log('pressed 3 button')}
-                        onKeyDown={() => {}}
+                        onClick={handleOpen}
+                        onKeyDown={handleOpen}
                         role="button"
                         tabIndex={0}
                     >

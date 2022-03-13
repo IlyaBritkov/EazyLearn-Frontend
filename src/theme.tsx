@@ -39,7 +39,7 @@ const theme = createTheme({
                     '& .MuiOutlinedInput-input': {
                         padding: '10px 22px',
                         '&::placeholder': {
-                            color: ThemeColors.secondary,
+                            color: ThemeColors.primary,
                         },
                     },
                     '& .MuiFormHelperText-root': {
@@ -62,7 +62,7 @@ const theme = createTheme({
                         background: ThemeColors.white,
                         padding: '10px 5px 2px',
                         '&::placeholder': {
-                            color: ThemeColors.secondary,
+                            color: ThemeColors.primary,
                         },
                     },
                     '& .MuiFilledInput-root': {

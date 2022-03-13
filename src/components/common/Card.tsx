@@ -110,16 +110,6 @@ const Card: React.FC<CardProps> = ({ item, cardArray }) => {
                             </Button>
                         </div>
                         <div>
-                            <Button style={styles.MenuItemButton} variant="text">
-                                <Typo style={styles.Typo}>Добавить карточки</Typo>
-                            </Button>
-                        </div>
-                        <div>
-                            <Button style={styles.MenuItemButton} variant="text">
-                                <Typo style={styles.Typo}>Изменить уровень владения</Typo>
-                            </Button>
-                        </div>
-                        <div>
                             <Button onClick={handleRemove} style={styles.MenuItemButton} variant="text">
                                 <Typo style={styles.Typo}>Удалить</Typo>
                             </Button>
