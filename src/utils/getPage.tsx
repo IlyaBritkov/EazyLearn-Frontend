@@ -39,6 +39,8 @@ export function getPage(page: string) {
         return <Typography style={styles.Typography}>Профиль</Typography>;
     case 'learn':
         return <Typography style={styles.Typography}>Изучать</Typography>;
+    case 'game':
+        return <Typography style={styles.Typography}>Обучение</Typography>;
     default:
         return <Typography style={styles.Typography}>Главная</Typography>;
     }

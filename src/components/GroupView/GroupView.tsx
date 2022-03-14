@@ -100,7 +100,6 @@ const GroupView: React.FC<any> = () => {
                         <Card
                             key={card.id}
                             item={card}
-                            cardArray={cardsInGroup}
                         />
                     )) : 'Пусто'}
                 </Stack>

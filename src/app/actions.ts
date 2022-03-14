@@ -70,19 +70,6 @@ export const loginByToken: any = createAsyncThunk(
     }
 );
 
-export const getAllUsers: any = createAsyncThunk(
-    'user/getAll',
-    async (_: any, { rejectWithValue, getState }: any) => {
-        try {
-            const { user }: any = getState();
-            const response = await axios.get(`${BASE_URL}/users`, authHeader(user.token));
-            return rejectWithValue(response.data);
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-
 export const loadCards: any = createAsyncThunk(
     'user/loadCards',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {
@@ -90,6 +77,33 @@ export const loadCards: any = createAsyncThunk(
             const { user }: any = getState();
             const response = await axios.get(`${BASE_URL}/cards`, authHeader(user.token));
             dispatch(setCards(response.data));
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const getAllUniqueCards: any = createAsyncThunk(
+    'user/getAllUniqueCards',
+    async (_: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/cards`, authHeader(user.token));
+            const unique = response.data.filter((card: any) => card.linkedCardSetsIds.length === 0);
+            return unique;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const getAllCards: any = createAsyncThunk(
+    'user/getAllCards',
+    async (_: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/cards`, authHeader(user.token));
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);

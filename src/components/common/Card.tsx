@@ -14,7 +14,7 @@ import { removeCardById } from '../../app/actions';
 
 type CardProps = {
     item: any;
-    cardArray: any;
+    isGame?: boolean;
 }
 
 const styles = {
@@ -29,18 +29,36 @@ const styles = {
     },
 };
 
-const Card: React.FC<CardProps> = ({ item, cardArray }) => {
+const Card: React.FC<CardProps> = ({ item, isGame }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFavourite, setFavourite] = useState(item.isFavourite);
     const dispatch = useDispatch();
+    const setHeight = () => {
+        if (isMobile) {
+            return isGame ? 300 : 80;
+        }
+        return isGame ? 340 : 100;
+    };
+    const setWidth = () => {
+        if (isMobile) {
+            return isGame ? 210 : 160;
+        }
+        return isGame ? 250 : 190;
+    };
+    const setMaxHeight = () => {
+        if (isGame) {
+            return '100%';
+        }
+        return isFlipped ? '100%' : 100;
+    };
     const OuterDiv = styled('div')({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: isMobile ? 160 : 190,
-        minHeight: isMobile ? 80 : 100,
-        maxHeight: isFlipped ? '100%' : 100,
+        width: setWidth(),
+        minHeight: setHeight(),
+        maxHeight: setMaxHeight(),
         border: `1px solid ${theme.palette.primary.dark}`,
         color: '#fff',
         borderRadius: 12,
@@ -82,10 +100,13 @@ const Card: React.FC<CardProps> = ({ item, cardArray }) => {
         dispatch(removeCardById(item.id));
         // setInitialCardArray(cardArray.filter((card: any) => card.id !== item.id));
     };
+    const handleFlip = () => {
+        setIsFlipped(!isFlipped);
+    };
     return (
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" flipSpeedFrontToBack={0.45} flipSpeedBackToFront={0.45}>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={() => setIsFlipped(!isFlipped)} onKeyDown={() => {}}>
-                <AbsoluteIcon style={{ left: isMobile ? 5 : 12 }}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {}}>
+                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
                     <Button
                         sx={{
                             width: '30px',
@@ -95,7 +116,7 @@ const Card: React.FC<CardProps> = ({ item, cardArray }) => {
                         onClick={handleActive}
                     />
                 </AbsoluteIcon>
-                <AbsoluteIcon style={{ right: isMobile ? 5 : 12 }}>
+                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12 }}>
                     <Dropdown
                         Icon={tripleDots}
                         IconStyles={{ width: 12 }}
@@ -118,8 +139,8 @@ const Card: React.FC<CardProps> = ({ item, cardArray }) => {
                 </AbsoluteIcon>
                 <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.term}</Typography></div>
             </OuterDiv>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={() => setIsFlipped(!isFlipped)} onKeyDown={() => { }}>
-                <AbsoluteIcon style={{ left: isMobile ? 5 : 12 }}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => { }}>
+                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
                     <Button
                         sx={{
                             width: '30px',
@@ -129,7 +150,7 @@ const Card: React.FC<CardProps> = ({ item, cardArray }) => {
                         onClick={handleActive}
                     />
                 </AbsoluteIcon>
-                <AbsoluteIcon style={{ right: isMobile ? 5 : 12 }}>
+                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12 }}>
                     <Dropdown
                         Icon={tripleDots}
                         IconStyles={{ width: 12 }}
@@ -169,6 +190,10 @@ const Card: React.FC<CardProps> = ({ item, cardArray }) => {
             </OuterDiv>
         </ReactCardFlip>
     );
+};
+
+Card.defaultProps = {
+    isGame: false,
 };
 
 export default Card;
