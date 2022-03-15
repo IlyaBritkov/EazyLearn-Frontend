@@ -55,6 +55,7 @@ const CardCreator: React.FC = () => {
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        if (!title || !description) return;
         dispatch(addNewCard({
             isFavourite: location.state === 'createFavourite',
             term: title,
@@ -63,7 +64,7 @@ const CardCreator: React.FC = () => {
             linkedCardSetsIds: existingGroups.map((group: any) => group.id),
         }))
             .then(({ payload }: any) => dispatch(
-                addCardToGroups({ id: payload[0]?.id, groups: existingGroups })
+                addCardToGroups({ id: payload[0].id, groups: existingGroups })
             ).then(() => navigate(-1)));
     };
     return (

@@ -97,7 +97,6 @@ const CardsList: React.FC<Props> = React.memo((
                                 <SwiperSlide>
                                     <Card
                                         item={item}
-                                        cardArray={cardArray}
                                         key={item.id}
                                     />
                                 </SwiperSlide>
@@ -124,7 +123,6 @@ const CardsList: React.FC<Props> = React.memo((
                         <SwiperSlide>
                             <Card
                                 item={item}
-                                cardArray={cardArray}
                                 key={item.id}
                             />
                         </SwiperSlide>

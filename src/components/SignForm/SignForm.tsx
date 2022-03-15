@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import {
-    Container, Stack, Tabs, Link
+    Container, Stack, Tabs
 } from '@mui/material';
-import { motion } from 'framer-motion';
-import theme from '../../theme';
 import { logoRed } from '../../assets';
 import Tab from '../common/Tab';
 import SignIn from './SignIn';
@@ -29,9 +27,6 @@ const styles = {
         minHeight: 28,
         gap: 80,
         marginBottom: 56,
-    },
-    Link: {
-        textAlign: 'center' as const,
     },
     Img: {
         display: 'flex',
@@ -84,12 +79,6 @@ const SignForm = () => {
                     >
                         <SignUp />
                     </TabPanel>
-                    <Link
-                        href="/"
-                        underline="always"
-                        style={styles.Link}
-                    >Забыли пароль?
-                    </Link>
                 </Stack>
             </Stack>
         </Container>

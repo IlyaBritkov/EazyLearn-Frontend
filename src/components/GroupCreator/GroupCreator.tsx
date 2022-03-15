@@ -51,10 +51,11 @@ const GroupCreator: React.FC = () => {
     const location = useLocation();
     const [pickedCards, setPickedCards] = useState([]);
     const [title, setTitle] = useState('');
-    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH' | null>('AVERAGE');
+    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH'>('AVERAGE');
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        if (!title) return;
         dispatch(addNewGroup({
             isFavourite: location.state === 'createFavourite',
             linkedCardsIds: pickedCards,
