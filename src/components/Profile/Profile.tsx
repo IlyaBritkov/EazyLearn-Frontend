@@ -10,6 +10,7 @@ import { dropdownProfileCaret, profileIcon } from '../../assets';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import { logout, setUser } from '../../app/userSlice';
+import { updateUserById } from '../../app/actions';
 
 const styles = {
     DropdownButton: {
@@ -102,7 +103,12 @@ const Profile = () => {
             setIsError(true);
             return;
         }
-        dispatch(setUser({ ...inputs }));
+        dispatch(updateUserById({
+            userId: user.id,
+            username: inputs.username,
+            email: inputs.email,
+            password: inputs.password,
+        }));
         handleClose();
     };
     return (
