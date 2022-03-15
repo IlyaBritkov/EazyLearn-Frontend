@@ -13,6 +13,7 @@ import GroupsList from '../common/GroupsList';
 import GroupCreator from '../GroupCreator/GroupCreator';
 import CardCreator from '../CardCreator/CardCreator';
 import theme from '../../theme';
+import { setCards, setGroups } from '../../app/userSlice';
 
 const styles = {
     StackMobile: {
@@ -79,6 +80,62 @@ const Home = () => {
             SortByLevelAsc: true,
         },
     });
+
+    useEffect(() => {
+        cards.map((card: any, index: number, array: any[]) => {
+            if (cardsSortings.time.isSortByTime) {
+                const newArr = [...array].sort((a: any, b: any) => {
+                    const first = new Date(a.createdDateTime.slice(0, -2));
+                    const last = new Date(b.createdDateTime.slice(0, -2));
+                    if (cardsSortings.time.SortByTimeAsc) {
+                        // @ts-ignore
+                        return first - last;
+                    }
+                    // @ts-ignore
+                    return last - first;
+                });
+                dispatch(setCards(newArr));
+            }
+            if (cardsSortings.level.isSortByLevel) {
+                const newArr = [...array].sort((a: any, b: any) => {
+                    if (cardsSortings.level.SortByLevelAsc) {
+                        return a.proficiencyLevel - b.proficiencyLevel;
+                    }
+                    return b.proficiencyLevel - a.proficiencyLevel;
+                });
+                dispatch(setCards(newArr));
+            }
+            return card;
+        });
+    }, [cardsSortings]);
+
+    useEffect(() => {
+        groups.map((group: any, index: number, array: any[]) => {
+            if (groupSortings.time.isSortByTime) {
+                const newArr = [...array].sort((a: any, b: any) => {
+                    const first = new Date(a.createdDateTime.slice(0, -2));
+                    const last = new Date(b.createdDateTime.slice(0, -2));
+                    if (groupSortings.time.SortByTimeAsc) {
+                        // @ts-ignore
+                        return first - last;
+                    }
+                    // @ts-ignore
+                    return last - first;
+                });
+                dispatch(setGroups(newArr));
+            }
+            if (groupSortings.level.isSortByLevel) {
+                const newArr = [...array].sort((a: any, b: any) => {
+                    if (groupSortings.level.SortByLevelAsc) {
+                        return a.proficiencyLevel - b.proficiencyLevel;
+                    }
+                    return b.proficiencyLevel - a.proficiencyLevel;
+                });
+                dispatch(setGroups(newArr));
+            }
+            return group;
+        });
+    }, [groupSortings]);
 
     useEffect(() => {
         setCardArray(cards);
