@@ -46,7 +46,6 @@ const CardEditor: React.FC = () => {
     const location = useLocation();
     const params = useParams();
     const id = String(params.id);
-    console.log(id);
     const cardArray = useSelector((state: any) => state.user.cards);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
