@@ -19,10 +19,18 @@ const userSlice = createSlice({
         setGroups: (state, action) => {
             if (typeof action.payload === 'object' && !Array.isArray(action.payload) && action.payload !== null) {
                 state.groups.push(action.payload);
-            } else state.groups = action.payload;
+            } else {
+                state.groups = [...action.payload.reduce((a: any, c: any) => {
+                    a.set(c.id, c);
+                    return a;
+                }, new Map()).values()]; // this shit makes all groups unique
+            }
         },
         setCards: (state, action) => {
-            state.cards = action.payload;
+            state.cards = [...action.payload.reduce((a: any, c: any) => {
+                a.set(c.id, c);
+                return a;
+            }, new Map()).values()]; // this shit makes all cards unique
         },
         removeGroup: (state, action) => {
             state.groups = state.groups.filter((group: any) => group.id !== action.payload);

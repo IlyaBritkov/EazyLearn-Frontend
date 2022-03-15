@@ -10,7 +10,8 @@ import isMobile from '../../utils/isMobile';
 import LevelDropdown from './LevelDropdown';
 import ExistingGroups from './ExistingGroups';
 import GroupToAdd from './GroupToAdd';
-import {addCardToGroups, loadCards, updateCardById} from '../../app/actions';
+import { updateCardById } from '../../app/actions';
+import { removeCard } from '../../app/userSlice';
 
 const styles = {
     Stack: {
@@ -46,7 +47,6 @@ const CardEditor: React.FC = () => {
     const location = useLocation();
     const params = useParams();
     const id = String(params.id);
-    console.log(id);
     const cardArray = useSelector((state: any) => state.user.cards);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -59,14 +59,17 @@ const CardEditor: React.FC = () => {
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(updateCardById({
-            cardId: id,
-            definition: description,
-            isFavourite: location.state === 'createFavourite',
-            linkedCardSetsIds: existingGroups.map((group: any) => group.id),
-            proficiencyLevel: cardLevel,
-            term: title,
-        })).then(() => navigate(-1));
+        dispatch(removeCard(id));
+        dispatch(
+            updateCardById({
+                cardId: id,
+                definition: description,
+                isFavourite: location.state === 'createFavourite',
+                linkedCardSetsIds: existingGroups.map((group: any) => group.id),
+                proficiencyLevel: cardLevel,
+                term: title,
+            })
+        ).then(() => navigate(-1));
     };
     return (
         <motion.div
