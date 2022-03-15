@@ -23,7 +23,6 @@ const styles = {
     cardWrapper: {
         position: 'relative' as const,
         width: isMobile ? 'calc(100% + 16px)' : '100%',
-        wordWrap: 'break-word',
     },
     CreateButton: {
         maxWidth: isMobile ? 180 : 230,
@@ -94,7 +93,7 @@ const CardCreator: React.FC = () => {
                     style={{ width: '100%', marginTop: isMobile ? 10 : 30 }}
                 >
                     <div className="input-group" style={styles.flex}>
-                        <TextInput inputProps={{ maxLength: 40 }} helperText="Термин" variant="filled" onChange={(e) => setTitle(e.target.value)} />
+                        <TextInput helperText="Термин" variant="filled" onChange={(e) => setTitle(e.target.value)} />
                         <TextInput helperText="Определение" variant="filled" onChange={(e) => setDescription(e.target.value)} style={{ marginTop: '30px' }} />
                     </div>
                     <div className="known-level">
