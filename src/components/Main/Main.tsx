@@ -15,7 +15,7 @@ import GroupView from '../GroupView/GroupView';
 import CardCreator from '../CardCreator/CardCreator';
 import GroupCreator from '../GroupCreator/GroupCreator';
 import CardEditor from '../CardEditor/CardEditor';
-import Game from '../Game/Game';
+import GroupEditor from '../GroupEditor/GroupEditor';
 
 type MainProps = {
     page: string;
@@ -62,9 +62,9 @@ const Main = ({ page }: MainProps) => {
                         {page === 'learn' && <Learn />}
                         {page === 'create-card' && <CardCreator />}
                         {page === 'edit-card' && <CardEditor />}
+                        {page === 'edit-group' && <GroupEditor />}
                         {page === 'create-group' && <GroupCreator />}
                         {page === 'group-view' && <GroupView />}
-                        {page === 'game' && <Game />}
                     </Stack>
                 </Container>
             </Stack>
