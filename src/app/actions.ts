@@ -221,21 +221,7 @@ export const changeCardStatus: any = createAsyncThunk(
         }
     }
 );
-export const updateGroupById: any = createAsyncThunk(
-    'user/updateGroupById',
-    async (group: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            console.log(group);
-            const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/groups/${group.groupId}`, group, authHeader(user.token));
-            dispatch(setCards([...user.cards, ...response.data]));
-            console.log(response.data);
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
+
 //! GROUPS
 
 export const loadGroups: any = createAsyncThunk(

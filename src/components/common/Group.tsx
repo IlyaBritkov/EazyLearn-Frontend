@@ -134,12 +134,6 @@ const Group: React.FC<any> = ({
         setFavourite(!isFavourite);
     };
 
-    const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
-        e.stopPropagation();
-        const path = `/edit-group/${group.id}`;
-        navigate(path);
-    };
-
     const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         const caret = (caretRef!.current as any);
@@ -197,7 +191,7 @@ const Group: React.FC<any> = ({
                             }}
                         >
                             <div>
-                                <Button onClick={handleEdit} style={styles.MenuItemButton} variant="text">
+                                <Button style={styles.MenuItemButton} variant="text">
                                     <Typo style={styles.Typo}>Редактировать</Typo>
                                 </Button>
                             </div>
@@ -270,7 +264,7 @@ const Group: React.FC<any> = ({
                             }}
                         >
                             <div>
-                                <Button onClick={handleEdit} style={styles.MenuItemButton} variant="text">
+                                <Button style={styles.MenuItemButton} variant="text">
                                     <Typo style={styles.Typo}>Редактировать</Typo>
                                 </Button>
                             </div>
