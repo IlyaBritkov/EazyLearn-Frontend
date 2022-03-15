@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { styled } from '@mui/styles';
+import { useNavigate } from 'react-router-dom';
 import isMobile from '../../utils/isMobile';
 import { dropdownProfileCaret } from '../../assets';
 import theme from '../../theme';
@@ -56,22 +57,32 @@ const Horizontal = styled('hr')({
 });
 
 const ListInfo = ({ pickedGroups }: any) => {
-    const v1 = 1;
+    const navigate = useNavigate();
     return (
         <AnimatePresence>
             <motion.div
                 transition={{ duration: 0.2 }}
                 style={styles.LevelsWrapper}
             >
-                <Button onClick={() => { }} style={styles.LevelsButtons} variant="text">
+                <Button onClick={() => navigate('/game', { state: { name: 'unique-cards' } })} style={styles.LevelsButtons} variant="text">
                     <Typography>Все карточки, не входящие ни в одну группу</Typography>
                 </Button>
                 <Horizontal />
-                <Button onClick={() => { }} style={styles.LevelsButtons} variant="text">
+                <Button onClick={() => navigate('/game', { state: { name: 'all-cards' } })} style={styles.LevelsButtons} variant="text">
                     <Typography>Все карточки</Typography>
                 </Button>
                 <Horizontal />
-                <Button disabled={pickedGroups.length === 0} onClick={() => { }} style={styles.LevelsButtons} variant="text">
+                <Button
+                    disabled={pickedGroups.length === 0} onClick={() => navigate(
+                        '/game',
+                        {
+                            state: {
+                                name: 'picked-groups',
+                                groups: pickedGroups.map((group: any) => group.id),
+                            },
+                        }
+                    )} style={styles.LevelsButtons} variant="text"
+                >
                     <Typography style={{ opacity: pickedGroups.length > 0 ? 1 : 0.5 }}>
                         Выбранные группы
                     </Typography>

@@ -5,6 +5,15 @@
     font-family: 'Montserrat', sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
+.game-card-wrapper > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#root {
+    overflow: hidden
+}
+
 .swiper {
     width: 100% !important;
 }

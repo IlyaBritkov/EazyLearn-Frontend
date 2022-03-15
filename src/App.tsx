@@ -28,6 +28,7 @@ const App: React.FC = () => {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Loader />} />
                 <Route path="/login" element={<SignForm />} />
+                <Route path="/game" element={user ? <Main page="game" /> : <Navigate to="/" />} />
                 <Route path="/home" element={user ? <Main page="home" /> : <Navigate to="/" />} />
                 <Route path="/sets" element={user ? <Main page="categories" /> : <Navigate to="/" />} />
                 <Route path="/favourite" element={user ? <Main page="favourite" /> : <Navigate to="/" />} />

@@ -55,6 +55,7 @@ const CardCreator: React.FC = () => {
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        if (!title || !description) return;
         dispatch(addNewCard({
             isFavourite: location.state === 'createFavourite',
             term: title,
