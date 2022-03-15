@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 import { Typography as Typo } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import ReactCardFlip from 'react-card-flip';
+import { useNavigate } from 'react-router-dom';
+import { type } from 'os';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots
 } from '../../assets';
@@ -33,6 +35,7 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFavourite, setFavourite] = useState(item.isFavourite);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const setHeight = () => {
         if (isMobile) {
             return isGame ? 300 : 80;
@@ -100,6 +103,12 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
         dispatch(removeCardById(item.id));
         // setInitialCardArray(cardArray.filter((card: any) => card.id !== item.id));
     };
+    const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        const path = `/edit-card/${item.id}`;
+        navigate(path);
+    };
+
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
     };
@@ -126,7 +135,7 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                         }}
                     >
                         <div>
-                            <Button style={styles.MenuItemButton} variant="text">
+                            <Button onClick={handleEdit} style={styles.MenuItemButton} variant="text">
                                 <Typo style={styles.Typo}>Редактировать</Typo>
                             </Button>
                         </div>
@@ -160,18 +169,8 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                         }}
                     >
                         <div>
-                            <Button style={styles.MenuItemButton} variant="text">
+                            <Button onClick={handleEdit} style={styles.MenuItemButton} variant="text">
                                 <Typo style={styles.Typo}>Редактировать</Typo>
-                            </Button>
-                        </div>
-                        <div>
-                            <Button style={styles.MenuItemButton} variant="text">
-                                <Typo style={styles.Typo}>Добавить карточки</Typo>
-                            </Button>
-                        </div>
-                        <div>
-                            <Button style={styles.MenuItemButton} variant="text">
-                                <Typo style={styles.Typo}>Изменить уровень владения</Typo>
                             </Button>
                         </div>
                         <div>

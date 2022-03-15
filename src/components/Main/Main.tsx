@@ -14,6 +14,7 @@ import Learn from '../Learn/Learn';
 import GroupView from '../GroupView/GroupView';
 import CardCreator from '../CardCreator/CardCreator';
 import GroupCreator from '../GroupCreator/GroupCreator';
+import CardEditor from '../CardEditor/CardEditor';
 import Game from '../Game/Game';
 
 type MainProps = {
@@ -60,6 +61,7 @@ const Main = ({ page }: MainProps) => {
                         {page === 'profile' && <Profile />}
                         {page === 'learn' && <Learn />}
                         {page === 'create-card' && <CardCreator />}
+                        {page === 'edit-card' && <CardEditor />}
                         {page === 'create-group' && <GroupCreator />}
                         {page === 'group-view' && <GroupView />}
                         {page === 'game' && <Game />}

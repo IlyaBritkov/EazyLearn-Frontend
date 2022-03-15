@@ -185,6 +185,22 @@ export const removeCardById: any = createAsyncThunk(
     }
 );
 
+export const updateCardById: any = createAsyncThunk(
+    'user/updateCardById    ',
+    async (card: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            console.log(card);
+            const { user }: any = getState();
+            const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, card, authHeader(user.token));
+            dispatch(setCards([...user.cards, ...response.data]));
+            console.log(response.data);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const loadGroups: any = createAsyncThunk(
     'user/loadGroups',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {

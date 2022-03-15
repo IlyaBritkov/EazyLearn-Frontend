@@ -60,12 +60,13 @@ const GroupView: React.FC<any> = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
     const group = useSelector((state: any) => state.user.groups.find((g: any) => g.id === id));
+    console.log(group);
     const [cardsInGroup, setCardsInGroup] = useState([]);
     useEffect(() => {
         dispatch(getCardsByGroupId(id)).then(({ payload }: any) => {
             setCardsInGroup(payload);
         });
-    }, [group, dispatch]);
+    }, [group, setCardsInGroup, dispatch]);
     return (
         <motion.div
             initial={{ y: '110vh' }}
