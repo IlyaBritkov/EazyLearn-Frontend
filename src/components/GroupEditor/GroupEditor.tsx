@@ -9,7 +9,8 @@ import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import LevelDropdown from '../CardCreator/LevelDropdown';
 import CardsInGroup from './CardsInGroup';
-import { updateFullDataGroupById } from '../../app/actions';
+
+import { updateGroupById } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -57,14 +58,14 @@ const GroupEditor: React.FC = () => {
 
     const linkedCardsIds = groupArray
         ?.filter((item: { id: string | undefined; }) => item.id === id)
-        .map((item: { linkedCardsIds: [];}) => item.linkedCardsIds).flat();
+        .map((item: { linkedCardsIds: [];}) => item.linkedCardsIds);
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(updateFullDataGroupById({
+        dispatch(updateGroupById({
             groupId: id,
             isFavourite: location.state === 'createFavourite',
-            linkedCardsIds: linkedCardsIds.concat(pickedCards),
+            linkedCardsIds: [...pickedCards, linkedCardsIds],
             linkedNewCards: [],
             name: title,
             proficiencyLevel: groupLevel,
