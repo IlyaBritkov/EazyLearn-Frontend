@@ -66,7 +66,6 @@ const Main = ({ page }: MainProps) => {
                         {page === 'edit-group' && <GroupEditor />}
                         {page === 'create-group' && <GroupCreator />}
                         {page === 'group-view' && <GroupView />}
-                        {page === 'game' && <Game />}
                     </Stack>
                 </Container>
             </Stack>
