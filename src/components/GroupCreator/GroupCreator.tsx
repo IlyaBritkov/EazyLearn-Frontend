@@ -56,10 +56,11 @@ const GroupCreator: React.FC = () => {
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         dispatch(addNewGroup({
+            isFavourite: location.state === 'createFavourite',
             linkedCardsIds: pickedCards,
+            linkedNewCards: [],
             name: title,
             proficiencyLevel: groupLevel,
-            linkedNewCards: [],
         }));
         navigate(-1);
     };

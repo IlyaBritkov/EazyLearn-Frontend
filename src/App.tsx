@@ -34,6 +34,7 @@ const App: React.FC = () => {
                 <Route path="/profile" element={user ? <Main page="profile" /> : <Navigate to="/" />} />
                 <Route path="/learn" element={user ? <Main page="learn" /> : <Navigate to="/" />} />
                 <Route path="/create-card" element={user ? <Main page="create-card" /> : <Navigate to="/" />} />
+                <Route path="/edit-card/:id" element={user ? <Main page="edit-card" /> : <Navigate to="/" />} />
                 <Route path="/create-group" element={user ? <Main page="create-group" /> : <Navigate to="/" />} />
                 <Route path="/group/:id" element={user ? <Main page="group-view" /> : <Navigate to="/" />} />
                 <Route path="*" element={<div>404 NOT FOUND</div>} />
