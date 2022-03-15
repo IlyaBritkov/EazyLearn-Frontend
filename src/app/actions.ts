@@ -136,7 +136,7 @@ export const addCardToGroups: any = createAsyncThunk(
         try {
             const { user }: any = getState();
             data.groups.forEach(async (group: any) => {
-                const res = await axios.patch(`${BASE_URL}/cardSets/${group.id}`, {
+                const res = await axios.patch(`${BASE_URL}/cardSets/${data.id}`, {
                     linkedCardsIds: [...group.linkedCardsIds, data.id],
                 }, authHeader(user.token));
                 dispatch(setGroups(
@@ -189,15 +189,45 @@ export const updateCardById: any = createAsyncThunk(
 
 export const updateGroupById: any = createAsyncThunk(
     'user/updateGroupById',
-    async (group: any, { rejectWithValue, getState, dispatch }: any) => {
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
-            console.log(group);
+            console.log(data);
             const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/groups/${group.groupId}`, group, authHeader(user.token));
-            dispatch(setCards([...user.cards, ...response.data]));
-            console.log(response.data);
+            const response = await axios.patch(`${BASE_URL}/cardSets/${data.group.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
+            console.log('GROUP FAV', response.data);
+            dispatch(setGroups([...user.groups, response.data]));
+            console.log(user.groups);
             return response.data;
         } catch (error: any) {
+            console.log(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateFullDataGroupById: any = createAsyncThunk(
+    'user/updateFullDataGroupById',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            console.log(data.linkedCardsIds);
+            const { user }: any = getState();
+            const response = await axios.patch(
+                `${BASE_URL}/cardSets/${data.groupId}`,
+                {
+                    isFavourite: data.isFavourite,
+                    linkedCardsIds: data.linkedCardsIds,
+                    linkedNewCards: data.linkedNewCards,
+                    name: data.name,
+                    proficiencyLevel: data.proficiencyLevel,
+                },
+                authHeader(user.token)
+            );
+            console.log('GROUP FAV', response.data);
+            dispatch(setGroups([...user.groups, response.data]));
+            console.log(user.groups);
+            return response.data;
+        } catch (error: any) {
+            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
