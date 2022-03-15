@@ -1,43 +1,48 @@
-import React from 'react';
-import { Stack } from '@mui/material';
-import TextInput from './components/common/TextInput';
-import Button from './components/common/Button';
-import * as Assets from './assets';
+import React, { useEffect } from 'react';
+import {
+    Routes,
+    Route,
+    useLocation,
+    Navigate
+} from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from './components/Loader';
+import SignForm from './components/SignForm/SignForm';
+import Main from './components/Main/Main';
 
-const App: React.FC = () => (
-    <div className="App">
-        <Stack
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-        >
-            <TextInput placeholder="Логин" helperText="foo bar" variant="filled" />
-            <TextInput placeholder="Пароль" type="password" />
-            <Stack direction="row">
-                <Button Icon={Assets.notificationIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.createIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.deleteIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.favouritesActiveIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.favouritesInactiveIcon} onClick={() => console.log('only image button')} />
-                <Button
-                    Icon={Assets.arrowDropdownIcon} IconStyles={
-                        { width: 5, height: 5 }
-                    } onClick={() => console.log('only image button')}
-                />
-                <Button Icon={Assets.homeActiveIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.homeInactiveIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.groupsInactiveIcon} onClick={() => console.log('only image button')} />
-                <Button Icon={Assets.groupsActiveIcon} onClick={() => console.log('only image button')} />
-                <Button
-                    Icon={Assets.searchIcon} onClick={() => console.log('only image button')}
-                />
-                <Button Icon={Assets.arrowBackIcon} onClick={() => console.log('only image button')} />
-            </Stack>
-            <Button onClick={() => console.log('only text button')}>no icon</Button>
-            <Button startIcon={Assets.filterIcon} IconStartStyles={{ width: 15, height: 15 }} variant="outlined" onClick={() => console.log('button left icon')}>icon start</Button>
-            <Button endIcon={Assets.profileIcon} IconEndStyles={{ border: '1px solid black', padding: 1 }} variant="outlined" onClick={() => console.log('button right icon')}>icon end</Button>
-        </Stack>
-    </div>
-);
+import { loadGroups, loadCards } from './app/actions';
+
+const App: React.FC = () => {
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const user = useSelector((state: { [key: string]: any }) => state.user.user);
+    useEffect(() => {
+        if (user) {
+            dispatch(loadGroups());
+            dispatch(loadCards());
+        }
+    }, [user]);
+    return (
+        <AnimatePresence exitBeforeEnter>
+            <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Loader />} />
+                <Route path="/login" element={<SignForm />} />
+                <Route path="/game" element={user ? <Main page="game" /> : <Navigate to="/" />} />
+                <Route path="/home" element={user ? <Main page="home" /> : <Navigate to="/" />} />
+                <Route path="/sets" element={user ? <Main page="categories" /> : <Navigate to="/" />} />
+                <Route path="/favourite" element={user ? <Main page="favourite" /> : <Navigate to="/" />} />
+                <Route path="/profile" element={user ? <Main page="profile" /> : <Navigate to="/" />} />
+                <Route path="/learn" element={user ? <Main page="learn" /> : <Navigate to="/" />} />
+                <Route path="/create-card" element={user ? <Main page="create-card" /> : <Navigate to="/" />} />
+                <Route path="/edit-card/:id" element={user ? <Main page="edit-card" /> : <Navigate to="/" />} />
+                <Route path="/create-group" element={user ? <Main page="create-group" /> : <Navigate to="/" />} />
+                <Route path="/edit-group/:id" element={user ? <Main page="edit-group" /> : <Navigate to="/" />} />
+                <Route path="/group/:id" element={user ? <Main page="group-view" /> : <Navigate to="/" />} />
+                <Route path="*" element={<div>404 NOT FOUND</div>} />
+            </Routes>
+        </AnimatePresence>
+    );
+};
 
 export default App;

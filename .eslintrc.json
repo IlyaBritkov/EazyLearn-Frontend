@@ -12,6 +12,9 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
+    "globals": {
+        "jsx": true
+    },
     "plugins": ["react", "@typescript-eslint"],
     "rules": {
         // typescript
@@ -66,6 +69,7 @@
         "react/destructuring-assignment": "off",
 
         //other
+        "no-param-reassign": ["error", { "props": false }],
         "object-curly-newline": "warn",
         "no-use-before-define": "warn",
         "eol-last": "off",
@@ -86,7 +90,7 @@
         "comma-dangle": [
             "warn",
             {
-                "arrays": "always",
+                "arrays": "never",
                 "objects": "always-multiline",
                 "imports": "never",
                 "exports": "never",
