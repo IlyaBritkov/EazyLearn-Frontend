@@ -16,6 +16,7 @@ import CardCreator from '../CardCreator/CardCreator';
 import GroupCreator from '../GroupCreator/GroupCreator';
 import CardEditor from '../CardEditor/CardEditor';
 import GroupEditor from '../GroupEditor/GroupEditor';
+import Game from '../Game/Game';
 
 type MainProps = {
     page: string;

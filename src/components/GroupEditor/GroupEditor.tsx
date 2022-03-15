@@ -9,7 +9,6 @@ import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import LevelDropdown from '../CardCreator/LevelDropdown';
 import CardsInGroup from './CardsInGroup';
-
 import { updateFullDataGroupById } from '../../app/actions';
 
 const styles = {
