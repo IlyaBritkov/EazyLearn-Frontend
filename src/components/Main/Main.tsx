@@ -16,6 +16,7 @@ import CardCreator from '../CardCreator/CardCreator';
 import GroupCreator from '../GroupCreator/GroupCreator';
 import CardEditor from '../CardEditor/CardEditor';
 import GroupEditor from '../GroupEditor/GroupEditor';
+import Game from '../Game/Game';
 
 type MainProps = {
     page: string;
@@ -65,6 +66,7 @@ const Main = ({ page }: MainProps) => {
                         {page === 'edit-group' && <GroupEditor />}
                         {page === 'create-group' && <GroupCreator />}
                         {page === 'group-view' && <GroupView />}
+                        {page === 'game' && <Game />}
                     </Stack>
                 </Container>
             </Stack>

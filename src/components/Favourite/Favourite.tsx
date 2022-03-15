@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Stack, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import isMobile from '../../utils/isMobile';
 import Filter from './Filter';
 import CardsList from '../common/CardsList';
 import GroupsList from '../common/GroupsList';
+import { setCards, setGroups } from '../../app/userSlice';
 
 const styles = {
     StackMobile: {
@@ -37,8 +38,7 @@ const styles = {
 const Favourite = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [groupArray, setGroupArray] = useState(useSelector((state: any) => state.user.groups));
-    const [cardArray, setCardArray] = useState(useSelector((state: any) => state.user.cards));
+    const { cards, groups } = useSelector((state: any) => state.user);
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -60,6 +60,34 @@ const Favourite = () => {
             SortByLevelAsc: true,
         },
     });
+    useEffect(() => {
+        const cardsFiltered = cards.map((card: any, index: number, array: any[]) => {
+            if (cardsSortings.time.isSortByTime) {
+                const newArr = [...array].sort((a: any, b: any) => {
+                    if (cardsSortings.time.SortByTimeAsc) {
+                        // @ts-ignore
+                        return new Date(a.createdDateTime.slice(0, -2))
+                            - new Date(b.createdDateTime.slice(0, -2));
+                    }
+                    return b.createdDateTime.slice(0, -2) - a.createdDateTime.slice(0, -2);
+                });
+                console.log(newArr);
+                dispatch(setCards(newArr));
+            }
+            if (cardsSortings.level.isSortByLevel) {
+                const newArr = [...array].sort((a: any, b: any) => {
+                    if (cardsSortings.level.SortByLevelAsc) {
+                        return a.proficiencyLevel - b.proficiencyLevel;
+                    }
+                    return b.proficiencyLevel - a.proficiencyLevel;
+                });
+                console.log(newArr);
+                dispatch(setCards(newArr));
+            }
+            return card;
+        });
+    }, [cardsSortings]);
+
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -121,7 +149,7 @@ const Favourite = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <GroupsList showFavourite groupArray={groupArray} />
+                        <GroupsList showFavourite groupArray={groups} />
                     </Stack>
                 </Stack>
                 <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
@@ -141,7 +169,7 @@ const Favourite = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <CardsList showFavourite cardArray={cardArray} />
+                        <CardsList showFavourite cardArray={cards} />
                     </Stack>
                 </Stack>
             </Stack>

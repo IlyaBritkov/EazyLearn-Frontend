@@ -70,19 +70,6 @@ export const loginByToken: any = createAsyncThunk(
     }
 );
 
-export const getAllUsers: any = createAsyncThunk(
-    'user/getAll',
-    async (_: any, { rejectWithValue, getState }: any) => {
-        try {
-            const { user }: any = getState();
-            const response = await axios.get(`${BASE_URL}/users`, authHeader(user.token));
-            return rejectWithValue(response.data);
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-
 export const loadCards: any = createAsyncThunk(
     'user/loadCards',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {
@@ -90,6 +77,33 @@ export const loadCards: any = createAsyncThunk(
             const { user }: any = getState();
             const response = await axios.get(`${BASE_URL}/cards`, authHeader(user.token));
             dispatch(setCards(response.data));
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const getAllUniqueCards: any = createAsyncThunk(
+    'user/getAllUniqueCards',
+    async (_: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/cards`, authHeader(user.token));
+            const unique = response.data.filter((card: any) => card.linkedCardSetsIds.length === 0);
+            return unique;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const getAllCards: any = createAsyncThunk(
+    'user/getAllCards',
+    async (_: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/cards`, authHeader(user.token));
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -136,7 +150,7 @@ export const addCardToGroups: any = createAsyncThunk(
         try {
             const { user }: any = getState();
             data.groups.forEach(async (group: any) => {
-                const res = await axios.patch(`${BASE_URL}/cardSets/${data.id}`, {
+                const res = await axios.patch(`${BASE_URL}/cardSets/${group.id}`, {
                     linkedCardsIds: [...group.linkedCardsIds, data.id],
                 }, authHeader(user.token));
                 dispatch(setGroups(
@@ -175,18 +189,23 @@ export const updateCardById: any = createAsyncThunk(
     'user/updateCardById',
     async (card: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
-            console.log(card);
             const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, card, authHeader(user.token));
-            dispatch(setCards([...user.cards, ...response.data]));
-            console.log(response.data);
+            const newCard = {
+                cardId: card.cardId,
+                definition: card.definition,
+                isFavorite: card.isFavorite,
+                linkedCardSetsIds: card.linkedCardSetsIds,
+                term: card.term,
+                proficiencyLevel: card.proficiencyLevel,
+            };
+            const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, newCard, authHeader(user.token));
+            dispatch(setCards([...user.cards, response.data]));
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
     }
 );
-
 export const updateUserById: any = createAsyncThunk(
     'user/updateUserById',
     async (data: any, { rejectWithValue, getState, dispatch }: any) => {
@@ -212,52 +231,36 @@ export const updateUserById: any = createAsyncThunk(
         }
     }
 );
-
+export const changeCardStatus: any = createAsyncThunk(
+    'user/changeCardStatus',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.patch(`${BASE_URL}/cards/${data.card.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
+            console.log(response.data);
+            dispatch(setCards([...user.cards, response.data]));
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 export const updateGroupById: any = createAsyncThunk(
     'user/updateGroupById',
-    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+    async (group: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
-            console.log(data);
+            console.log(group);
             const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/cardSets/${data.group.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
-            console.log('GROUP FAV', response.data);
-            dispatch(setGroups([...user.groups, response.data]));
-            console.log(user.groups);
+            const response = await axios.patch(`${BASE_URL}/groups/${group.groupId}`, group, authHeader(user.token));
+            dispatch(setCards([...user.cards, ...response.data]));
+            console.log(response.data);
             return response.data;
         } catch (error: any) {
-            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
 );
-
-export const updateFullDataGroupById: any = createAsyncThunk(
-    'user/updateFullDataGroupById',
-    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            console.log(data.linkedCardsIds);
-            const { user }: any = getState();
-            const response = await axios.patch(
-                `${BASE_URL}/cardSets/${data.groupId}`,
-                {
-                    isFavourite: data.isFavourite,
-                    linkedCardsIds: data.linkedCardsIds,
-                    linkedNewCards: data.linkedNewCards,
-                    name: data.name,
-                    proficiencyLevel: data.proficiencyLevel,
-                },
-                authHeader(user.token)
-            );
-            console.log('GROUP FAV', response.data);
-            dispatch(setGroups([...user.groups, response.data]));
-            console.log(user.groups);
-            return response.data;
-        } catch (error: any) {
-            console.log(error);
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
+//! GROUPS
 
 export const loadGroups: any = createAsyncThunk(
     'user/loadGroups',
@@ -282,6 +285,21 @@ export const addNewGroup: any = createAsyncThunk(
             dispatch(setGroups(response.data));
             return response.data;
         } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const changeGroupStatus: any = createAsyncThunk(
+    'user/changeGroupStatus',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.patch(`${BASE_URL}/cardSets/${data.group.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
+            dispatch(setGroups([...user.groups, response.data]));
+            return response.data;
+        } catch (error: any) {
+            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
