@@ -7,7 +7,7 @@ import qs from 'qs';
 import { BASE_URL } from '../config.js';
 import checkResponse from '../utils/checkResponse';
 import {
-    setGroups, setCards, removeCard, removeGroup
+    setGroups, setCards, removeCard, removeGroup, setUser
 } from './userSlice';
 
 const authHeader = (token: string) => ({ headers: { Authorization: `Bearer ${token}` } });
@@ -182,6 +182,32 @@ export const updateCardById: any = createAsyncThunk(
             console.log(response.data);
             return response.data;
         } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateUserById: any = createAsyncThunk(
+    'user/updateUserById',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            console.log(data);
+            const { user }: any = getState();
+            const response = await axios.patch(
+                `${BASE_URL}/users/${data.userId}`,
+                {
+                    username: data.username,
+                    email: data.email,
+                    password: data.password,
+                },
+                authHeader(user.token)
+            );
+            console.log('GROUP FAV', response.data);
+            dispatch(setUser([...user.groups, response.data]));
+            console.log(user.groups);
+            return response.data;
+        } catch (error: any) {
+            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
