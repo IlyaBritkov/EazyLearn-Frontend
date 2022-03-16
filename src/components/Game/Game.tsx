@@ -75,6 +75,7 @@ const Game: React.FC<any> = () => {
     const [loaded, setLoaded] = useState(false);
     const [cards, setCards] = useState([] as any);
     // usePrompt('Вы уверены, что хотите выйти?', true);
+    // test for git
     useEffect(() => {
         if (cards.length === 0) {
             console.log(leftArr, rightArr);
