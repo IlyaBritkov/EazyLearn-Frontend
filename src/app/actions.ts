@@ -209,7 +209,6 @@ export const updateCardById: any = createAsyncThunk(
     }
 );
 
-//! GROUPS
 export const loadGroups: any = createAsyncThunk(
     'user/loadGroups',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {
