@@ -24,6 +24,7 @@ const styles = {
     cardWrapper: {
         position: 'relative' as const,
         width: isMobile ? 'calc(100% + 16px)' : '100%',
+        wordWrap: 'break-word',
     },
     CreateButton: {
         maxWidth: isMobile ? 180 : 230,
@@ -48,10 +49,9 @@ const CardEditor: React.FC = () => {
     const params = useParams();
     const id = String(params.id);
     const cardArray = useSelector((state: any) => state.user.cards);
-    const [card, setCard] = useState(cardArray.find((c: any) => c.id === id));
-    const [title, setTitle] = useState(card.term);
-    const [description, setDescription] = useState(card.definition);
-    const [cardLevel, setCardLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH' | number>(card.proficiencyLevel);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [cardLevel, setCardLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH'>('AVERAGE');
     const [existingGroups, setExistingGroups] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [availableGroups, setAvailableGroups] = useState(
@@ -60,6 +60,7 @@ const CardEditor: React.FC = () => {
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        dispatch(removeCard(id));
         dispatch(
             updateCardById({
                 cardId: id,
@@ -77,57 +78,61 @@ const CardEditor: React.FC = () => {
             animate={{ y: 0, transition: { delay: 0.2 } }}
             exit={{ y: '110vh' }}
         >
-            <Stack
-                direction="column"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-            >
-                <Stack style={{ ...styles.Stack, margin: isMobile ? '24px 0' : '35px 0' }}>
-                    <Button
-                        Icon={arrowBackIcon}
-                        IconStyles={{ width: 40 }}
-                        onClick={() => navigate(-1)}
-                    />
-                    <Button onClick={handleSave} style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
-                </Stack>
-                <Stack
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    style={{ width: '100%', marginTop: isMobile ? 10 : 30 }}
-                >
-                    <div className="input-group" style={styles.flex}>
-                        <TextInput defaultValue={card.term} helperText="Термин" variant="filled" onChange={(e) => setTitle(e.target.value)} />
-                        <TextInput defaultValue={card.definition} helperText="Определение" variant="filled" onChange={(e) => setDescription(e.target.value)} style={{ marginTop: '30px' }} />
-                    </div>
-                    <div className="known-level">
-                        <LevelDropdown level={cardLevel} setLevel={setCardLevel} />
-                    </div>
-                    <div className="existing-groups" style={{ marginTop: isMobile ? 20 : 50 }}>
-                        <ExistingGroups
-                            existingGroups={existingGroups}
-                            setExistingGroups={setExistingGroups}
-                        />
-                    </div>
-                    <div className="search-groups" style={{ ...styles.flex, marginTop: isMobile ? 50 : 80 }}>
-                        <TextInput
-                            value={searchTerm}
-                            onChange={(e: any) => setSearchTerm(e.currentTarget.value)}
-                            placeholder="Поиск" variant="filled"
-                            InputProps={{
-                                startAdornment: (<img src={searchCardCreator} style={{ marginBottom: '-6px' }} alt="search" />),
-                            }}
-                        />
-                        <GroupToAdd
-                            searchTerm={searchTerm}
-                            existingGroups={existingGroups}
-                            setExistingGroups={setExistingGroups}
-                            availableGroups={availableGroups}
-                            setAvailableGroups={setAvailableGroups}
-                        />
-                    </div>
-                </Stack>
-            </Stack>
+            {cardArray
+                ?.filter((item: { id: string | undefined; }) => item.id === id)
+                .map((item: { term: string; definition: string; }) => (
+                    <Stack
+                        direction="column"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                    >
+                        <Stack style={{ ...styles.Stack, margin: isMobile ? '24px 0' : '35px 0' }}>
+                            <Button
+                                Icon={arrowBackIcon}
+                                IconStyles={{ width: 40 }}
+                                onClick={() => navigate(-1)}
+                            />
+                            <Button onClick={handleSave} style={styles.SaveButton} variant="text"><Typography>Сохранить</Typography></Button>
+                        </Stack>
+                        <Stack
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            style={{ width: '100%', marginTop: isMobile ? 10 : 30 }}
+                        >
+                            <div className="input-group" style={styles.flex}>
+                                <TextInput inputProps={{ maxLength: 40 }} defaultValue={item.term} helperText="Термин" variant="filled" onChange={(e) => setTitle(e.target.value)} />
+                                <TextInput defaultValue={item.definition} helperText="Определение" variant="filled" onChange={(e) => setDescription(e.target.value)} style={{ marginTop: '30px' }} />
+                            </div>
+                            <div className="known-level">
+                                <LevelDropdown level={cardLevel} setLevel={setCardLevel} />
+                            </div>
+                            <div className="existing-groups" style={{ marginTop: isMobile ? 20 : 50 }}>
+                                <ExistingGroups
+                                    existingGroups={existingGroups}
+                                    setExistingGroups={setExistingGroups}
+                                />
+                            </div>
+                            <div className="search-groups" style={{ ...styles.flex, marginTop: isMobile ? 50 : 80 }}>
+                                <TextInput
+                                    value={searchTerm}
+                                    onChange={(e: any) => setSearchTerm(e.currentTarget.value)}
+                                    placeholder="Поиск" variant="filled"
+                                    InputProps={{
+                                        startAdornment: (<img src={searchCardCreator} style={{ marginBottom: '-6px' }} alt="search" />),
+                                    }}
+                                />
+                                <GroupToAdd
+                                    searchTerm={searchTerm}
+                                    existingGroups={existingGroups}
+                                    setExistingGroups={setExistingGroups}
+                                    availableGroups={availableGroups}
+                                    setAvailableGroups={setAvailableGroups}
+                                />
+                            </div>
+                        </Stack>
+                    </Stack>
+                ))}
         </motion.div>
     );
 };
