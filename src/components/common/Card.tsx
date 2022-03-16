@@ -4,7 +4,6 @@ import {Typography as Typo} from '@mui/material';
 import {useDispatch} from 'react-redux';
 import ReactCardFlip from 'react-card-flip';
 import {useNavigate} from 'react-router-dom';
-import {type} from 'os';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots
 } from '../../assets';
@@ -12,7 +11,7 @@ import Button from './Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import Dropdown from './Dropdown';
-import {removeCardById} from '../../app/actions';
+import { removeCardById, changeCardStatus } from '../../app/actions';
 
 type CardProps = {
     item: any;
@@ -94,7 +93,7 @@ const Card: React.FC<CardProps> = ({item, isGame}) => {
 
     const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-
+        dispatch(changeCardStatus({ card: item, isFavourite: !isFavourite }));
         setFavourite(!isFavourite);
     };
 
