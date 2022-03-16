@@ -65,7 +65,7 @@ const GroupView: React.FC<any> = () => {
         dispatch(getCardsByGroupId(id)).then(({ payload }: any) => {
             setCardsInGroup(payload);
         });
-    }, [group, dispatch]);
+    }, [group, setCardsInGroup, dispatch]);
     return (
         <motion.div
             initial={{ y: '110vh' }}

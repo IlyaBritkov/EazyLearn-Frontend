@@ -57,11 +57,11 @@ const GroupCreator: React.FC = () => {
         e.preventDefault();
         if (!title) return;
         dispatch(addNewGroup({
+            isFavourite: location.state === 'createFavourite',
             linkedCardsIds: pickedCards,
+            linkedNewCards: [],
             name: title,
             proficiencyLevel: groupLevel,
-            linkedNewCards: [],
-            isFavourite: location.state === 'createFavourite',
         }));
         navigate(-1);
     };

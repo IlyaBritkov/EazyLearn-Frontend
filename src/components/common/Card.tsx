@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { Typography as Typo } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import React, {useState} from 'react';
+import {styled} from '@mui/material/styles';
+import {Typography as Typo} from '@mui/material';
+import {useDispatch} from 'react-redux';
 import ReactCardFlip from 'react-card-flip';
+import {useNavigate} from 'react-router-dom';
+import {type} from 'os';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots
 } from '../../assets';
@@ -10,7 +12,7 @@ import Button from './Button';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import Dropdown from './Dropdown';
-import { removeCardById } from '../../app/actions';
+import {removeCardById} from '../../app/actions';
 
 type CardProps = {
     item: any;
@@ -29,10 +31,11 @@ const styles = {
     },
 };
 
-const Card: React.FC<CardProps> = ({ item, isGame }) => {
+const Card: React.FC<CardProps> = ({item, isGame}) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFavourite, setFavourite] = useState(item.isFavourite);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const setHeight = () => {
         if (isMobile) {
             return isGame ? 300 : 80;
@@ -100,33 +103,42 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
         dispatch(removeCardById(item.id));
         // setInitialCardArray(cardArray.filter((card: any) => card.id !== item.id));
     };
+
+    const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        const path = `/edit-card/${item.id}`;
+        navigate(path);
+    };
+
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
     };
     return (
-        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" flipSpeedFrontToBack={0.45} flipSpeedBackToFront={0.45}>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {}}>
-                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
+        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" flipSpeedFrontToBack={0.45}
+                       flipSpeedBackToFront={0.45}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {
+            }}>
+                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12}}>
                     <Button
                         sx={{
                             width: '30px',
                         }}
                         Icon={isFavourite ? favouritesActiveIcon : favouritesInactiveIcon}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         onClick={handleActive}
                     />
                 </AbsoluteIcon>
-                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12 }}>
+                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12}}>
                     <Dropdown
                         Icon={tripleDots}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         IconWrapperStyles={{
                             width: '30px',
                             height: '30px',
                         }}
                     >
                         <div>
-                            <Button style={styles.MenuItemButton} variant="text">
+                            <Button onClick={handleEdit} style={styles.MenuItemButton} variant="text">
                                 <Typo style={styles.Typo}>Редактировать</Typo>
                             </Button>
                         </div>
@@ -137,41 +149,32 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                         </div>
                     </Dropdown>
                 </AbsoluteIcon>
-                <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.term}</Typography></div>
+                <div style={{userSelect: 'none', width: '100%'}}><Typography>{item.term}</Typography></div>
             </OuterDiv>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => { }}>
-                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {
+            }}>
+                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12}}>
                     <Button
                         sx={{
                             width: '30px',
                         }}
                         Icon={isFavourite ? favouritesActiveIcon : favouritesInactiveIcon}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         onClick={handleActive}
                     />
                 </AbsoluteIcon>
-                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12 }}>
+                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12}}>
                     <Dropdown
                         Icon={tripleDots}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         IconWrapperStyles={{
                             width: '30px',
                             height: '30px',
                         }}
                     >
                         <div>
-                            <Button style={styles.MenuItemButton} variant="text">
+                            <Button onClick={handleEdit} style={styles.MenuItemButton} variant="text">
                                 <Typo style={styles.Typo}>Редактировать</Typo>
-                            </Button>
-                        </div>
-                        <div>
-                            <Button style={styles.MenuItemButton} variant="text">
-                                <Typo style={styles.Typo}>Добавить карточки</Typo>
-                            </Button>
-                        </div>
-                        <div>
-                            <Button style={styles.MenuItemButton} variant="text">
-                                <Typo style={styles.Typo}>Изменить уровень владения</Typo>
                             </Button>
                         </div>
                         <div>
@@ -185,7 +188,7 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                     style={{
                         userSelect: 'none', width: '100%', height: '100%',
                     }}
-                ><Typography style={{ textOverflow: 'initial', wordBreak: 'break-word' }}>{item.definition}</Typography>
+                ><Typography style={{textOverflow: 'initial', wordBreak: 'break-word'}}>{item.definition}</Typography>
                 </div>
             </OuterDiv>
         </ReactCardFlip>
