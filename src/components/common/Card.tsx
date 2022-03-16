@@ -114,11 +114,9 @@ const Card: React.FC<CardProps> = ({item, isGame}) => {
         setIsFlipped(!isFlipped);
     };
     return (
-        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" flipSpeedFrontToBack={0.45}
-                       flipSpeedBackToFront={0.45}>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {
-            }}>
-                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12}}>
+        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" flipSpeedFrontToBack={0.45} flipSpeedBackToFront={0.45}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {}}>
+                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
                     <Button
                         sx={{
                             width: '30px',
@@ -151,9 +149,8 @@ const Card: React.FC<CardProps> = ({item, isGame}) => {
                 </AbsoluteIcon>
                 <div style={{userSelect: 'none', width: '100%'}}><Typography>{item.term}</Typography></div>
             </OuterDiv>
-            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => {
-            }}>
-                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12}}>
+            <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => { }}>
+                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
                     <Button
                         sx={{
                             width: '30px',
