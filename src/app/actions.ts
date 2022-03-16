@@ -186,13 +186,21 @@ export const removeCardById: any = createAsyncThunk(
 );
 
 export const updateCardById: any = createAsyncThunk(
-    'user/updateCardById    ',
+    'user/updateCardById',
     async (card: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
-            console.log(card);
             const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, card, authHeader(user.token));
-            dispatch(setCards([...user.cards, ...response.data]));
+            const newCard = {
+                cardId: card.cardId,
+                definition: card.definition,
+                isFavorite: card.isFavorite,
+                linkedCardSetsIds: card.linkedCardSetsIds,
+                term: card.term,
+                proficiencyLevel: card.proficiencyLevel,
+            };
+            const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, newCard, authHeader(user.token));
+            dispatch(setCards([...user.cards, response.data]
+                .filter((v, i, a) => a.indexOf(v) === i)));
             console.log(response.data);
             return response.data;
         } catch (error: any) {
@@ -201,6 +209,7 @@ export const updateCardById: any = createAsyncThunk(
     }
 );
 
+//! GROUPS
 export const loadGroups: any = createAsyncThunk(
     'user/loadGroups',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {
@@ -224,6 +233,24 @@ export const addNewGroup: any = createAsyncThunk(
             dispatch(setGroups(response.data));
             return response.data;
         } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateGroupById: any = createAsyncThunk(
+    'user/updateGroupById',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            console.log(data);
+            const { user }: any = getState();
+            const response = await axios.patch(`${BASE_URL}/cardSets/${data.group.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
+            console.log('GROUP FAV', response.data);
+            dispatch(setGroups([...user.groups, response.data]));
+            console.log(user.groups);
+            return response.data;
+        } catch (error: any) {
+            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }

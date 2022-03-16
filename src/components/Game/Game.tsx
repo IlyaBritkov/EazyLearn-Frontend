@@ -161,8 +161,8 @@ const Game: React.FC<any> = () => {
                     {(cards.length > 0 && loaded)
                         ? (
                             <Swipeable
-                                limit={500} // <- вот это должно быть больше
-                                min={250} // <- вот этого вот :]
+                                limit={isMobile ? 120 : 500} // <- вот это должно быть больше
+                                min={isMobile ? 100 : 250} // <- вот этого вот :]
                                 buttons={({ right, left }: any) => (
                                     <Stack
                                         style={{

@@ -11,7 +11,7 @@ import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 import getNoun from '../../utils/getNoun';
 import Dropdown from './Dropdown';
-import { removeGroupById } from '../../app/actions';
+import { removeGroupById, updateGroupById } from '../../app/actions';
 
 const styles = {
     ButtonOpen: {
@@ -130,6 +130,7 @@ const Group: React.FC<any> = ({
 
     const handleActive = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
+        dispatch(updateGroupById({ group, isFavourite: !isFavourite }));
         setFavourite(!isFavourite);
     };
 

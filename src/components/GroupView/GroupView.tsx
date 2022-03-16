@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { idText } from 'typescript';
 import { dropdownCaret } from '../../assets';
@@ -15,7 +15,7 @@ const styles = {
     Stack: {
         display: 'flex',
         flexDirection: 'row' as const,
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
     },
@@ -44,14 +44,29 @@ const styles = {
     },
     GroupName: {
         fontWeight: 500,
-        fontSize: isMobile ? 12 : 17,
+        fontSize: isMobile ? 15 : 17,
         textAlign: 'center' as const,
         marginLeft: isMobile ? 25 : 250,
     },
     BackButton: {
         height: 40,
-        maxWidth: isMobile ? 130 : 260,
+        maxWidth: isMobile ? 100 : 120,
         textAlign: 'start' as const,
+    },
+    LearnLink: {
+        width: 95,
+        height: 40,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        // border: '1px solid #6D0000',
+        color: '#6D0000',
+        padding: '15px 25px',
+        fontSize: 13,
+        fontWeight: 400,
+        textDecoration: 'none',
+        transition: '0.1s',
     },
 };
 
@@ -65,7 +80,7 @@ const GroupView: React.FC<any> = () => {
         dispatch(getCardsByGroupId(id)).then(({ payload }: any) => {
             setCardsInGroup(payload);
         });
-    }, [group, setCardsInGroup, dispatch]);
+    }, [group, dispatch]);
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -83,15 +98,30 @@ const GroupView: React.FC<any> = () => {
                         onClick={() => navigate(-1)}
                         style={styles.BackButton}
                     >
-                        <img src={dropdownCaret} style={{ transform: 'rotate(180deg)', marginRight: isMobile ? 12 : 25, height: isMobile ? 15 : 20 }} alt="back-icon" />
+                        <img
+                            src={dropdownCaret} style={{
+                                transform: 'rotate(180deg)',
+                                marginRight: isMobile ? 12 : 25,
+                                height: isMobile ? 15 : 20,
+                            }} alt="back-icon"
+                        />
                         <Typography
                             style={{
-                                fontSize: isMobile ? 10 : 16,
+                                fontSize: isMobile ? 13 : 16,
                             }}
-                        >Предыдущий раздел
+                        >Назад
                         </Typography>
                     </Button>
                     <Typography style={styles.GroupName}>{group.name}</Typography>
+                    <Button
+                        variant="text" onClick={() => navigate('/game', {
+                            state: {
+                                name: 'picked-groups',
+                                groups: [group.id],
+                            },
+                        })} className="learn-link" style={styles.LearnLink}
+                    >Изучать
+                    </Button>
                 </Stack>
                 <Stack
                     style={{ ...styles.cardWrapper, width: '100%', marginTop: isMobile ? 10 : 80 }}
