@@ -70,6 +70,19 @@ export const loginByToken: any = createAsyncThunk(
     }
 );
 
+export const getAllUsers: any = createAsyncThunk(
+    'user/getAll',
+    async (_: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/users`, authHeader(user.token));
+            return rejectWithValue(response.data);
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const loadCards: any = createAsyncThunk(
     'user/loadCards',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {
