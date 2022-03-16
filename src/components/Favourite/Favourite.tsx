@@ -66,8 +66,10 @@ const Favourite = () => {
                 const newArr = [...array].sort((a: any, b: any) => {
                     const first = new Date(a.createdDateTime.slice(0, -2));
                     const last = new Date(b.createdDateTime.slice(0, -2));
-                    // @ts-ignore
-                    if (cardsSortings.time.SortByTimeAsc) return first - last;
+                    if (cardsSortings.time.SortByTimeAsc) {
+                        // @ts-ignore
+                        return first - last;
+                    }
                     // @ts-ignore
                     return last - first;
                 });
@@ -92,8 +94,10 @@ const Favourite = () => {
                 const newArr = [...array].sort((a: any, b: any) => {
                     const first = new Date(a.createdDateTime.slice(0, -2));
                     const last = new Date(b.createdDateTime.slice(0, -2));
-                    // @ts-ignore
-                    if (groupSortings.time.SortByTimeAsc) return first - last;
+                    if (groupSortings.time.SortByTimeAsc) {
+                        // @ts-ignore
+                        return first - last;
+                    }
                     // @ts-ignore
                     return last - first;
                 });
