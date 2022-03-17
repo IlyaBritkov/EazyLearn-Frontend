@@ -37,11 +37,16 @@ const styles = {
 type Props = {
     existingGroups: any;
     setExistingGroups: any;
+    availableGroups: any;
+    setAvailableGroups: any;
 };
 
-const ExistingGroups: React.FC<Props> = ({ existingGroups, setExistingGroups }) => {
+const ExistingGroups: React.FC<Props> = ({
+    existingGroups, setExistingGroups, availableGroups, setAvailableGroups,
+}) => {
     const handleDeleteGroup = (item: any) => {
         setExistingGroups(existingGroups.filter((i: any) => i.id !== item.id));
+        setAvailableGroups([...availableGroups, item]);
     };
     return (
         <AnimatePresence>

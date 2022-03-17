@@ -82,12 +82,10 @@ const Home = () => {
     useEffect(() => {
         if (cardsSortings.time.isSortByTime) {
             const newArr = [...cards].sort((a: any, b: any) => {
-                const first = new Date(a.createdDateTime.slice(0, -2));
-                const last = new Date(b.createdDateTime.slice(0, -2));
-                if (cardsSortings.time.SortByTimeAsc) {
-                    // @ts-ignore
-                    return first - last;
-                }
+                const first = new Date(a.createdDateTime);
+                const last = new Date(b.createdDateTime);
+                // @ts-ignore
+                if (cardsSortings.time.SortByTimeAsc) return first - last;
                 // @ts-ignore
                 return last - first;
             });
@@ -96,9 +94,13 @@ const Home = () => {
         if (cardsSortings.level.isSortByLevel) {
             const newArr = [...cards].sort((a: any, b: any) => {
                 if (cardsSortings.level.SortByLevelAsc) {
-                    return a.proficiencyLevel - b.proficiencyLevel;
+                    if (a.proficiencyLevel > b.proficiencyLevel) return 1;
+                    if (a.proficiencyLevel < b.proficiencyLevel) return -1;
+                    return -1;
                 }
-                return b.proficiencyLevel - a.proficiencyLevel;
+                if (b.proficiencyLevel > a.proficiencyLevel) return 1;
+                if (b.proficiencyLevel < a.proficiencyLevel) return -1;
+                return 0;
             });
             dispatch(setCards(newArr));
         }
@@ -107,12 +109,10 @@ const Home = () => {
     useEffect(() => {
         if (groupSortings.time.isSortByTime) {
             const newArr = [...groups].sort((a: any, b: any) => {
-                const first = new Date(a.createdDateTime.slice(0, -2));
-                const last = new Date(b.createdDateTime.slice(0, -2));
-                if (groupSortings.time.SortByTimeAsc) {
-                    // @ts-ignore
-                    return first - last;
-                }
+                const first = new Date(a.createdDateTime);
+                const last = new Date(b.createdDateTime);
+                // @ts-ignore
+                if (groupSortings.time.SortByTimeAsc) return first - last;
                 // @ts-ignore
                 return last - first;
             });
@@ -121,9 +121,13 @@ const Home = () => {
         if (groupSortings.level.isSortByLevel) {
             const newArr = [...groups].sort((a: any, b: any) => {
                 if (groupSortings.level.SortByLevelAsc) {
-                    return a.proficiencyLevel - b.proficiencyLevel;
+                    if (a.proficiencyLevel > b.proficiencyLevel) return 1;
+                    if (a.proficiencyLevel < b.proficiencyLevel) return -1;
+                    return -1;
                 }
-                return b.proficiencyLevel - a.proficiencyLevel;
+                if (b.proficiencyLevel > a.proficiencyLevel) return 1;
+                if (b.proficiencyLevel < a.proficiencyLevel) return -1;
+                return 0;
             });
             dispatch(setGroups(newArr));
         }

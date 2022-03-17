@@ -10,7 +10,7 @@ import isMobile from '../../utils/isMobile';
 import LevelDropdown from './LevelDropdown';
 import ExistingGroups from './ExistingGroups';
 import GroupToAdd from './GroupToAdd';
-import { addNewCard, addCardToGroups } from '../../app/actions';
+import { addNewCard, addCardToGroups, loadGroups } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -66,7 +66,7 @@ const CardCreator: React.FC = () => {
         }))
             .then(({ payload }: any) => dispatch(
                 addCardToGroups({ id: payload[0].id, groups: existingGroups })
-            ).then(() => navigate(-1)));
+            ).then(() => dispatch(loadGroups()).then(() => navigate(-1))));
     };
     return (
         <motion.div
@@ -104,6 +104,8 @@ const CardCreator: React.FC = () => {
                         <ExistingGroups
                             existingGroups={existingGroups}
                             setExistingGroups={setExistingGroups}
+                            availableGroups={availableGroups}
+                            setAvailableGroups={setAvailableGroups}
                         />
                     </div>
                     <div className="search-groups" style={{ ...styles.flex, marginTop: isMobile ? 50 : 80 }}>

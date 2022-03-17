@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -10,7 +10,7 @@ import isMobile from '../../utils/isMobile';
 import LevelDropdown from './LevelDropdown';
 import ExistingGroups from './ExistingGroups';
 import GroupToAdd from './GroupToAdd';
-import { updateCardById } from '../../app/actions';
+import { updateCardById, getGroupById, loadGroups } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -48,15 +48,29 @@ const CardEditor: React.FC = () => {
     const params = useParams();
     const id = String(params.id);
     const cardArray = useSelector((state: any) => state.user.cards);
+    const groups = useSelector((state: any) => state.user.groups);
     const [card, setCard] = useState(cardArray.find((c: any) => c.id === id));
     const [title, setTitle] = useState(card.term);
     const [description, setDescription] = useState(card.definition);
-    const [cardLevel, setCardLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH' | number>(card.proficiencyLevel);
-    const [existingGroups, setExistingGroups] = useState([]);
+    const [cardLevel, setCardLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH'>('AVERAGE');
+    const [existingGroups, setExistingGroups] = useState([] as any);
     const [searchTerm, setSearchTerm] = useState('');
-    const [availableGroups, setAvailableGroups] = useState(
-        useSelector((state: any) => state.user.groups)
-    );
+    const [availableGroups, setAvailableGroups] = useState([] as any);
+
+    useEffect(() => {
+        if (card.linkedCardSetsIds.length > 0) {
+            card.linkedCardSetsIds.forEach((item: any) => {
+                dispatch(getGroupById(item)).then(
+                    ({ payload }: any) => {
+                        setExistingGroups([...existingGroups, payload]);
+                        setAvailableGroups(groups.filter((group: any) => group.id !== item));
+                    }
+                );
+            });
+        } else {
+            setAvailableGroups(groups);
+        }
+    }, []);
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -69,7 +83,7 @@ const CardEditor: React.FC = () => {
                 proficiencyLevel: cardLevel,
                 term: title,
             })
-        ).then(() => navigate(-1));
+        ).then(() => dispatch(loadGroups()).then(() => navigate(-1)));
     };
     return (
         <motion.div
@@ -107,6 +121,8 @@ const CardEditor: React.FC = () => {
                         <ExistingGroups
                             existingGroups={existingGroups}
                             setExistingGroups={setExistingGroups}
+                            availableGroups={availableGroups}
+                            setAvailableGroups={setAvailableGroups}
                         />
                     </div>
                     <div className="search-groups" style={{ ...styles.flex, marginTop: isMobile ? 50 : 80 }}>

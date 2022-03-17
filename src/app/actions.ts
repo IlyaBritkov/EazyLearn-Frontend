@@ -345,6 +345,20 @@ export const addNewGroup: any = createAsyncThunk(
     }
 );
 
+export const getGroupById: any = createAsyncThunk(
+    'user/getGroupById',
+    async (groupId: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/cardSets/${groupId}`, authHeader(user.token));
+            return response.data;
+        } catch (error: any) {
+            toast.error('Произошла ошибка');
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const changeGroupStatus: any = createAsyncThunk(
     'user/changeGroupStatus',
     async (data: any, { rejectWithValue, getState, dispatch }: any) => {

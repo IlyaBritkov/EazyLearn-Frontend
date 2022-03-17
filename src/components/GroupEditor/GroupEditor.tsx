@@ -55,11 +55,10 @@ const GroupEditor: React.FC = () => {
     const [group, setGroup] = useState(groupArray.find((c: any) => c.id === id));
     const [pickedCards, setPickedCards] = useState(group.linkedCardsIds);
     const [title, setTitle] = useState(group.name);
-    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH' | number>(group.proficiencyLevel);
+    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH'>('AVERAGE');
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log('sent list: ', pickedCards);
         dispatch(updateFullDataGroupById({
             groupId: id,
             isFavourite: location.state === 'createFavourite',
@@ -67,7 +66,7 @@ const GroupEditor: React.FC = () => {
             linkedNewCards: [],
             name: title,
             proficiencyLevel: groupLevel,
-        })).then((res: any) => console.log('update group response', res));
+        }));
         navigate(-1);
     };
     return (
