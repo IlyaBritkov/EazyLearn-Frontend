@@ -3,6 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { arrowBackIcon, searchCardCreator } from '../../assets';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
@@ -83,7 +84,7 @@ const CardEditor: React.FC = () => {
                 proficiencyLevel: cardLevel,
                 term: title,
             })
-        ).then(() => dispatch(loadGroups()).then(() => navigate(-1)));
+        ).then(() => dispatch(loadGroups()).then(() => toast.success('Карточка успешно обновлена')).then(() => navigate(-1)));
     };
     return (
         <motion.div

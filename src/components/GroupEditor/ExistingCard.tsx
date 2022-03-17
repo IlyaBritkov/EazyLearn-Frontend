@@ -43,8 +43,10 @@ const ExistingCard: React.FC<any> = ({ item, pickedCards, setPickedCards }) => {
     });
     const handlePick = (e: any) => {
         if (pickedCards.includes(item.id)) {
+            setIsPicked(false);
             setPickedCards(pickedCards.filter((g: any) => g !== item.id));
         } else {
+            setIsPicked(true);
             setPickedCards([...pickedCards, item.id]);
         }
     };

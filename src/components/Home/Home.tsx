@@ -94,13 +94,9 @@ const Home = () => {
         if (cardsSortings.level.isSortByLevel) {
             const newArr = [...cards].sort((a: any, b: any) => {
                 if (cardsSortings.level.SortByLevelAsc) {
-                    if (a.proficiencyLevel > b.proficiencyLevel) return 1;
-                    if (a.proficiencyLevel < b.proficiencyLevel) return -1;
-                    return -1;
+                    return a.proficiencyLevel - b.proficiencyLevel;
                 }
-                if (b.proficiencyLevel > a.proficiencyLevel) return 1;
-                if (b.proficiencyLevel < a.proficiencyLevel) return -1;
-                return 0;
+                return b.proficiencyLevel - a.proficiencyLevel;
             });
             dispatch(setCards(newArr));
         }
@@ -121,13 +117,9 @@ const Home = () => {
         if (groupSortings.level.isSortByLevel) {
             const newArr = [...groups].sort((a: any, b: any) => {
                 if (groupSortings.level.SortByLevelAsc) {
-                    if (a.proficiencyLevel > b.proficiencyLevel) return 1;
-                    if (a.proficiencyLevel < b.proficiencyLevel) return -1;
-                    return -1;
+                    return a.proficiencyLevel - b.proficiencyLevel;
                 }
-                if (b.proficiencyLevel > a.proficiencyLevel) return 1;
-                if (b.proficiencyLevel < a.proficiencyLevel) return -1;
-                return 0;
+                return b.proficiencyLevel - a.proficiencyLevel;
             });
             dispatch(setGroups(newArr));
         }

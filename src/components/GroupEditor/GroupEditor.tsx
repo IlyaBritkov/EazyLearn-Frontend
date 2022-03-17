@@ -10,7 +10,7 @@ import isMobile from '../../utils/isMobile';
 import LevelDropdown from '../CardCreator/LevelDropdown';
 import CardsInGroup from './CardsInGroup';
 
-import { updateFullDataGroupById } from '../../app/actions';
+import { updateFullDataGroupById, updateCardsByGroupId } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -66,7 +66,7 @@ const GroupEditor: React.FC = () => {
             linkedNewCards: [],
             name: title,
             proficiencyLevel: groupLevel,
-        }));
+        })).then(() => dispatch(updateCardsByGroupId({ id, cards: pickedCards })));
         navigate(-1);
     };
     return (
@@ -100,7 +100,7 @@ const GroupEditor: React.FC = () => {
                     <div className="create-group-card" style={styles.GroupCardWrapper}>
                         <CardsInGroup
                             cardArray={cardArray}
-                            pickedCards={[...pickedCards, ...group.linkedCardsIds]}
+                            pickedCards={pickedCards}
                             setPickedCards={setPickedCards}
                         />
                     </div>

@@ -133,6 +133,20 @@ export const getAllCards: any = createAsyncThunk(
     }
 );
 
+export const getCardById: any = createAsyncThunk(
+    'user/getCardById',
+    async (id: any, { rejectWithValue, getState }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.get(`${BASE_URL}/cards/${id}`, authHeader(user.token));
+            return response.data;
+        } catch (error: any) {
+            toast.error('Не удалось загрузить карточку');
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const getCardsByGroupId: any = createAsyncThunk(
     'user/getCardsByGroupId',
     async (groupId: string, { rejectWithValue, getState }: any) => {
@@ -222,11 +236,9 @@ export const updateCardById: any = createAsyncThunk(
                 isFavorite: card.isFavorite,
                 linkedCardSetsIds: card.linkedCardSetsIds,
                 term: card.term,
-                proficiencyLevel: card.proficiencyLevel,
             };
             const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, newCard, authHeader(user.token));
             dispatch(setCards([...user.cards, response.data]));
-            toast.success('Карточка успешно обновлена');
             return response.data;
         } catch (error: any) {
             toast.error('Произошла ошибка');
@@ -298,7 +310,7 @@ export const updateFullDataGroupById: any = createAsyncThunk(
                 {
                     isFavourite: group.isFavourite,
                     linkedCardsIds: group.linkedCardsIds,
-                    linkedNewCards: group.linkedNewCards,
+                    linkedNewCards: [],
                     name: group.name,
                     proficiencyLevel: group.proficiencyLevel,
                 },
@@ -307,6 +319,27 @@ export const updateFullDataGroupById: any = createAsyncThunk(
             dispatch(setGroups([...user.groups, response.data]));
             toast.success('Группа успешно обновлена');
             return response.data;
+        } catch (error: any) {
+            toast.error('Произошла ошибка');
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateCardsByGroupId: any = createAsyncThunk(
+    'user/updateCardsByGroupId',
+    async (data: any, { rejectWithValue, dispatch }: any) => {
+        try {
+            data.cards.forEach((card: any) => {
+                dispatch(getCardById(card)).then(({ payload }: any) => dispatch(updateCardById({
+                    cardId: payload.id,
+                    definition: payload.definition,
+                    isFavorite: payload.isFavorite,
+                    linkedCardSetsIds: [...payload.linkedCardSetsIds, data.id],
+                    term: payload.term,
+                })));
+            });
+            return '';
         } catch (error: any) {
             toast.error('Произошла ошибка');
             return rejectWithValue(error.response.data);
