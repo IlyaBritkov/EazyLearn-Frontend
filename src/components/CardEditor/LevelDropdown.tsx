@@ -88,20 +88,20 @@ const Vertical = styled('div')({
 
 const getLevel = (level: 'LOW' | 'AVERAGE' | 'HIGH') => {
     switch (level) {
-        case 'LOW':
-            return 'Плохо знаю';
-        case 'AVERAGE':
-            return 'Не очень хорошо знаю';
-        case 'HIGH':
-            return 'Хорошо знаю';
-        default:
-            return 'Уровень владения';
+    case 'LOW':
+        return 'Плохо знаю';
+    case 'AVERAGE':
+        return 'Не очень хорошо знаю';
+    case 'HIGH':
+        return 'Хорошо знаю';
+    default:
+        return 'Уровень владения';
     }
 };
 
 const LevelDropdown = ({
-                           level, setLevel, row, ...props
-                       }: any) => {
+    level, setLevel, row, ...props
+}: any) => {
     const [open, setOpen] = useState(false);
     const handleLevelChange = (lvl: 'LOW' | 'AVERAGE' | 'HIGH') => {
         setLevel(lvl);

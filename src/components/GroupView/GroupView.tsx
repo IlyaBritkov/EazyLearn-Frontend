@@ -46,7 +46,6 @@ const styles = {
         fontWeight: 500,
         fontSize: isMobile ? 15 : 17,
         textAlign: 'center' as const,
-        marginLeft: isMobile ? 25 : 250,
     },
     BackButton: {
         height: 40,

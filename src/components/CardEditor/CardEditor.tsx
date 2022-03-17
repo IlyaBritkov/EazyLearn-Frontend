@@ -11,7 +11,6 @@ import LevelDropdown from './LevelDropdown';
 import ExistingGroups from './ExistingGroups';
 import GroupToAdd from './GroupToAdd';
 import { updateCardById } from '../../app/actions';
-import { removeCard } from '../../app/userSlice';
 
 const styles = {
     Stack: {

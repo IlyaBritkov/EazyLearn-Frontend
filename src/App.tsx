@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from './components/Loader';
 import SignForm from './components/SignForm/SignForm';
 import Main from './components/Main/Main';
-
 import { loadGroups, loadCards } from './app/actions';
 
 const App: React.FC = () => {

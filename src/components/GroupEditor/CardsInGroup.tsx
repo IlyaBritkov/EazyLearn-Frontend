@@ -65,8 +65,8 @@ const styles = {
 };
 
 const CardsInGroup: React.FC<any> = React.memo(({
-                                                    cardArray, setInitialCardArray, pickedCards, setPickedCards, ...props
-                                                }) => {
+    cardArray, setInitialCardArray, pickedCards, setPickedCards, ...props
+}) => {
     const navigate = useNavigate();
     const [localCardArray, setLocalCardArray] = useState(cardArray);
     const [prev, setPrev] = useState(false);
