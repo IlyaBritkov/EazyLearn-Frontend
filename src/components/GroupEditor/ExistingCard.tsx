@@ -5,7 +5,7 @@ import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
 
 const ExistingCard: React.FC<any> = ({ item, pickedCards, setPickedCards }) => {
-    const [isPicked, setIsPicked] = useState(false);
+    const [isPicked, setIsPicked] = useState(pickedCards.includes(item.id));
     useEffect(() => {
         setIsPicked(pickedCards.includes(item.id));
     }, [pickedCards]);
@@ -43,8 +43,10 @@ const ExistingCard: React.FC<any> = ({ item, pickedCards, setPickedCards }) => {
     });
     const handlePick = (e: any) => {
         if (pickedCards.includes(item.id)) {
+            setIsPicked(false);
             setPickedCards(pickedCards.filter((g: any) => g !== item.id));
         } else {
+            setIsPicked(true);
             setPickedCards([...pickedCards, item.id]);
         }
     };

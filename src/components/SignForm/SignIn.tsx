@@ -36,7 +36,7 @@ const SignIn = () => {
 
     const handleSignIn = (e: any) => {
         e.preventDefault();
-        dispatch(login({ email, password }));
+        dispatch(login({ email, password })).then((res: any) => console.log('login response', res));
     };
     return (
         <>

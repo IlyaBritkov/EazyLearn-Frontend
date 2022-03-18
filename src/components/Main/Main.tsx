@@ -13,8 +13,8 @@ import Profile from '../Profile/Profile';
 import Learn from '../Learn/Learn';
 import GroupView from '../GroupView/GroupView';
 import CardCreator from '../CardCreator/CardCreator';
-import GroupCreator from '../GroupCreator/GroupCreator';
 import CardEditor from '../CardEditor/CardEditor';
+import GroupCreator from '../GroupCreator/GroupCreator';
 import GroupEditor from '../GroupEditor/GroupEditor';
 import Game from '../Game/Game';
 
@@ -63,8 +63,8 @@ const Main = ({ page }: MainProps) => {
                         {page === 'learn' && <Learn />}
                         {page === 'create-card' && <CardCreator />}
                         {page === 'edit-card' && <CardEditor />}
-                        {page === 'edit-group' && <GroupEditor />}
                         {page === 'create-group' && <GroupCreator />}
+                        {page === 'edit-group' && <GroupEditor />}
                         {page === 'group-view' && <GroupView />}
                         {page === 'game' && <Game />}
                     </Stack>

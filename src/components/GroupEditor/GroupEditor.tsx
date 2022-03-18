@@ -10,7 +10,7 @@ import isMobile from '../../utils/isMobile';
 import LevelDropdown from '../CardCreator/LevelDropdown';
 import CardsInGroup from './CardsInGroup';
 
-import { updateGroupById } from '../../app/actions';
+import { updateFullDataGroupById, updateCardsByGroupId } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -52,24 +52,21 @@ const GroupEditor: React.FC = () => {
     const params = useParams();
     const id = String(params.id);
     const groupArray = useSelector((state: any) => state.user.groups);
-    const [pickedCards, setPickedCards] = useState([]);
-    const [title, setTitle] = useState('');
-    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH' | null>('AVERAGE');
-
-    const linkedCardsIds = groupArray
-        ?.filter((item: { id: string | undefined; }) => item.id === id)
-        .map((item: { linkedCardsIds: [];}) => item.linkedCardsIds);
+    const [group, setGroup] = useState(groupArray.find((c: any) => c.id === id));
+    const [pickedCards, setPickedCards] = useState(group.linkedCardsIds);
+    const [title, setTitle] = useState(group.name);
+    const [groupLevel, setGroupLevel] = useState<'LOW' | 'AVERAGE' | 'HIGH'>('AVERAGE');
 
     const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(updateGroupById({
+        dispatch(updateFullDataGroupById({
             groupId: id,
             isFavourite: location.state === 'createFavourite',
-            linkedCardsIds: [...pickedCards, linkedCardsIds],
+            linkedCardsIds: pickedCards,
             linkedNewCards: [],
             name: title,
             proficiencyLevel: groupLevel,
-        }));
+        })).then(() => dispatch(updateCardsByGroupId({ id, cards: pickedCards })));
         navigate(-1);
     };
     return (
@@ -78,44 +75,40 @@ const GroupEditor: React.FC = () => {
             animate={{ y: 0, transition: { delay: 0.2 } }}
             exit={{ y: '110vh' }}
         >
-            {groupArray
-                ?.filter((item: { id: string | undefined; }) => item.id === id)
-                .map((item: { name: string; linkedCardsIds: [];}) => (
-                    <Stack
-                        direction="column"
-                        alignItems="flex-start"
-                        justifyContent="flex-start"
-                    >
-                        <Stack style={{ ...styles.Stack, margin: isMobile ? '24px 0' : '35px 0' }}>
-                            <Button
-                                Icon={arrowBackIcon}
-                                IconStyles={{ width: 40 }}
-                                onClick={() => navigate(-1)}
-                            />
-                            <Button style={styles.SaveButton} onClick={handleSave} variant="text"><Typography>Сохранить</Typography></Button>
-                        </Stack>
-                        <Stack
-                            direction="column"
-                            alignItems="center"
-                            justifyContent="flex-start"
-                            style={{ position: 'relative', width: '100%', marginTop: isMobile ? 10 : 30 }}
-                        >
-                            <div className="input-group" style={{ ...styles.flex, marginBottom: 30 }}>
-                                <TextInput defaultValue={item.name} helperText="Название" variant="filled" onChange={(e) => setTitle(e.target.value)} />
-                            </div>
-                            <div className="create-group-card" style={styles.GroupCardWrapper}>
-                                <CardsInGroup
-                                    cardArray={cardArray}
-                                    pickedCards={[...pickedCards, ...item.linkedCardsIds]}
-                                    setPickedCards={setPickedCards}
-                                />
-                            </div>
-                            <div className="known-level" style={{ margin: '30px 0 80px 0' }}>
-                                <LevelDropdown row level={groupLevel} setLevel={setGroupLevel} />
-                            </div>
-                        </Stack>
-                    </Stack>
-                ))}
+            <Stack
+                direction="column"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+            >
+                <Stack style={{ ...styles.Stack, margin: isMobile ? '24px 0' : '35px 0' }}>
+                    <Button
+                        Icon={arrowBackIcon}
+                        IconStyles={{ width: 40 }}
+                        onClick={() => navigate(-1)}
+                    />
+                    <Button style={styles.SaveButton} onClick={handleSave} variant="text"><Typography>Сохранить</Typography></Button>
+                </Stack>
+                <Stack
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                    style={{ position: 'relative', width: '100%', marginTop: isMobile ? 10 : 30 }}
+                >
+                    <div className="input-group" style={{ ...styles.flex, marginBottom: 30 }}>
+                        <TextInput defaultValue={group.name} helperText="Название" variant="filled" onChange={(e) => setTitle(e.target.value)} />
+                    </div>
+                    <div className="create-group-card" style={styles.GroupCardWrapper}>
+                        <CardsInGroup
+                            cardArray={cardArray}
+                            pickedCards={pickedCards}
+                            setPickedCards={setPickedCards}
+                        />
+                    </div>
+                    <div className="known-level" style={{ margin: '30px 0 80px 0' }}>
+                        <LevelDropdown row level={groupLevel} setLevel={setGroupLevel} />
+                    </div>
+                </Stack>
+            </Stack>
         </motion.div>
     );
 };

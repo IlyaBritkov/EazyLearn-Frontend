@@ -3,6 +3,7 @@ import { Button, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { styled } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import isMobile from '../../utils/isMobile';
 import { dropdownProfileCaret } from '../../assets';
 import theme from '../../theme';
@@ -58,17 +59,30 @@ const Horizontal = styled('hr')({
 
 const ListInfo = ({ pickedGroups }: any) => {
     const navigate = useNavigate();
+    const cards = useSelector((state: any) => state.user.cards);
     return (
         <AnimatePresence>
             <motion.div
                 transition={{ duration: 0.2 }}
                 style={styles.LevelsWrapper}
             >
-                <Button onClick={() => navigate('/game', { state: { name: 'unique-cards' } })} style={styles.LevelsButtons} variant="text">
+                <Button
+                    disabled={cards.length === 0}
+                    onClick={() => navigate('/game', { state: { name: 'unique-cards' } })}
+                    style={
+                        { ...styles.LevelsButtons, opacity: cards.length === 0 ? 0.5 : 1 }
+                    } variant="text"
+                >
                     <Typography>Все карточки, не входящие ни в одну группу</Typography>
                 </Button>
                 <Horizontal />
-                <Button onClick={() => navigate('/game', { state: { name: 'all-cards' } })} style={styles.LevelsButtons} variant="text">
+                <Button
+                    disabled={cards.length === 0}
+                    onClick={() => navigate('/game', { state: { name: 'all-cards' } })}
+                    style={
+                        { ...styles.LevelsButtons, opacity: cards.length === 0 ? 0.5 : 1 }
+                    } variant="text"
+                >
                     <Typography>Все карточки</Typography>
                 </Button>
                 <Horizontal />

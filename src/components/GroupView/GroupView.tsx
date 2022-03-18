@@ -97,7 +97,13 @@ const GroupView: React.FC<any> = () => {
                         onClick={() => navigate(-1)}
                         style={styles.BackButton}
                     >
-                        <img src={dropdownCaret} style={{ transform: 'rotate(180deg)', marginRight: isMobile ? 12 : 25, height: isMobile ? 15 : 20 }} alt="back-icon" />
+                        <img
+                            src={dropdownCaret} style={{
+                                transform: 'rotate(180deg)',
+                                marginRight: isMobile ? 12 : 25,
+                                height: isMobile ? 15 : 20,
+                            }} alt="back-icon"
+                        />
                         <Typography
                             style={{
                                 fontSize: isMobile ? 13 : 16,

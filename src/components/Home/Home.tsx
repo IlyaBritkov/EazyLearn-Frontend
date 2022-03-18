@@ -13,6 +13,7 @@ import GroupsList from '../common/GroupsList';
 import GroupCreator from '../GroupCreator/GroupCreator';
 import CardCreator from '../CardCreator/CardCreator';
 import theme from '../../theme';
+import { setCards, setGroups } from '../../app/userSlice';
 
 const styles = {
     StackMobile: {
@@ -56,8 +57,6 @@ const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { cards, groups } = useSelector((state: any) => state.user);
-    const [groupArray, setGroupArray] = useState(groups);
-    const [cardArray, setCardArray] = useState(cards);
     const [groupSortings, setGroupSortings] = useState({
         time: {
             isSortByTime: false,
@@ -81,12 +80,50 @@ const Home = () => {
     });
 
     useEffect(() => {
-        setCardArray(cards);
-    }, [cards]);
+        if (cardsSortings.time.isSortByTime) {
+            const newArr = [...cards].sort((a: any, b: any) => {
+                const first = new Date(a.createdDateTime);
+                const last = new Date(b.createdDateTime);
+                // @ts-ignore
+                if (cardsSortings.time.SortByTimeAsc) return first - last;
+                // @ts-ignore
+                return last - first;
+            });
+            dispatch(setCards(newArr));
+        }
+        if (cardsSortings.level.isSortByLevel) {
+            const newArr = [...cards].sort((a: any, b: any) => {
+                if (cardsSortings.level.SortByLevelAsc) {
+                    return a.proficiencyLevel - b.proficiencyLevel;
+                }
+                return b.proficiencyLevel - a.proficiencyLevel;
+            });
+            dispatch(setCards(newArr));
+        }
+    }, [cardsSortings]);
 
     useEffect(() => {
-        setGroupArray(groups);
-    }, [groups]);
+        if (groupSortings.time.isSortByTime) {
+            const newArr = [...groups].sort((a: any, b: any) => {
+                const first = new Date(a.createdDateTime);
+                const last = new Date(b.createdDateTime);
+                // @ts-ignore
+                if (groupSortings.time.SortByTimeAsc) return first - last;
+                // @ts-ignore
+                return last - first;
+            });
+            dispatch(setGroups(newArr));
+        }
+        if (groupSortings.level.isSortByLevel) {
+            const newArr = [...groups].sort((a: any, b: any) => {
+                if (groupSortings.level.SortByLevelAsc) {
+                    return a.proficiencyLevel - b.proficiencyLevel;
+                }
+                return b.proficiencyLevel - a.proficiencyLevel;
+            });
+            dispatch(setGroups(newArr));
+        }
+    }, [groupSortings]);
 
     return (
         <motion.div
@@ -148,7 +185,7 @@ const Home = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <GroupsList groupArray={groupArray} />
+                        <GroupsList groupArray={groups} />
                     </Stack>
                 </Stack>
                 <Stack style={{ marginTop: 80, width: '100%', gap: '35px' }}>
@@ -168,7 +205,7 @@ const Home = () => {
                         alignItems="center"
                         style={styles.cardWrapper}
                     >
-                        <CardsList cardArray={cardArray} />
+                        <CardsList cardArray={cards} />
                     </Stack>
                 </Stack>
                 {isMobile && (

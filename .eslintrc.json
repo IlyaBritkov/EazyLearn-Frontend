@@ -40,11 +40,7 @@
         ],
 
         // react
-        "react/jsx-indent": [
-            2,
-            4,
-            { "checkAttributes": true, "indentLogicalExpressions": true }
-        ],
+        "react/jsx-indent": [2, 4, { "checkAttributes": true, "indentLogicalExpressions": true }],
         "react/function-component-definition": [
             "error",
             {

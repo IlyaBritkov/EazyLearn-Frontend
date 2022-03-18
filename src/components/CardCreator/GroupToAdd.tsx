@@ -53,11 +53,11 @@ const GroupToAdd: React.FC<Props> = (
         setFilteredArray(availableGroups.filter(
             (item: any) => item.name.toLowerCase().includes(searchTerm.toLowerCase())
         ));
-    }, [searchTerm]);
+    }, [searchTerm, availableGroups]);
 
     const handleAddToGroup = (item: any) => {
         if (!existingGroups.includes(item)) setExistingGroups([...existingGroups, item]);
-        // setFilteredArray(filteredArray.filter((i: any) => i.id !== item.id));
+        setAvailableGroups(availableGroups.filter((i: any) => i.id !== item.id));
     };
 
     return (

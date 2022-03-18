@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { Typography as Typo } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import React, {useState} from 'react';
+import {styled} from '@mui/material/styles';
+import {Typography as Typo} from '@mui/material';
+import {useDispatch} from 'react-redux';
 import ReactCardFlip from 'react-card-flip';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {
     favouritesActiveIcon, favouritesInactiveIcon, tripleDots
 } from '../../assets';
@@ -30,7 +30,7 @@ const styles = {
     },
 };
 
-const Card: React.FC<CardProps> = ({ item, isGame }) => {
+const Card: React.FC<CardProps> = ({item, isGame}) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFavourite, setFavourite] = useState(item.isFavourite);
     const dispatch = useDispatch();
@@ -102,6 +102,7 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
         dispatch(removeCardById(item.id));
         // setInitialCardArray(cardArray.filter((card: any) => card.id !== item.id));
     };
+
     const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         const path = `/edit-card/${item.id}`;
@@ -120,14 +121,14 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                             width: '30px',
                         }}
                         Icon={isFavourite ? favouritesActiveIcon : favouritesInactiveIcon}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         onClick={handleActive}
                     />
                 </AbsoluteIcon>
-                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12 }}>
+                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12}}>
                     <Dropdown
                         Icon={tripleDots}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         IconWrapperStyles={{
                             width: '30px',
                             height: '30px',
@@ -145,7 +146,7 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                         </div>
                     </Dropdown>
                 </AbsoluteIcon>
-                <div style={{ userSelect: 'none', width: '100%' }}><Typography>{item.term}</Typography></div>
+                <div style={{userSelect: 'none', width: '100%'}}><Typography>{item.term}</Typography></div>
             </OuterDiv>
             <OuterDiv key={item.id} role="button" tabIndex={0} onClick={handleFlip} onKeyDown={() => { }}>
                 <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', left: isMobile ? 5 : 12 }}>
@@ -154,14 +155,14 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                             width: '30px',
                         }}
                         Icon={isFavourite ? favouritesActiveIcon : favouritesInactiveIcon}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         onClick={handleActive}
                     />
                 </AbsoluteIcon>
-                <AbsoluteIcon style={{ display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12 }}>
+                <AbsoluteIcon style={{display: isGame ? 'none' : 'block', right: isMobile ? 5 : 12}}>
                     <Dropdown
                         Icon={tripleDots}
-                        IconStyles={{ width: 12 }}
+                        IconStyles={{width: 12}}
                         IconWrapperStyles={{
                             width: '30px',
                             height: '30px',
@@ -183,7 +184,7 @@ const Card: React.FC<CardProps> = ({ item, isGame }) => {
                     style={{
                         userSelect: 'none', width: '100%', height: '100%',
                     }}
-                ><Typography style={{ textOverflow: 'initial', wordBreak: 'break-word' }}>{item.definition}</Typography>
+                ><Typography style={{textOverflow: 'initial', wordBreak: 'break-word'}}>{item.definition}</Typography>
                 </div>
             </OuterDiv>
         </ReactCardFlip>
