@@ -117,7 +117,7 @@ const CardsInGroup: React.FC<any> = React.memo(({
                                             fontSize: isMobile ? 10 : 12,
                                         }}
                                     >
-                                        Создать карточку в категории
+                                        Создать карточку
                                     </Typography>
                                 </CreateNewCard>
                             </SwiperSlide>
