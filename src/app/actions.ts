@@ -294,12 +294,9 @@ export const updateUserByIdUserName: any = createAsyncThunk(
                 },
                 authHeader(user.token)
             );
-            console.log('GROUP FAV', response.data);
             dispatch(setUser([...user.groups, response.data]));
-            console.log(user.groups);
             return response.data;
         } catch (error: any) {
-            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
@@ -308,7 +305,6 @@ export const updateUserByIdEmail: any = createAsyncThunk(
     'user/updateUserById',
     async (data: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
-            console.log(data);
             const { user }: any = getState();
             const response = await axios.patch(
                 `${BASE_URL}/users/${data.userId}`,
@@ -317,12 +313,9 @@ export const updateUserByIdEmail: any = createAsyncThunk(
                 },
                 authHeader(user.token)
             );
-            console.log('GROUP FAV', response.data);
             dispatch(setUser([...user.groups, response.data]));
-            console.log(user.groups);
             return response.data;
         } catch (error: any) {
-            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
@@ -331,7 +324,6 @@ export const updateUserByIdPassword: any = createAsyncThunk(
     'user/updateUserById',
     async (data: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
-            console.log(data);
             const { user }: any = getState();
             const response = await axios.patch(
                 `${BASE_URL}/users/${data.userId}`,
@@ -356,12 +348,9 @@ export const getUserById: any = createAsyncThunk(
         try {
             const { user }: any = getState();
             const response = await axios.get(`${BASE_URL}/users/${data.id}`, authHeader(user.token));
-            console.log('GROUP FAV', response.data);
             dispatch(setUser([...user.groups, response.data]));
-            console.log(user.groups);
             return response.data;
         } catch (error: any) {
-            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
