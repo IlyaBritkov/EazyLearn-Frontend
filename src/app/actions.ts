@@ -267,7 +267,7 @@ export const changeCardStatus: any = createAsyncThunk(
     }
 );
 
-export const updateUserById: any = createAsyncThunk(
+export const updateUserByIdUserName: any = createAsyncThunk(
     'user/updateUserById',
     async (data: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
@@ -276,7 +276,51 @@ export const updateUserById: any = createAsyncThunk(
                 `${BASE_URL}/users/${data.userId}`,
                 {
                     username: data.username,
+                },
+                authHeader(user.token)
+            );
+            console.log('GROUP FAV', response.data);
+            dispatch(setUser([...user.groups, response.data]));
+            console.log(user.groups);
+            return response.data;
+        } catch (error: any) {
+            console.log(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+export const updateUserByIdEmail: any = createAsyncThunk(
+    'user/updateUserById',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            console.log(data);
+            const { user }: any = getState();
+            const response = await axios.patch(
+                `${BASE_URL}/users/${data.userId}`,
+                {
                     email: data.email,
+                },
+                authHeader(user.token)
+            );
+            console.log('GROUP FAV', response.data);
+            dispatch(setUser([...user.groups, response.data]));
+            console.log(user.groups);
+            return response.data;
+        } catch (error: any) {
+            console.log(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+export const updateUserByIdPassword: any = createAsyncThunk(
+    'user/updateUserById',
+    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            console.log(data);
+            const { user }: any = getState();
+            const response = await axios.patch(
+                `${BASE_URL}/users/${data.userId}`,
+                {
                     password: data.password,
                 },
                 authHeader(user.token)
@@ -291,15 +335,18 @@ export const updateUserById: any = createAsyncThunk(
     }
 );
 
-export const updateGroupById: any = createAsyncThunk(
-    'user/updateGroupById',
+export const getUserById: any = createAsyncThunk(
+    'user/getUserById',
     async (data: any, { rejectWithValue, getState, dispatch }: any) => {
         try {
             const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/cardSets/${data.group.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
-            dispatch(setGroups([...user.groups, response.data]));
+            const response = await axios.get(`${BASE_URL}/users/${data.id}`, authHeader(user.token));
+            console.log('GROUP FAV', response.data);
+            dispatch(setUser([...user.groups, response.data]));
+            console.log(user.groups);
             return response.data;
         } catch (error: any) {
+            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }

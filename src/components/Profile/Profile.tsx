@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { TextField, Stack, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import TextInput from '../common/TextInput';
 import Button from '../common/Button';
 import { dropdownProfileCaret, profileIcon } from '../../assets';
 import theme from '../../theme';
 import isMobile from '../../utils/isMobile';
-import { logout, setUser } from '../../app/userSlice';
-import { updateUserById } from '../../app/actions';
+import { logout } from '../../app/userSlice';
+import {
+    getUserById,
+    updateUserByIdEmail,
+    updateUserByIdPassword,
+    updateUserByIdUserName
+} from '../../app/actions';
 
 const styles = {
     DropdownButton: {
@@ -70,7 +76,7 @@ const styles = {
 };
 
 const Profile = () => {
-    const user = useSelector((state: any) => state.user.user);
+    const [user, setUser] = useState(useSelector((state: any) => state.user.user));
     const [inputs, setInputs] = useState({
         username: '',
         email: '',
@@ -78,9 +84,17 @@ const Profile = () => {
     });
     const [isError, setIsError] = useState(false);
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [openUserName, setOpenUserName] = React.useState(false);
+    const [openEmail, setOpenEmail] = React.useState(false);
+    const [openPassword, setOpenPassword] = React.useState(false);
+
+    const handleOpenUserName = () => setOpenUserName(true);
+    const handleOpenEmail = () => setOpenEmail(true);
+    const handleOpenPassword = () => setOpenPassword(true);
+
+    const handleCloseUserName = () => setOpenUserName(false);
+    const handleCloseEmail = () => setOpenEmail(false);
+    const handleClosePassword = () => setOpenPassword(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -89,6 +103,11 @@ const Profile = () => {
         navigate('/');
         window.location.reload();
     };
+    useEffect(() => {
+        dispatch(getUserById(user)).then(({ payload }: any) => {
+            setUser(payload);
+        });
+    }, [user, dispatch]);
 
     const handleChange = (event: { target: { name?: any; value?: any; }; }) => {
         const { name } = event.target;
@@ -96,21 +115,44 @@ const Profile = () => {
         setInputs((values) => ({ ...values, [name]: value }));
     };
 
-    const handleSubmit = (event: { preventDefault: () => void; }) => {
+    const handleSubmitPassword = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email);
-        if (!validEmail || inputs.password.length < 9 || inputs.username.length < 4) {
+        if (inputs.password.length < 9) {
             setIsError(true);
             return;
         }
-        dispatch(updateUserById({
+        dispatch(updateUserByIdPassword({
             userId: user.id,
-            username: inputs.username,
-            email: inputs.email,
             password: inputs.password,
         }));
-        handleClose();
+        handleClosePassword();
     };
+    const handleSubmitUserName = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+        if (inputs.username.length < 4) {
+            setIsError(true);
+            return;
+        }
+        dispatch(updateUserByIdUserName({
+            userId: user.id,
+            username: inputs.username,
+        }));
+        handleCloseUserName();
+    };
+    const handleSubmitEmail = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+        const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email);
+        if (!validEmail) {
+            setIsError(true);
+            return;
+        }
+        dispatch(updateUserByIdEmail({
+            userId: user.id,
+            email: inputs.email,
+        }));
+        handleCloseEmail();
+    };
+    // @ts-ignore
     return (
         <motion.div
             initial={{ y: '110vh' }}
@@ -129,8 +171,74 @@ const Profile = () => {
                     style={{ marginTop: isMobile ? 45 : 100 }}
                 >
                     <Modal
-                        open={open}
-                        onClose={handleClose}
+                        open={openUserName}
+                        onClose={handleCloseUserName}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 600,
+                                bgcolor: 'background.paper',
+                                boxShadow: 24,
+                                p: 4,
+                                borderRadius: '10px',
+                            }}
+                        >
+                            <Typography
+                                style={{
+                                    fontWeight: 'normal',
+                                    fontSize: '1.3rem',
+                                    marginBottom: 30,
+                                }}
+                                id="modal-modal-title" variant="h6" component="h2"
+                            >
+                                Редактировать имя пользователя
+                            </Typography>
+                            <TextInput
+                                variant="filled"
+                                helperText="Имя пользователя"
+                                error={isError}
+                                defaultValue={user.username}
+                                inputProps={{ style: { fontSize: 20 } }}
+                                InputLabelProps={{ style: { fontSize: 25 } }}
+                                style={{
+                                    marginBottom: 20,
+                                }}
+                                name="username"
+                                onChange={handleChange}
+                            />
+                            <Typography align="right">
+                                <Button
+                                    onClick={handleCloseUserName}
+                                    variant="text"
+                                    style={{
+                                        maxWidth: 110,
+                                        marginRight: 30,
+                                        fontSize: '1.2rem',
+                                    }}
+                                ><Typography>Отмена</Typography>
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    onClick={handleSubmitUserName}
+                                    variant="text"
+                                    style={{
+                                        maxWidth: 150,
+                                        fontSize: '1.2rem',
+                                    }}
+                                ><Typography>Сохранить</Typography>
+                                </Button>
+                            </Typography>
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={openEmail}
+                        onClose={handleCloseEmail}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
@@ -142,39 +250,26 @@ const Profile = () => {
                                 transform: 'translate(-50%, -50%)',
                                 width: 500,
                                 bgcolor: 'background.paper',
-                                border: '2px solid #000',
                                 boxShadow: 24,
                                 p: 4,
+                                borderRadius: '10px',
                             }}
                         >
                             <Typography
                                 style={{
-                                    fontWeight: 'bold',
-                                    fontSize: '1.5rem',
+                                    fontWeight: 'normal',
+                                    fontSize: '1.3rem',
                                     marginBottom: 30,
                                 }}
                                 id="modal-modal-title" variant="h6" component="h2"
                             >
-                                Редактировать профиль
+                                Редактировать эл. почту
                             </Typography>
-                            <TextField
-                                variant="standard"
+                            <TextInput
+                                variant="filled"
+                                helperText="Эл. почта"
                                 error={isError}
-                                label="Имя пользователя"
-                                defaultValue={user.username || ''}
-                                inputProps={{ style: { fontSize: 20 } }}
-                                InputLabelProps={{ style: { fontSize: 25 } }}
-                                style={{
-                                    marginBottom: 20,
-                                }}
-                                name="username"
-                                onChange={handleChange}
-                            />
-                            <TextField
-                                variant="standard"
-                                error={isError}
-                                label="Эл. почта"
-                                defaultValue={user.email || ''}
+                                defaultValue={user.email}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -183,12 +278,65 @@ const Profile = () => {
                                 name="email"
                                 onChange={handleChange}
                             />
-                            <TextField
+                            <Typography align="right">
+                                <Button
+                                    onClick={handleCloseEmail}
+                                    variant="text"
+                                    style={{
+                                        maxWidth: 110,
+                                        marginRight: 30,
+                                        fontSize: '1.2rem',
+                                    }}
+                                ><Typography>Отмена</Typography>
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    onClick={handleSubmitEmail}
+                                    variant="text"
+                                    style={{
+                                        maxWidth: 150,
+                                        fontSize: '1.2rem',
+                                    }}
+                                ><Typography>Сохранить</Typography>
+                                </Button>
+                            </Typography>
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={openPassword}
+                        onClose={handleClosePassword}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 500,
+                                bgcolor: 'background.paper',
+                                boxShadow: 24,
+                                p: 4,
+                                borderRadius: '10px',
+                            }}
+                        >
+                            <Typography
+                                style={{
+                                    fontWeight: 'normal',
+                                    fontSize: '1.3rem',
+                                    marginBottom: 30,
+                                }}
+                                id="modal-modal-title" variant="h6" component="h2"
+                            >
+                                Редактировать пароль
+                            </Typography>
+                            <TextInput
+                                variant="filled"
+                                helperText="Пароль"
                                 type="password"
                                 error={isError}
-                                variant="standard"
-                                label="Пароль"
-                                defaultValue={user.password || ''}
+                                defaultValue={user.password}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -199,24 +347,24 @@ const Profile = () => {
                             />
                             <Typography align="right">
                                 <Button
-                                    onClick={handleClose}
+                                    onClick={handleClosePassword}
                                     variant="text"
                                     style={{
                                         maxWidth: 110,
                                         marginRight: 30,
                                         fontSize: '1.2rem',
                                     }}
-                                >Отмена
+                                ><Typography>Отмена</Typography>
                                 </Button>
                                 <Button
                                     type="submit"
-                                    onClick={handleSubmit}
+                                    onClick={handleSubmitPassword}
                                     variant="text"
                                     style={{
                                         maxWidth: 150,
                                         fontSize: '1.2rem',
                                     }}
-                                >Сохранить
+                                ><Typography>Сохранить</Typography>
                                 </Button>
                             </Typography>
                         </Box>
@@ -241,8 +389,8 @@ const Profile = () => {
                 >
                     <div
                         style={styles.ProfileDetailsDiv}
-                        onClick={handleOpen}
-                        onKeyDown={handleOpen}
+                        onClick={handleOpenUserName}
+                        onKeyDown={handleOpenUserName}
                         role="button"
                         tabIndex={0}
                     >
@@ -256,8 +404,8 @@ const Profile = () => {
                     </div>
                     <div
                         style={styles.ProfileDetailsDiv}
-                        onClick={handleOpen}
-                        onKeyDown={handleOpen}
+                        onClick={handleOpenEmail}
+                        onKeyDown={handleOpenEmail}
                         role="button"
                         tabIndex={0}
                     >
@@ -271,14 +419,14 @@ const Profile = () => {
                     </div>
                     <div
                         style={styles.ProfileDetailsDiv}
-                        onClick={handleOpen}
-                        onKeyDown={handleOpen}
+                        onClick={handleOpenPassword}
+                        onKeyDown={handleOpenPassword}
                         role="button"
                         tabIndex={0}
                     >
                         <Typography>Пароль</Typography>
                         <div style={styles.flex}>
-                            <Typography style={styles.DetailsInfo}>********</Typography>
+                            <Typography style={styles.DetailsInfo}>{`${user.password}`.split('').map((item) => item.replace(item, '*'))}</Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
                     </div>
