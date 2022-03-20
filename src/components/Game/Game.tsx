@@ -13,7 +13,7 @@ import Button from '../common/Button';
 import isMobile from '../../utils/isMobile';
 import Card from '../common/Card';
 import { usePrompt } from '../../hooks/usePrompt.js';
-import { getCardsByGroupId, getAllUniqueCards, getAllCards } from '../../app/actions';
+import { getCardsByGroupIds, getAllUniqueCards, getAllCards } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -113,11 +113,7 @@ const Game: React.FC<any> = () => {
     };
 
     const getCards = (groups: Array<string>) => {
-        groups.forEach(async (groupId: string) => {
-            dispatch(getCardsByGroupId(groupId)).then(({ payload }: any) => {
-                setCards([...cards, ...payload]);
-            });
-        });
+        dispatch(getCardsByGroupIds(groups)).then(({ payload }: any) => setCards(payload));
         setLoaded(true);
     };
 

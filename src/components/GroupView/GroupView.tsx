@@ -9,7 +9,7 @@ import Button from '../common/Button';
 import isMobile from '../../utils/isMobile';
 import Card from '../common/Card';
 
-import { getCardsByGroupId } from '../../app/actions';
+import { getCardsByGroupIds } from '../../app/actions';
 
 const styles = {
     Stack: {
@@ -76,7 +76,8 @@ const GroupView: React.FC<any> = () => {
     const group = useSelector((state: any) => state.user.groups.find((g: any) => g.id === id));
     const [cardsInGroup, setCardsInGroup] = useState([]);
     useEffect(() => {
-        dispatch(getCardsByGroupId(id)).then(({ payload }: any) => {
+        dispatch(getCardsByGroupIds([id])).then(({ payload }: any) => {
+            console.log(payload);
             setCardsInGroup(payload);
         });
     }, [group, dispatch]);

@@ -147,18 +147,23 @@ export const getCardById: any = createAsyncThunk(
     }
 );
 
-export const getCardsByGroupId: any = createAsyncThunk(
-    'user/getCardsByGroupId',
-    async (groupId: string, { rejectWithValue, getState }: any) => {
+export const getCardsByGroupIds: any = createAsyncThunk(
+    'user/getCardsByGroupIds',
+    async (groupIds: any, { rejectWithValue, getState }: any) => {
         try {
             const { user }: any = getState();
-            const response = await axios.get(`${BASE_URL}/cards`, {
-                ...authHeader(user.token),
-                params: {
-                    cardSetId: groupId,
-                },
+            return Promise.all(
+                groupIds.map((groupId: any) => axios.get(`${BASE_URL}/cards`, {
+                    ...authHeader(user.token),
+                    params: {
+                        cardSetId: groupId,
+                    },
+                }))
+            ).then((data: any) => {
+                const localArray: Array<any> = [];
+                data.map((item: any) => localArray.push(...item.data));
+                return localArray;
             });
-            return response.data;
         } catch (error: any) {
             toast.error('Произошла ошибка');
             return rejectWithValue(error.response.data);
