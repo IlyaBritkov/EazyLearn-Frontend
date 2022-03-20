@@ -347,83 +347,6 @@ export const updateCardsByGroupId: any = createAsyncThunk(
     }
 );
 
-export const updateCardById: any = createAsyncThunk(
-    'user/updateCardById',
-    async (card: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            const { user }: any = getState();
-            const newCard = {
-                cardId: card.cardId,
-                definition: card.definition,
-                isFavorite: card.isFavorite,
-                linkedCardSetsIds: card.linkedCardSetsIds,
-                term: card.term,
-                proficiencyLevel: card.proficiencyLevel,
-            };
-            const response = await axios.patch(`${BASE_URL}/cards/${card.cardId}`, newCard, authHeader(user.token));
-            dispatch(setCards([...user.cards, response.data]));
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-export const updateUserById: any = createAsyncThunk(
-    'user/updateUserById',
-    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            console.log(data);
-            const { user }: any = getState();
-            const response = await axios.patch(
-                `${BASE_URL}/users/${data.userId}`,
-                {
-                    username: data.username,
-                    email: data.email,
-                    password: data.password,
-                },
-                authHeader(user.token)
-            );
-            console.log('GROUP FAV', response.data);
-            dispatch(setUser([...user.groups, response.data]));
-            console.log(user.groups);
-            return response.data;
-        } catch (error: any) {
-            console.log(error);
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-export const changeCardStatus: any = createAsyncThunk(
-    'user/changeCardStatus',
-    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/cards/${data.card.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
-            console.log(response.data);
-            dispatch(setCards([...user.cards, response.data]));
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-export const updateGroupById: any = createAsyncThunk(
-    'user/updateGroupById',
-    async (group: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            console.log(group);
-            const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/groups/${group.groupId}`, group, authHeader(user.token));
-            dispatch(setCards([...user.cards, ...response.data]));
-            console.log(response.data);
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-//! GROUPS
-
 export const loadGroups: any = createAsyncThunk(
     'user/loadGroups',
     async (_: any, { rejectWithValue, getState, dispatch }: any) => {
@@ -479,21 +402,6 @@ export const changeGroupStatus: any = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             toast.error('Произошла ошибка');
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-
-export const changeGroupStatus: any = createAsyncThunk(
-    'user/changeGroupStatus',
-    async (data: any, { rejectWithValue, getState, dispatch }: any) => {
-        try {
-            const { user }: any = getState();
-            const response = await axios.patch(`${BASE_URL}/cardSets/${data.group.id}`, { isFavourite: data.isFavourite }, authHeader(user.token));
-            dispatch(setGroups([...user.groups, response.data]));
-            return response.data;
-        } catch (error: any) {
-            console.log(error);
             return rejectWithValue(error.response.data);
         }
     }
