@@ -13,7 +13,10 @@ import Button from '../common/Button';
 import isMobile from '../../utils/isMobile';
 import Card from '../common/Card';
 import { usePrompt } from '../../hooks/usePrompt.js';
-import { getCardsByGroupIds, getAllUniqueCards, getAllCards } from '../../app/actions';
+import {
+    getCardsByGroupIds, getAllUniqueCards, getAllCards, updateCardLevel
+} from '../../app/actions';
+import ResultPage from './ResultPage';
 
 const styles = {
     Stack: {
@@ -56,15 +59,7 @@ const styles = {
             background: 'rgba(252, 202, 194, 1)',
         },
     },
-    resultPage: {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        alignItems: 'center',
-        width: '100%',
-        padding: isMobile ? '50px 0' : '50px 100px',
-        textAlign: 'center' as const,
-        gap: 15,
-    },
+
 };
 let leftArr: any = [];
 let rightArr: any = [];
@@ -77,13 +72,12 @@ const Game: React.FC<any> = () => {
     // usePrompt('Вы уверены, что хотите выйти?', true);
     useEffect(() => {
         if (cards.length === 0) {
-            console.log(leftArr, rightArr);
+            dispatch(updateCardLevel([...leftArr, ...rightArr]));
             leftArr = [];
             rightArr = [];
         }
     }, [cards]);
     useEffect(() => {
-        console.log('current state', location.state);
         switch (location.state.name) {
         case 'all-cards':
             getAll();
@@ -98,35 +92,53 @@ const Game: React.FC<any> = () => {
         }
     }, []);
 
+    const sortByLevel = (cardArray: Array<any>): Array<any> => {
+        const sortedCards = [...cardArray].sort(
+            (a: any, b: any) => a.proficiencyLevel - b.proficiencyLevel
+        );
+        return sortedCards;
+    };
+
     const getAll = () => {
         dispatch(getAllCards()).then((res: any) => {
-            setCards([...cards, ...res.payload]);
+            const sortedArray = sortByLevel(res.payload);
+            setCards(sortedArray);
             setLoaded(true);
         });
     };
 
     const getUniqueCards = () => {
         dispatch(getAllUniqueCards()).then((res: any) => {
-            setCards([...cards, ...res.payload]);
+            const sortedArray = sortByLevel(res.payload);
+            setCards(sortedArray);
             setLoaded(true);
         });
     };
 
     const getCards = (groups: Array<string>) => {
-        dispatch(getCardsByGroupIds(groups)).then(({ payload }: any) => setCards(payload));
+        dispatch(getCardsByGroupIds(groups)).then(({ payload }: any) => {
+            const sortedArray = sortByLevel(payload);
+            setCards(sortedArray);
+        });
         setLoaded(true);
     };
 
     const handleSwipe = (dir: any) => {
         if (dir === 'left') {
+            let value = parseFloat((cards[0].proficiencyLevel - 0.1).toFixed(2));
+            if (value < 0) value = 0;
+            if (value > 1) value = 1;
             leftArr.push({
-                id: cards[0].id,
-                proficiencyLevel: cards[0].proficiencyLevel - 0.1,
+                cardId: cards[0].id,
+                proficiencyLevelValue: value,
             });
         } else {
+            let value = parseFloat((cards[0].proficiencyLevel + 0.1).toFixed(2));
+            if (value < 0) value = 0;
+            if (value > 1) value = 1;
             rightArr.push({
-                id: cards[0].id,
-                proficiencyLevel: cards[0].proficiencyLevel + 0.1,
+                cardId: cards[0].id,
+                proficiencyLevelValue: value,
             });
         }
     };
@@ -152,7 +164,7 @@ const Game: React.FC<any> = () => {
                 </Stack>
                 <Stack
                     className="game-card-wrapper"
-                    style={{ ...styles.cardWrapper, width: '100%', marginTop: isMobile ? 10 : 80 }}
+                    style={{ ...styles.cardWrapper, width: '100%', marginTop: isMobile ? 80 : 15 }}
                 >
                     {(cards.length > 0 && loaded)
                         ? (
@@ -193,32 +205,7 @@ const Game: React.FC<any> = () => {
                             </Swipeable>
                         )
                         : (
-                            <div style={styles.resultPage}>
-                                <Typography
-                                    variant="h1" style={{
-                                        background: 'rgba(0, 0, 0, 0.5)',
-                                        padding: '10px 20px',
-                                        borderRadius: 10,
-                                        color: '#fff',
-                                        fontSize: 20,
-                                    }}
-                                >Карточек больше нет
-                                </Typography>
-                                <div>
-                                    <Typography style={{ fontSize: 16 }}>
-                                        Количество неизученных карточек:&nbsp;
-                                        <strong>
-                                            {leftArr.length}
-                                        </strong>
-                                    </Typography>
-                                    <Typography style={{ fontSize: 16 }}>
-                                        Количество изученных карточек:&nbsp;
-                                        <strong>
-                                            {rightArr.length}
-                                        </strong>
-                                    </Typography>
-                                </div>
-                            </div>
+                            <ResultPage unknown={leftArr.length} known={rightArr.length} />
                         )}
                 </Stack>
 

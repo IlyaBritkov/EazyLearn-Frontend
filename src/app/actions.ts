@@ -214,6 +214,21 @@ export const addCardToGroups: any = createAsyncThunk(
     }
 );
 
+export const updateCardLevel: any = createAsyncThunk(
+    'user/updateCardLevel',
+    async (cards: any, { rejectWithValue, getState, dispatch }: any) => {
+        try {
+            const { user }: any = getState();
+            const response = await axios.patch(`${BASE_URL}/cards/proficiencyLevel`, cards, authHeader(user.token));
+            dispatch(setCards([...user.cards, ...response.data]));
+            return response.data;
+        } catch (error: any) {
+            toast.error('Произошла ошибка');
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const removeCardById: any = createAsyncThunk(
     'user/removeCardById',
     async (cardId: any, { rejectWithValue, getState, dispatch }: any) => {
