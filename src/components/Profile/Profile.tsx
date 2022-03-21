@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import { toast } from 'react-toastify';
 import TextInput from '../common/TextInput';
 import Button from '../common/Button';
 import { dropdownProfileCaret, profileIcon } from '../../assets';
@@ -81,8 +82,8 @@ const Profile = () => {
         username: '',
         email: '',
         password: '',
+        passwordConfirm: '',
     });
-    const [isError, setIsError] = useState(false);
 
     const [openUserName, setOpenUserName] = React.useState(false);
     const [openEmail, setOpenEmail] = React.useState(false);
@@ -107,7 +108,7 @@ const Profile = () => {
         dispatch(getUserById(user)).then(({ payload }: any) => {
             setUser(payload);
         });
-    }, [user, dispatch]);
+    }, [user, setUser]);
 
     const handleChange = (event: { target: { name?: any; value?: any; }; }) => {
         const { name } = event.target;
@@ -117,8 +118,12 @@ const Profile = () => {
 
     const handleSubmitPassword = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        if (inputs.password.length < 9) {
-            setIsError(true);
+        if (inputs.password.length < 7) {
+            toast.error('Ваш пароль должен содержать больше 8 символов');
+            return;
+        }
+        if (inputs.password !== inputs.passwordConfirm) {
+            toast.error('Вы не подтвердили пароль');
             return;
         }
         dispatch(updateUserByIdPassword({
@@ -129,8 +134,8 @@ const Profile = () => {
     };
     const handleSubmitUserName = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        if (inputs.username.length < 4) {
-            setIsError(true);
+        if (inputs.username.length < 3) {
+            toast.error('Имя пользователя должно содержать больше 3 символов');
             return;
         }
         dispatch(updateUserByIdUserName({
@@ -143,7 +148,7 @@ const Profile = () => {
         event.preventDefault();
         const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email);
         if (!validEmail) {
-            setIsError(true);
+            toast.error('Проверьте адрес эл. почты');
             return;
         }
         dispatch(updateUserByIdEmail({
@@ -202,8 +207,7 @@ const Profile = () => {
                             <TextInput
                                 variant="filled"
                                 helperText="Имя пользователя"
-                                error={isError}
-                                defaultValue={user.username}
+                                defaultValue={user.username || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -268,8 +272,7 @@ const Profile = () => {
                             <TextInput
                                 variant="filled"
                                 helperText="Эл. почта"
-                                error={isError}
-                                defaultValue={user.email}
+                                defaultValue={user.email || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -335,14 +338,26 @@ const Profile = () => {
                                 variant="filled"
                                 helperText="Пароль"
                                 type="password"
-                                error={isError}
-                                defaultValue={user.password}
+                                defaultValue={user.password || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
                                     marginBottom: 50,
                                 }}
                                 name="password"
+                                onChange={handleChange}
+                            />
+                            <TextInput
+                                variant="filled"
+                                helperText="Пароль"
+                                type="password"
+                                defaultValue={user.password || ''}
+                                inputProps={{ style: { fontSize: 20 } }}
+                                InputLabelProps={{ style: { fontSize: 25 } }}
+                                style={{
+                                    marginBottom: 50,
+                                }}
+                                name="passwordConfirm"
                                 onChange={handleChange}
                             />
                             <Typography align="right">
@@ -377,7 +392,7 @@ const Profile = () => {
                             textAlign: 'center',
                             wordBreak: 'break-all',
                         }}
-                    >{user.username}
+                    >{user?.username}
                     </Typography>
                 </Stack>
                 <Stack
@@ -397,7 +412,7 @@ const Profile = () => {
                         <Typography>Имя пользователя</Typography>
                         <div style={styles.flex}>
                             <Typography style={styles.DetailsInfo}>
-                                {user.username}
+                                {user?.username}
                             </Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
@@ -412,7 +427,7 @@ const Profile = () => {
                         <Typography>Эл. почта</Typography>
                         <div style={styles.flex}>
                             <Typography style={styles.DetailsInfo}>
-                                {user.email}
+                                {user?.email}
                             </Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
@@ -426,7 +441,7 @@ const Profile = () => {
                     >
                         <Typography>Пароль</Typography>
                         <div style={styles.flex}>
-                            <Typography style={styles.DetailsInfo}>{`${user.password}`.split('').map((item) => item.replace(item, '*'))}</Typography>
+                            <Typography style={styles.DetailsInfo}>{`${user?.password}`.split('').map((item) => item.replace(item, '*'))}</Typography>
                             <img src={dropdownProfileCaret} alt="dropdown-caret" />
                         </div>
                     </div>

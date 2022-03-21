@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { registerUser } from '../../app/actions';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
@@ -39,9 +40,22 @@ const SignUp = () => {
     const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        if (!validEmail) return;
-        if (password !== confirmPassword) return;
-
+        if (!validEmail) {
+            toast.error('Проверьте адрес эл. почты');
+            return;
+        }
+        if (password.length < 7) {
+            toast.error('Ваш пароль должен содержать больше 8 символов');
+            return;
+        }
+        if (password !== confirmPassword) {
+            toast.error('Вы не подтвердили пароль');
+            return;
+        }
+        if (username.length < 3) {
+            toast.error('Имя пользователя должно содержать больше 3 символов');
+            return;
+        }
         console.log('registered', username, email, password);
         dispatch(registerUser({
             username,
