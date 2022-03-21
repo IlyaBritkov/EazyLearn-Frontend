@@ -352,7 +352,7 @@ export const getUserById: any = createAsyncThunk(
             }
             const userId = localStorage.getItem('userId');
             const response = await axios.get(`${BASE_URL}/users/${data.id || userId}`, authHeader(user.token));
-            dispatch(setUser([...user.groups, response.data]));
+            dispatch(setUser(response.data));
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
