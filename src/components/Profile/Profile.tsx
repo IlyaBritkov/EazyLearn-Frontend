@@ -207,7 +207,7 @@ const Profile = () => {
                             <TextInput
                                 variant="filled"
                                 helperText="Имя пользователя"
-                                defaultValue={user.username || ''}
+                                defaultValue={user?.username || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -272,7 +272,7 @@ const Profile = () => {
                             <TextInput
                                 variant="filled"
                                 helperText="Эл. почта"
-                                defaultValue={user.email || ''}
+                                defaultValue={user?.email || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -338,7 +338,7 @@ const Profile = () => {
                                 variant="filled"
                                 helperText="Пароль"
                                 type="password"
-                                defaultValue={user.password || ''}
+                                defaultValue={user?.password || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
@@ -351,7 +351,7 @@ const Profile = () => {
                                 variant="filled"
                                 helperText="Пароль"
                                 type="password"
-                                defaultValue={user.password || ''}
+                                defaultValue={user?.password || ''}
                                 inputProps={{ style: { fontSize: 20 } }}
                                 InputLabelProps={{ style: { fontSize: 25 } }}
                                 style={{
