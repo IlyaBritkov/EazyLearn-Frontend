@@ -79,7 +79,7 @@ const CardEditor: React.FC = () => {
             updateCardById({
                 cardId: id,
                 definition: description,
-                isFavourite: location.state === 'createFavourite',
+                isFavourite: card.isFavourite,
                 linkedCardSetsIds: existingGroups.map((group: any) => group.id),
                 proficiencyLevel: cardLevel,
                 term: title,

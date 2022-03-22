@@ -61,7 +61,7 @@ const GroupEditor: React.FC = () => {
         e.preventDefault();
         dispatch(updateFullDataGroupById({
             groupId: id,
-            isFavourite: location.state === 'createFavourite',
+            isFavourite: group.isFavourite,
             linkedCardsIds: pickedCards,
             linkedNewCards: [],
             name: title,

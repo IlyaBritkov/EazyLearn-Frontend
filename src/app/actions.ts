@@ -295,6 +295,7 @@ export const updateUserByIdUserName: any = createAsyncThunk(
                 authHeader(user.token)
             );
             dispatch(setUser([...user.groups, response.data]));
+            toast.success('Имя пользователя успешно изменено');
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -314,6 +315,7 @@ export const updateUserByIdEmail: any = createAsyncThunk(
                 authHeader(user.token)
             );
             dispatch(setUser([...user.groups, response.data]));
+            toast.success('Адрес эл. почты успешно изменен');
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -333,7 +335,7 @@ export const updateUserByIdPassword: any = createAsyncThunk(
                 authHeader(user.token)
             );
             dispatch(setUser([...user.groups, response.data]));
-            toast.success('Данные успешно обновлены');
+            toast.success('Пароль успешно изменен');
             return response.data;
         } catch (error: any) {
             toast.error('Произошла ошибка');
