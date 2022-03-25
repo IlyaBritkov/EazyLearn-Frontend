@@ -2,20 +2,21 @@
 import React, {
     useEffect, useState
 } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Stack, Typography, Modal } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 // @ts-ignore
 import Swipeable from 'react-swipy';
+import { Box } from '@mui/material/node_modules/@mui/system';
 import { arrowBackIcon } from '../../assets';
 import Button from '../common/Button';
 import isMobile from '../../utils/isMobile';
 import Card from '../common/Card';
-import { usePrompt } from '../../hooks/usePrompt.js';
 import {
     getCardsByGroupIds, getAllUniqueCards, getAllCards, updateCardLevel
 } from '../../app/actions';
+import theme from '../../theme';
 import ResultPage from './ResultPage';
 
 const styles = {
@@ -69,9 +70,19 @@ const Game: React.FC<any> = () => {
     const dispatch = useDispatch();
     const [loaded, setLoaded] = useState(false);
     const [cards, setCards] = useState([] as any);
-    // usePrompt('Вы уверены, что хотите выйти?', true);
+    const [wannaLeave, setWannaLeave] = useState(false);
     useEffect(() => {
-        if (cards.length === 0) {
+        console.log(leftArr, rightArr);
+    }, [leftArr, rightArr]);
+    useEffect(() => {
+        if (!location.pathname.includes('game')) {
+            if (leftArr.length > 0 || rightArr.length > 0) {
+                setWannaLeave(true);
+            }
+        }
+    }, [location]);
+    useEffect(() => {
+        if (cards.length === 0 && (leftArr.length >= 0 || rightArr.length >= 0)) {
             dispatch(updateCardLevel([...leftArr, ...rightArr]));
             leftArr = [];
             rightArr = [];
@@ -123,6 +134,17 @@ const Game: React.FC<any> = () => {
         setLoaded(true);
     };
 
+    const handleSaveBeforeLeave = (event: any) => {
+        event.preventDefault();
+        dispatch(updateCardLevel([...leftArr, ...rightArr]))
+            .then(() => navigate(-1));
+    };
+
+    const handleLeave = () => {
+        if (leftArr.length > 0 || rightArr.length > 0) setWannaLeave(true);
+        else navigate(-1);
+    };
+
     const handleSwipe = (dir: any) => {
         if (dir === 'left') {
             let value = parseFloat((cards[0].proficiencyLevel - 0.1).toFixed(2));
@@ -150,6 +172,69 @@ const Game: React.FC<any> = () => {
             animate={{ y: 0, transition: { delay: 0.2 } }}
             exit={{ y: '110vh' }}
         >
+            <Modal
+                open={wannaLeave}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: isMobile ? 'translate(-50%, -50%) scale(0.8)' : 'translate(-50%, -50%)',
+                        width: isMobile ? 400 : 600,
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: '10px',
+                        textAlign: isMobile ? 'center' : 'left',
+                    }}
+                >
+                    <Typography
+                        style={{
+                            fontWeight: 'normal',
+                            fontSize: '1.3rem',
+                            marginBottom: 30,
+                        }}
+                        id="modal-modal-title" variant="h6" component="h2"
+                    >
+                        Повторение не закончено.<br />
+                        Сохранить результаты и выйти?
+                    </Typography>
+
+                    <Typography align="center">
+                        <Button
+                            variant="text"
+                            onClick={() => {
+                                leftArr = [];
+                                rightArr = [];
+                                navigate(-1);
+                            }}
+                            style={{
+                                maxWidth: 150,
+                                marginRight: 30,
+                                height: 40,
+                                border: `1px solid ${theme.palette.primary.dark}`,
+                                fontSize: isMobile ? 17 : 13,
+                            }}
+                        ><Typography>Не сохранять</Typography>
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="text"
+                            onClick={handleSaveBeforeLeave}
+                            style={{
+                                maxWidth: 150,
+                                height: 40,
+                                background: 'rgba(252, 202, 194, 0.8)',
+                                fontSize: isMobile ? 17 : 13,
+                            }}
+                        ><Typography>Сохранить</Typography>
+                        </Button>
+                    </Typography>
+                </Box>
+            </Modal>
             <Stack
                 direction="column"
                 alignItems="flex-start"
@@ -159,7 +244,7 @@ const Game: React.FC<any> = () => {
                     <Button
                         Icon={arrowBackIcon}
                         IconStyles={{ width: 40 }}
-                        onClick={() => navigate(-1)}
+                        onClick={() => handleLeave()}
                     />
                 </Stack>
                 <Stack
