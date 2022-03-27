@@ -75,13 +75,6 @@ const Game: React.FC<any> = () => {
         console.log(leftArr, rightArr);
     }, [leftArr, rightArr]);
     useEffect(() => {
-        if (!location.pathname.includes('game')) {
-            if (leftArr.length > 0 || rightArr.length > 0) {
-                setWannaLeave(true);
-            }
-        }
-    }, [location]);
-    useEffect(() => {
         if (cards.length === 0 && (leftArr.length >= 0 || rightArr.length >= 0)) {
             dispatch(updateCardLevel([...leftArr, ...rightArr]));
             leftArr = [];
@@ -174,6 +167,7 @@ const Game: React.FC<any> = () => {
         >
             <Modal
                 open={wannaLeave}
+                onClose={() => setWannaLeave(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >

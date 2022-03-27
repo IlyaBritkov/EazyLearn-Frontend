@@ -23,8 +23,12 @@ import dropdownCaret from './dropdown_caret.svg';
 import dropdownProfileCaret from './profileCaret.svg';
 import addIcon from './add_icon.svg';
 import searchCardCreator from './searchCardCreator.svg';
+import eye from './password-eye.svg';
+import eyeClosed from './password-eye-closed.svg';
 
 export {
+    eye,
+    eyeClosed,
     searchCardCreator,
     addIcon,
     dropdownProfileCaret,

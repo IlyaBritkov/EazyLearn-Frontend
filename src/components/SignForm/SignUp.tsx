@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { InputAdornment } from '@mui/material';
 import { registerUser } from '../../app/actions';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import isMobile from '../../utils/isMobile';
 import theme from '../../theme';
+import { eye, eyeClosed } from '../../assets';
 
 const styles = {
     TextInput: {
@@ -30,7 +32,8 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { user, error, loading } = useSelector((state: any) => state.user);
 
     useEffect(() => {
@@ -56,7 +59,6 @@ const SignUp = () => {
             toast.error('Имя пользователя должно содержать больше 3 символов');
             return;
         }
-        console.log('registered', username, email, password);
         dispatch(registerUser({
             username,
             email,
@@ -77,13 +79,41 @@ const SignUp = () => {
             />
 
             <TextInput
-                placeholder="Пароль" type="password" style={styles.TextInput}
-                value={password} onChange={(e) => setPassword(e.target.value)}
+                placeholder="Пароль"
+                value={password}
+                onChange={(e: any) => setPassword(e.target.value)}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <Button
+                                Icon={showPassword ? eye : eyeClosed}
+                                IconStyles={{ opacity: 0.5 }}
+                                onClick={() => setShowPassword(!showPassword)}
+                            />
+                        </InputAdornment>
+                    ),
+                }}
+                style={styles.TextInput}
             />
 
             <TextInput
-                placeholder="Подтвердить пароль" type="password" style={{ ...styles.TextInput, marginBottom: 40 }}
-                value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Подтвердить пароль"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <Button
+                                Icon={showConfirmPassword ? eye : eyeClosed}
+                                IconStyles={{ opacity: 0.5 }}
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            />
+                        </InputAdornment>
+                    ),
+                }}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{ ...styles.TextInput, marginBottom: 40 }}
             />
             <Button variant="contained" style={styles.Button} onClick={handleRegister} disabled={loading}>Зарегистрироваться</Button>
         </>
