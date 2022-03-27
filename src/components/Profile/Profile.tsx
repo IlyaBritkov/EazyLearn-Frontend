@@ -77,7 +77,7 @@ const styles = {
 };
 
 const Profile = () => {
-    const user: any = useSelector((state: any) => state.user.user);
+    const [user, setUser] = useState(useSelector((state: any) => state.user.user));
     const [inputs, setInputs] = useState({
         username: '',
         email: '',
@@ -104,7 +104,11 @@ const Profile = () => {
         navigate('/');
         window.location.reload();
     };
-
+    useEffect(() => {
+        dispatch(getUserById(user)).then(({ payload }: any) => {
+            setUser(payload);
+        });
+    }, [user, setUser]);
     const handleChange = (event: { target: { name?: any; value?: any; }; }) => {
         const { name } = event.target;
         const { value } = event.target;
