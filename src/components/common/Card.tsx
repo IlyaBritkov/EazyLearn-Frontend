@@ -73,7 +73,10 @@ const Card: React.FC<CardProps> = ({item, isGame}) => {
         textOverflow: 'ellipsis',
         WebkitTapHighlightColor: 'transparent',
         position: 'relative',
-        padding: 20,
+        paddingTop: item.definition.length > 50 ? 40 : 20,
+        paddingBottom: 20,
+        paddingRight: 20,
+        paddingLeft: 20,
         overflow: 'hidden',
     });
 
