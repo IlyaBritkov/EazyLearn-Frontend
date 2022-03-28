@@ -39,13 +39,13 @@ const ResultPage: React.FC <any> = ({ unknown, known }) => {
             <HR />
             <div>
                 <Typography style={{ fontSize: isMobile ? 14 : 16 }}>
-                    Количество неизученных карточек:&nbsp;
+                    Количество карточек, которые Вы не помните:&nbsp;
                     <span style={{ color: theme.palette.primary.main }}>
                         {unknown}
                     </span>
                 </Typography>
                 <Typography style={{ fontSize: isMobile ? 14 : 16 }}>
-                    Количество изученных карточек:&nbsp;
+                    Количество карточек, которые Вы помните:&nbsp;
                     <span style={{ color: theme.palette.primary.main }}>
                         {known}
                     </span>
