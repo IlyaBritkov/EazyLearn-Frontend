@@ -84,7 +84,6 @@ const Profile = () => {
         password: '',
         passwordConfirm: '',
     });
-
     const [openUserName, setOpenUserName] = React.useState(false);
     const [openEmail, setOpenEmail] = React.useState(false);
     const [openPassword, setOpenPassword] = React.useState(false);
@@ -108,7 +107,7 @@ const Profile = () => {
         dispatch(getUserById(user)).then(({ payload }: any) => {
             setUser(payload);
         });
-    }, [user, setUser]);
+    }, [!user.length]);
     const handleChange = (event: { target: { name?: any; value?: any; }; }) => {
         const { name } = event.target;
         const { value } = event.target;
@@ -128,7 +127,9 @@ const Profile = () => {
         dispatch(updateUserByIdPassword({
             userId: user.id,
             password: inputs.password,
-        }));
+        })).then(({ payload }: any) => {
+            setUser(payload);
+        });
         handleClosePassword();
     };
     const handleSubmitUserName = (event: { preventDefault: () => void; }) => {
@@ -140,7 +141,9 @@ const Profile = () => {
         dispatch(updateUserByIdUserName({
             userId: user.id,
             username: inputs.username,
-        }));
+        })).then(({ payload }: any) => {
+            setUser(payload);
+        });
         handleCloseUserName();
     };
     const handleSubmitEmail = (event: { preventDefault: () => void; }) => {
@@ -153,7 +156,9 @@ const Profile = () => {
         dispatch(updateUserByIdEmail({
             userId: user.id,
             email: inputs.email,
-        }));
+        })).then(({ payload }: any) => {
+            setUser(payload);
+        });
         handleCloseEmail();
     };
     // @ts-ignore
